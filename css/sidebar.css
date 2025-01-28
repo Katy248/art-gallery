@@ -1,4 +1,12 @@
+:root {
+    --sidebar-rounded: .5rem;
+    --sidebar-min-width: 10rem;
+}
+
 #toggle-sidebar {
+
+    border-radius: var(--sidebar-rounded);
+    min-width: var(--sidebar-min-width);
     font-size: 20px;
     /* Увеличиваем размер текста */
     font-weight: bold;
@@ -11,51 +19,57 @@
     /* Указатель при наведении */
     color: #000000;
     /* Цвет текста */
-    padding: 5px 0px;
+    /* padding: 5px 0px; */
     /* Отступы внутри кнопки */
 }
 
 /* Выпадающее меню */
 #dropdown-menu {
+    border-radius: var(--sidebar-rounded);
+    min-width: var(--sidebar-min-width);
     display: none;
     /* Скрыто по умолчанию */
     position: absolute;
-    top: 50px;
+    top: 60px;
     /* Расстояние от кнопки */
-    left: 30px;
+    left: 20px;
     background-color: white;
     /* Белый фон */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* Тень */
-    border-radius: 8px;
-    /* Скругленные углы */
     overflow: hidden;
     z-index: 500;
     animation: fadeIn 0.3s ease-in-out;
     /* Анимация */
 }
 
-#dropdown-menu ul {
+.nav {
     list-style: none;
+    display: flex;
+    flex-direction: column;
     /* Убираем маркеры списка */
+    /* margin: 0; */
+    gap: .5rem;
+    padding: .5rem;
     margin: 0;
-    padding: 10px 0;
 }
 
-#dropdown-menu ul li {
-    padding: 10px 2px;
-    /* Отступы внутри пунктов */
+.nav-item {
+    padding: .5rem;
+    padding-left: .6rem;
+    padding-right: .6rem;
+    border-radius: .3rem;
     cursor: pointer;
-}
-
-#dropdown-menu ul li:hover {
-    background-color: #f1f1f1;
-    /* Фон при наведении */
-}
-
-#dropdown-menu ul li a {
     text-decoration: none;
-    /* Убираем подчеркивание */
     color: #000000;
-    /* Цвет текста */
+}
+
+.nav-item:hover {
+    /* Фон при наведении */
+    background-color: #f1f1f1;
+}
+
+.nav-item:focus {
+    /* Фон при наведении */
+    background-color: lightgray;
 }

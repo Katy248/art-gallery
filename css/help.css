@@ -1,43 +1,11 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom right, #808080, #8A2BE2, #32CD32);
-    /* Градиент от серого к фиолетовому и зеленому */
-    color: #fff;
-    /* Белый цвет текста для контраста */
-}
-
-header {
-    background-color: rgba(0, 0, 0, 0.7);
-    /* Полупрозрачный черный фон для шапки */
-    padding: 15px;
-    text-align: left;
-}
-
-
-main {
-    margin-left: 270px;
-    /* Отступ для бокового меню */
-    padding: 20px;
-}
+@import url("base.css");
 
 h2,
 h3 {
-    color: #FFD700;
     /* Золотой цвет для заголовков */
+    color: #FFD700;
 }
 
 footer {
-    background-color: rgba(0, 0, 0, 0.7);
     text-align: center;
-    padding: 10px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-/* Анимация для бокового меню */
-#toggle-sidebar:checked+#sidebar {
-    transform: translateX(0);
-    /* Показать боковое меню */
 }

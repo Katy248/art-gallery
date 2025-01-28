@@ -1,6 +1,7 @@
 :root {
     --accent-color: #3498db;
     --round: 5px;
+    --max-content-width: 1200px;
 }
 
 a {
@@ -42,6 +43,11 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Иконки */
+i {
+    padding: .2rem;
 }
 
 header {
@@ -107,11 +113,15 @@ header h1 {
 /* Добавляем отступы для основного содержимого */
 main {
     /* Отступ слева для основного контента */
-    margin-left: 220px;
+    margin: auto;
     /* Внутренние отступы */
     padding: 20px;
 }
 
+main,
+.footer-content {
+    max-width: var(--max-content-width);
+}
 
 
 
@@ -140,7 +150,6 @@ footer {
 
 /* Стили для содержимого подвала */
 .footer-content {
-    max-width: 1200px;
     /* Максимальная ширина содержимого */
     margin: 0 auto;
 

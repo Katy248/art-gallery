@@ -4,10 +4,11 @@ workflow:
 
 deploy-pages:
   script:
-    - ls
+    - mkdir -p public/
+    - cp -r * public/
   pages: true  # specifies that this is a Pages job
   artifacts:
     paths:
-      - .
+      - public/
   rules:
     - if: $CI_COMMIT_BRANCH == "main"

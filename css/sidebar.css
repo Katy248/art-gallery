@@ -67,6 +67,7 @@
 .nav-item:hover {
     /* Фон при наведении */
     background-color: #f1f1f1;
+    text-decoration: none;
 }
 
 .nav-item:focus {

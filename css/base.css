@@ -1,6 +1,15 @@
+:root {
+    --accent-color: #3498db;
+    --round: ;
+}
+
 a {
     text-decoration: none;
-    /* Отменяем подчеркивание у ссылки */
+    color: var(--accent-color);
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 /* Устанавливаем box-sizing для всех элементов */
@@ -122,7 +131,7 @@ section {
 
 /* Стили для подвала */
 footer {
-    background: linear-gradient(to right, #8e44ad, #2ecc71, #7f8c8d);
+    /* background: linear-gradient(to right, #8e44ad, #2ecc71, #7f8c8d); */
     /* Градиент из фиолетового, зеленого и серого */
     color: white;
     /* Белый текст */
@@ -142,7 +151,7 @@ footer {
 
 /* Стили для заголовков в подвале */
 footer h2 {
-    color: #3498db;
+    color: var(--accent-color);
     /* Цвет заголовков */
     margin-bottom: 15px;
     /* Отступ снизу */
@@ -154,18 +163,6 @@ footer p {
     /* Отступ снизу */
 }
 
-/* Стили для ссылок в подвале */
-footer a {
-    color: #ecf0f1;
-    /* Светлый цвет для ссылок */
-    text-decoration: none;
-    /* Убираем подчеркивание */
-}
-
-footer a:hover {
-    text-decoration: underline;
-    /* Подчеркивание при наведении */
-}
 
 /* Стили для списка социальных сетей */
 footer ul {
@@ -191,12 +188,12 @@ footer section {
 /* Адаптивные стили для мобильных устройств */
 @media (max-width: 768px) {
     footer {
-        text-align: center;
+        /* text-align: center; */
         /* Центрируем текст на мобильных устройствах */
     }
 
     footer ul li {
-        display: block;
+        /* display: block; */
         /* Выравнивание элементов списка в колонку */
         margin-bottom: 10px;
         /* Отступ снизу между элементами списка */

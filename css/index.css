@@ -103,56 +103,17 @@
     /* фон текста */
 }
 
+.footer-section {
+    background-color: #2c3e50;
+
+    &:hover {
+        background-color: #2c3e50;
+    }
+}
+
 #gallery:hover {
     background-color: #ffffff;
     /* Темнее при наведении */
-}
-
-/* Для кнопки "О нас" */
-#about {
-    background-color: #2c3e50;
-    /* фон текста */
-}
-
-#about:hover {
-    background-color: #2c3e50;
-    /* Темнее при наведении */
-}
-
-/* Для кнопки помощи */
-#help {
-    background-color: #2c3e50;
-    /* фон текста */
-}
-
-#help:hover {
-    background-color: #2c3e50;
-    /* Темнее при наведении */
-}
-
-/* Для кнопки контактов */
-#contact {
-    background-color: #2c3e50;
-    /* Темно-оранжевый фон */
-}
-
-#contact:hover {
-    background-color: #2c3e50;
-    /* Темнее при наведении */
-}
-
-/* Стили для списка в боковой панели */
-#sidebar ul {
-    list-style-type: none;
-    /* Убираем маркеры списка */
-    padding: 0;
-    /* Убираем внутренние отступы */
-}
-
-/* Стили для элементов списка в боковой панели */
-#sidebar li {
-    padding: 5px;
-    /* Отступы внутри элементов списка */
 }
 
 /* Стили для формы загрузки */

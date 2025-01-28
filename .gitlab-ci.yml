@@ -3,6 +3,8 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 deploy-pages:
+  script:
+    - ls
   pages: true  # specifies that this is a Pages job
   artifacts:
     paths:

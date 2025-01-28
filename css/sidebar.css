@@ -1,0 +1,61 @@
+#toggle-sidebar {
+    font-size: 20px;
+    /* Увеличиваем размер текста */
+    font-weight: bold;
+    /* Делаем текст жирным */
+    background-color: #ffffff;
+    /* Убираем фон (если нужно) */
+    border: none;
+    /* Убираем рамку */
+    cursor: pointer;
+    /* Указатель при наведении */
+    color: #000000;
+    /* Цвет текста */
+    padding: 5px 0px;
+    /* Отступы внутри кнопки */
+}
+
+/* Выпадающее меню */
+#dropdown-menu {
+    display: none;
+    /* Скрыто по умолчанию */
+    position: absolute;
+    top: 50px;
+    /* Расстояние от кнопки */
+    left: 30px;
+    background-color: white;
+    /* Белый фон */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Тень */
+    border-radius: 8px;
+    /* Скругленные углы */
+    overflow: hidden;
+    z-index: 500;
+    animation: fadeIn 0.3s ease-in-out;
+    /* Анимация */
+}
+
+#dropdown-menu ul {
+    list-style: none;
+    /* Убираем маркеры списка */
+    margin: 0;
+    padding: 10px 0;
+}
+
+#dropdown-menu ul li {
+    padding: 10px 2px;
+    /* Отступы внутри пунктов */
+    cursor: pointer;
+}
+
+#dropdown-menu ul li:hover {
+    background-color: #f1f1f1;
+    /* Фон при наведении */
+}
+
+#dropdown-menu ul li a {
+    text-decoration: none;
+    /* Убираем подчеркивание */
+    color: #000000;
+    /* Цвет текста */
+}

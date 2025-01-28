@@ -5,7 +5,7 @@ workflow:
 deploy-pages:
   script:
     - mkdir -p public/
-    - cp -r * public/
+    - cp -r src/ public/
   pages: true  # specifies that this is a Pages job
   artifacts:
     paths:

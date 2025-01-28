@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея изображений</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Галерея изображений</h1>
+        <button id="add-image-button">Добавить изображение</button>
+    </header>
+
+    <main id="gallery">
+        <!-- Здесь будут карточки изображений -->
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Ваша Галерея. Все права защищены.</p>
+    </footer>
+
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Добавить изображение</h2>
+            <input type="text" id="image-url" placeholder="URL изображения">
+            <textarea id="image-description" placeholder="Описание изображения"></textarea>
+            <button id="submit-image">Добавить</button>
+        </div>
+    </div>
+
+    <!-- <script src="js/script.js"></script> -->
+</body>
+
+</html>

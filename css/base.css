@@ -120,7 +120,7 @@ section {
     /* Отступ между секциями */
     padding: 20px;
     /* Отступы */
-    /* background-color: white; */
+    background-color: white;
     /* Белый фон секций */
     border-radius: var(--round);
     /* Скругленные углы */

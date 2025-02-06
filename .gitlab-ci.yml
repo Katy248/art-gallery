@@ -4,8 +4,8 @@ workflow:
 
 deploy-pages:
   script:
-    - mkdir -p public/
-    - cp -r src/* public/
+    - cd client && npm run build
+    - cp -r ./client/dist/ ./public/
   pages: true  # specifies that this is a Pages job
   artifacts:
     paths:

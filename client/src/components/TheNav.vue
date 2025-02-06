@@ -13,51 +13,51 @@ const backdropClick = (event) => {
 };
 </script>
 <template>
-    <header class="flex flex-row p-3 sticky top-0 bg-white">
+    <header class="flex flex-row p-3 sticky top-0 bg-white w-full dark:bg-[#1C1B1A]">
         <button class="bg-white px-6 py-2 rounded-md hover:bg-gray-200 active:bg-gray-300 z-50 font-bold" @click="menuClick">ArtGallery</button>
-        <div v-show="showMenu" class="w-full h-screen absolute top-0 left-0 bg-black/60 z-40" @click="backdropClick">
-            <nav class="left-3">
-                <div class="nav rounded-md">
-                    <RouterLink class="nav-item" to="/">
-                        <i class="fas fa-home nav-icon"></i>
-                        Главная
-                    </RouterLink>
-                    <a class="nav-item" href="/gallery.html">
-                        <i class="fas fa-image nav-icon"></i>
-                        Моя галерея</a
-                    >
-                    <a class="nav-item" href="#upload">
-                        <i class="fas fa-upload nav-icon"></i>
-                        Загрузить
-                    </a>
-                    <RouterLink class="nav-item" to="/help">
-                        <i class="fas fa-question nav-icon"></i>
-                        Помощь
-                    </RouterLink>
-                    <RouterLink to="/about" class="nav-item">
-                        <i class="fas fa-info nav-icon"></i>
-                        О нас
-                    </RouterLink>
-                </div>
-                <div class="nav rounded-md" v-if="authorized">
-                    <a class="nav-item" href="/profile">
-                        <i class="fas fa-user-plus nav-icon"></i>
-                        Профиль</a
-                    >
-                </div>
-                <div class="nav rounded-md" v-else>
-                    <a class="nav-item" href="/registration.html">
-                        <i class="fas fa-user-plus nav-icon"></i>
-                        Регистрация</a
-                    >
-                    <a class="nav-item" href="/login.html">
-                        <i class="fas fa-arrow-right-to-bracket nav-icon"></i>
-                        Вход</a
-                    >
-                </div>
-            </nav>
-        </div>
     </header>
+    <div v-show="showMenu" class="w-full h-screen fixed top-0 left-0 bg-black/60 z-40 flex flex-col items-center" @click="backdropClick">
+        <nav class="left-3">
+            <div class="nav rounded-md">
+                <RouterLink class="nav-item" to="/">
+                    <i class="fas fa-home nav-icon"></i>
+                    Главная
+                </RouterLink>
+                <a class="nav-item" href="/gallery.html">
+                    <i class="fas fa-image nav-icon"></i>
+                    Моя галерея</a
+                >
+                <a class="nav-item" href="#upload">
+                    <i class="fas fa-upload nav-icon"></i>
+                    Загрузить
+                </a>
+                <RouterLink class="nav-item" to="/help">
+                    <i class="fas fa-question nav-icon"></i>
+                    Помощь
+                </RouterLink>
+                <RouterLink to="/about" class="nav-item">
+                    <i class="fas fa-info nav-icon"></i>
+                    О нас
+                </RouterLink>
+            </div>
+            <div class="nav rounded-md" v-if="authorized">
+                <a class="nav-item" href="/profile">
+                    <i class="fas fa-user-plus nav-icon"></i>
+                    Профиль</a
+                >
+            </div>
+            <div class="nav rounded-md" v-else>
+                <a class="nav-item" href="/registration.html">
+                    <i class="fas fa-user-plus nav-icon"></i>
+                    Регистрация</a
+                >
+                <a class="nav-item" href="/login.html">
+                    <i class="fas fa-arrow-right-to-bracket nav-icon"></i>
+                    Вход</a
+                >
+            </div>
+        </nav>
+    </div>
 </template>
 
 <style scoped>

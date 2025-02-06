@@ -5,9 +5,17 @@ import TheFooter from "./components/TheFooter.vue";
 </script>
 
 <template>
-    <TheNav />
-    <main class="grow">
-        <RouterView />
-    </main>
-    <TheFooter />
+    <div class="flex flex-col min-h-screen items-center gap-5 w-full">
+        <TheNav />
+        <main class="grow max-w-[800px] px-5">
+            <RouterView />
+        </main>
+        <TheFooter />
+    </div>
 </template>
+<style>
+@import "./style.css";
+body {
+    @apply dark:bg-[#100F0F];
+}
+</style>

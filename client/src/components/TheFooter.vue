@@ -17,16 +17,16 @@ const currentYear = ref(new Date());
                 </ul>
             </section>
         </div>
-        <p class="text-center py-2 text-gray-600">© 2023-{{ currentYear.getFullYear() }} ArtGallery. Все права защищены.</p>
+        <p class="text-center py-2 text-tx">© 2023-{{ currentYear.getFullYear() }} ArtGallery. Все права защищены.</p>
     </footer>
 </template>
 
 <style scoped>
 @reference "../style.css";
 h5 {
-    @apply pb-2 text-gray-800;
+    @apply pb-2 text-tx-2;
 }
 .item {
-    @apply text-gray-600 text-sm hover:underline active:text-gray-700;
+    @apply text-tx-2/50 text-sm hover:underline active:text-tx-2;
 }
 </style>

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"art-gallery-server/database"
 	m "art-gallery-server/models"
 
 	"github.com/charmbracelet/log"
@@ -42,12 +41,7 @@ func createUser(r *createUserRequest) gin.HandlerFunc {
 			ctx.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
-		db, err := database.ConnectToDb()
-		if err != nil {
-			log.Errorf("Failed to connect to database: %s", err)
-			ctx.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
+		db := ConnectToDbOrAbort(ctx)
 		if err := user.Save(db); err != nil {
 			log.Errorf("Failed to save user: %s", err)
 			ctx.AbortWithStatus(http.StatusInternalServerError)
@@ -82,7 +76,7 @@ func GetUserHandlers() []gin.HandlerFunc {
 }
 func getUser(r *getUserRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db, _ := database.ConnectToDb()
+		db := ConnectToDbOrAbort(ctx)
 		var user m.User
 		query := fmt.Sprintf("id = %d", r.Id)
 		db.Model(&m.User{}).First(&user, query)

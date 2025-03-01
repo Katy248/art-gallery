@@ -1,12 +1,14 @@
 package endpoints
 
 import (
+	"art-gallery-server/database"
 	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type Validatable interface {
@@ -51,6 +53,16 @@ func validateNotEmpty(value string, valueName string) error {
 			fmt.Sprintf("%s is empty", valueName))
 	}
 	return nil
+}
+
+func ConnectToDbOrAbort(ctx *gin.Context) *gorm.DB {
+	db, err := database.ConnectToDb()
+	if err != nil {
+		log.Errorf("Failed to connect to database: %s", err)
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return nil
+	}
+	return db
 }
 
 func ValidateNotEmpty(value string) error {

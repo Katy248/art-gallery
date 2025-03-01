@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"errors"
@@ -48,4 +48,7 @@ func (u *User) SetPassword(password string) *User {
 	hash := hashPassword(password)
 	u.PasswordHash = hash
 	return u
+}
+func (u *User) CheckPassword(password string) bool {
+	return u.PasswordHash == hashPassword(password)
 }

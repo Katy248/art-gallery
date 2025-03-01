@@ -3,6 +3,10 @@ package main
 import (
 	"net/http"
 
+	"art-gallery-server/database"
+	e "art-gallery-server/endpoints"
+	m "art-gallery-server/models"
+
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 )
@@ -10,22 +14,25 @@ import (
 func CreateServer(addr string) *gin.Engine {
 
 	server := gin.Default()
-	server.GET("/test", func(ctx *gin.Context) {
-		log.Info("Test endpoint")
-		db := ConnectToDbOrExit(ConnectionString)
 
-		var users []User
-		db.Model(&User{}).Find(&users)
-		ctx.JSON(http.StatusOK, users)
-	})
+	if gin.Mode() == gin.DebugMode {
+		server.GET("/test", func(ctx *gin.Context) {
+			log.Info("Test endpoint")
+			db := database.MustConnectToDb()
+
+			var users []m.User
+			db.Model(&m.User{}).Find(&users)
+			ctx.JSON(http.StatusOK, users)
+		})
+	}
 	api := server.Group("/api")
 	{
 		users := api.Group("/user")
 		{
 			// get user by id
-			users.GET("/:id", GetUserHandler())
+			users.POST("/", e.GetUserHandlers()...)
 			// create new user, aka register
-			users.POST("/create", CreateUserHandler())
+			users.POST("/create", e.CreateUserHandlers()...)
 			// update user info
 			users.POST("/update")
 		}

@@ -3,46 +3,28 @@ package main
 import (
 	"fmt"
 
-	"github.com/charmbracelet/log"
+	db "art-gallery-server/database"
 
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	"github.com/charmbracelet/log"
+	"github.com/gin-gonic/gin"
 )
 
 var (
 	port             = 8080
-	ConnectionString = "../art-gallery.db"
+	connectionString = "../art-gallery.db"
+	serverMode       = gin.ReleaseMode
 )
 
 func main() {
-	MigrateDb(ConnectionString)
+	db.SetupConnectionString(connectionString)
+	db.MustMigrateDb()
+	SetServerMode(serverMode)
 	addr := fmt.Sprintf(":%d", port)
 	server := CreateServer(addr)
 	server.Run(addr)
 }
 
-// Migrates database or exits with error
-func MigrateDb(conn string) {
-	db := ConnectToDbOrExit(conn)
-	err := db.AutoMigrate(&User{})
-	if err != nil {
-		log.Fatalf("Failed to migrate database: %s", err)
-	}
-	log.Info("Database migrated")
-}
-
-func ConnectToDbOrExit(conn string) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(conn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %s", err)
-	}
-	return db
-}
-func ConnectToDb(conn string) (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open(conn), &gorm.Config{})
-	if err != nil {
-		// log.Errorf("Failed to connect to database: %s", err)
-		return nil, err
-	}
-	return db, nil
+func SetServerMode(mode string) {
+	log.Infof("Gin server mode - %s", mode)
+	gin.SetMode(mode)
 }

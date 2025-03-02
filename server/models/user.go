@@ -15,6 +15,7 @@ type User struct {
 	Name         string
 	Email        string `gorm:"unique"`
 	PasswordHash string
+	PostSaves    []PostSave
 }
 
 func hashPassword(password string) string {

@@ -9,6 +9,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
+	gravatar "github.com/katy248/gravatar/pkg/url"
 )
 
 type createUserRequest struct {
@@ -63,8 +64,9 @@ func (r *getUserRequest) Validate() error {
 }
 
 type getUserResponse struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id        int    `json:"id"`
+	Name      string `json:"name"`
+	AvatarUrl string `json:"avatar.url"`
 }
 
 func GetUserHandlers() []gin.HandlerFunc {
@@ -86,7 +88,45 @@ func getUser(r *getUserRequest) gin.HandlerFunc {
 
 func newGetUserResponse(u m.User) *getUserResponse {
 	return &getUserResponse{
-		Id:   u.ID,
-		Name: u.Name,
+		Id:        u.ID,
+		Name:      u.Name,
+		AvatarUrl: gravatar.NewAvatarUrl(u.Email, gravatar.DefaultImage(gravatar.DefaultRetro)),
+	}
+}
+
+type editRequest struct {
+	Name string `json:"name"`
+}
+
+func (r *editRequest) Validate() error {
+	return errors.Join(ValidateNotEmptyNamed(r.Name, "name"))
+}
+
+func EditUserHandlers() []gin.HandlerFunc {
+	var user AuthUser
+	var request editRequest
+	handlers := []gin.HandlerFunc{
+		Authorization(&user),
+		ValidateRequest(&request),
+		editUser(&request, &user),
+	}
+	return handlers
+}
+func editUser(r *editRequest, user *AuthUser) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		db := ConnectToDbOrAbort(ctx)
+
+		var dbUser m.User
+		query := fmt.Sprintf("id = %d", user.ID)
+		result := db.Model(&m.User{}).First(&dbUser, query)
+
+		if result.Error != nil {
+			log.Errorf("Failed get user (id = %d) from database: %s", user.ID, result.Error)
+			ctx.AbortWithStatus(http.StatusBadRequest)
+			return
+		}
+
+		db.Model(&dbUser).Update("Name", r.Name)
+		ctx.AbortWithStatus(http.StatusOK)
 	}
 }

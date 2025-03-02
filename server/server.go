@@ -30,30 +30,34 @@ func CreateServer(addr string) *gin.Engine {
 		users := api.Group("/user")
 		{
 			// get user by id
-			users.POST("/", e.GetUserHandlers()...)
+			users.POST("/get", e.GetUserHandlers()...)
 			// create new user, aka register
 			users.POST("/create", e.CreateUserHandlers()...)
 			// update user info
-			users.POST("/update")
+			users.POST("/edit", e.EditUserHandlers()...)
+		}
+		auth := api.Group("/auth")
+		{
+			auth.POST("/", e.AuthHandlers()...)
 		}
 		post := api.Group("/post")
 		{
 			// get post by id
-			post.GET("/:id")
+			post.GET("/get")
 			// get users posts
-			post.GET("/users/:id")
+			post.GET("/get-users")
 			// create new post
-			post.POST("/")
+			post.POST("/create")
 			// update post info
 			post.POST("/update")
 			// delete post
-			post.DELETE("/:id")
+			post.DELETE("/delete")
 			// save post
-			post.GET("/save/:id")
+			post.POST("/save")
 			// unsave post
-			post.GET("/unsave/:id")
+			post.POST("/unsave")
 			// feed
-			post.GET("/feed/:lastId")
+			post.POST("/feed")
 		}
 		gallery := api.Group("/gallery")
 		{

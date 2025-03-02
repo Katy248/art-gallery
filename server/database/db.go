@@ -17,7 +17,7 @@ func SetupConnectionString(conn string) {
 // Migrates database or exits with error
 func MustMigrateDb() {
 	db := MustConnectToDb()
-	err := db.AutoMigrate(&m.User{})
+	err := db.AutoMigrate(&m.User{}, &m.Post{})
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %s", err)
 	}

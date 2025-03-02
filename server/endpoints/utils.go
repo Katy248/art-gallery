@@ -46,7 +46,7 @@ func ValidateUri(r Validatable) gin.HandlerFunc {
 }
 func validateNotEmpty(value string, valueName string) error {
 	if valueName == "" {
-		valueName = "string"
+		valueName = "string field"
 	}
 	if value == "" {
 		return errors.New(

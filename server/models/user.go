@@ -3,6 +3,9 @@ package models
 import (
 	"errors"
 
+	"github.com/charmbracelet/log"
+	"github.com/spf13/viper"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -19,8 +22,17 @@ type User struct {
 }
 
 func hashPassword(password string) string {
-	// TODO: implement hashing
-	return password
+	cost := viper.GetInt("password.cost")
+	hashed, err := bcrypt.GenerateFromPassword([]byte(password), cost)
+	if err != nil {
+		log.Fatalf("Failed hash password: %s", err)
+		return ""
+	}
+	return string(hashed)
+}
+func checkPassword(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func NewUser(name, email, password string) (*User, error) {
@@ -51,5 +63,8 @@ func (u *User) SetPassword(password string) *User {
 	return u
 }
 func (u *User) CheckPassword(password string) bool {
-	return u.PasswordHash == hashPassword(password)
+	// hashed := hashPassword(password)
+	// log.Debugf("Compare passwords '%s' and '%s'", u.PasswordHash, hashed)
+	// return u.PasswordHash == hashed
+	return checkPassword(password, u.PasswordHash)
 }

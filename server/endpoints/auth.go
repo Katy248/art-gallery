@@ -10,6 +10,16 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/spf13/viper"
+)
+
+func init() {
+	jwtKey = []byte(viper.GetString("server.jwt_key"))
+}
+
+var (
+	jwtKey       []byte
+	signinMethod = jwt.SigningMethodHS256
 )
 
 type authRequest struct {
@@ -100,9 +110,4 @@ func Authorization(u *AuthUser) gin.HandlerFunc {
 
 const (
 	bearer = "Bearer"
-)
-
-var (
-	jwtKey       = []byte("CoolPrivateJwtKey") // TODO: Load from config, not from code
-	signinMethod = jwt.SigningMethodHS256
 )

@@ -7,6 +7,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -15,16 +16,31 @@ var (
 	serverMode       = gin.ReleaseMode
 )
 
+func init() {
+	SetupConfiguration()
+	SetupLogging()
+}
+
 func main() {
-	db.SetupConnectionString(connectionString)
+	db.SetupConnectionStringFromConf()
 	db.MustMigrateDb()
-	SetServerMode(serverMode)
 	addr := fmt.Sprintf(":%d", port)
 	server := CreateServer(addr)
 	server.Run(addr)
 }
 
-func SetServerMode(mode string) {
-	log.Infof("Gin server mode - %s", mode)
-	gin.SetMode(mode)
+func SetupLogging() {
+	level := viper.GetString("log.level")
+	switch level {
+	case "debug":
+		log.SetLevel(log.DebugLevel)
+	case "info":
+		log.SetLevel(log.InfoLevel)
+	case "warning":
+		log.SetLevel(log.WarnLevel)
+	case "error":
+		log.SetLevel(log.ErrorLevel)
+	}
+
+	log.Infof("Log level - %s", level)
 }

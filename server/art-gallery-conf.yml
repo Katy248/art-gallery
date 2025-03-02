@@ -1,0 +1,11 @@
+log:
+   level: debug
+database:
+  connection_string: "../art-gallery.db"
+
+server:
+  mode: "release"
+  jwt_key: "CoolJwtKey1234567890"
+
+password:
+  cost: 8

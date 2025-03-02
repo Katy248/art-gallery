@@ -4,20 +4,26 @@ import (
 	m "art-gallery-server/models"
 
 	"github.com/charmbracelet/log"
+	"github.com/spf13/viper"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var connectionString = "../art-gallery.db"
 
+func SetupConnectionStringFromConf() {
+	conn := viper.GetString("database.connection_string")
+	SetupConnectionString(conn)
+}
 func SetupConnectionString(conn string) {
 	connectionString = conn
+	log.Debugf("Connection string - '%s'", conn)
 }
 
 // Migrates database or exits with error
 func MustMigrateDb() {
 	db := MustConnectToDb()
-	err := db.AutoMigrate(&m.User{}, &m.Post{})
+	err := db.AutoMigrate(&m.User{}, &m.Post{}, &m.PostSave{})
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %s", err)
 	}

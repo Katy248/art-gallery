@@ -73,6 +73,7 @@ func CreateServer(addr string) *gin.Engine {
 			gallery.POST("/update")
 			gallery.DELETE("/")
 		}
+		api.Static("/images", database.ImagesDir())
 	}
 	return server
 }

@@ -2,6 +2,7 @@ log:
    level: debug
 database:
   connection_string: "../art-gallery.db"
+  images_dir: "/tmp/art-gallery/images"
 
 server:
   mode: "release"
@@ -9,3 +10,4 @@ server:
 
 password:
   cost: 8
+

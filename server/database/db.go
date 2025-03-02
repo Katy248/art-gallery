@@ -22,6 +22,7 @@ func SetupConnectionString(conn string) {
 
 // Migrates database or exits with error
 func MustMigrateDb() {
+	setupImages()
 	db := MustConnectToDb()
 	err := db.AutoMigrate(&m.User{}, &m.Post{}, &m.PostSave{})
 	if err != nil {

@@ -5,10 +5,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-func SetupConfiguration() {
+func init() {
 	viper.SetConfigName("art-gallery-conf")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("$XDG_CONFIG_DIR/art-gallery/")
+}
+
+func SetupConfiguration() {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {

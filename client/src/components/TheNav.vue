@@ -51,10 +51,10 @@ const backdropClick = (event) => {
                     <i class="fas fa-user-plus nav-icon"></i>
                     Регистрация</a
                 >
-                <a class="nav-item" href="/login.html">
+                <RouterLink to="/auth/login" class="nav-item">
                     <i class="fas fa-arrow-right-to-bracket nav-icon"></i>
-                    Вход</a
-                >
+                    Вход
+                </RouterLink>
             </div>
         </nav>
     </div>

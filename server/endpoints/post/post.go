@@ -3,6 +3,8 @@ package post
 import (
 	"art-gallery-server/endpoints/post/create"
 	"art-gallery-server/endpoints/post/get_users"
+	"art-gallery-server/endpoints/post/save"
+	"art-gallery-server/endpoints/post/unsave"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,9 +21,9 @@ func Setup(router *gin.RouterGroup) {
 	// delete post
 	router.DELETE("/delete")
 	// save post
-	router.POST("/save")
+	router.POST("/save", save.Handlers()...)
 	// unsave post
-	router.POST("/unsave")
+	router.POST("/unsave", unsave.Handlers()...)
 	// feed
 	router.POST("/feed")
 }

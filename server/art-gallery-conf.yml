@@ -5,7 +5,7 @@ database:
   images_dir: "/tmp/art-gallery/images"
 
 server:
-  mode: "release"
+  mode: "debug"
   jwt_key: "CoolJwtKey1234567890"
 
 password:

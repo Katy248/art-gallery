@@ -24,6 +24,7 @@ func init() {
 func main() {
 	db.SetupConnectionStringFromConf()
 	db.MustMigrateDb()
+	log.Info("Here")
 	addr := fmt.Sprintf(":%d", port)
 	server := CreateServer(addr)
 	server.Run(addr)

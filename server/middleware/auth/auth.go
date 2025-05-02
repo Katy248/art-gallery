@@ -1,7 +1,8 @@
-package endpoints
+package auth
 
 import (
 	"art-gallery-server/models"
+	u "art-gallery-server/utils"
 	"errors"
 	"fmt"
 	"net/http"
@@ -29,8 +30,8 @@ type authRequest struct {
 
 func (r *authRequest) Validate() error {
 	return errors.Join(
-		ValidateNotEmpty(r.Email),
-		ValidateNotEmpty(r.Password),
+		u.ValidateNotEmpty(r.Email),
+		u.ValidateNotEmpty(r.Password),
 	)
 }
 
@@ -43,7 +44,7 @@ type authResponse struct {
 func AuthHandlers() []gin.HandlerFunc {
 	var request authRequest
 	handlers := []gin.HandlerFunc{
-		ValidateRequest(&request),
+		u.ValidateRequest(&request),
 		auth(&request),
 	}
 	return handlers
@@ -51,7 +52,7 @@ func AuthHandlers() []gin.HandlerFunc {
 
 func auth(r *authRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := ConnectToDbOrAbort(ctx)
+		db := u.ConnectToDbOrAbort(ctx)
 
 		query := fmt.Sprintf("email = '%s'", r.Email)
 		var user models.User

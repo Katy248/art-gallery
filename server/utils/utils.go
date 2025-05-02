@@ -1,4 +1,4 @@
-package endpoints
+package utils
 
 import (
 	"art-gallery-server/database"

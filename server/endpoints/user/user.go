@@ -1,11 +1,15 @@
-package endpoints
+package user
 
 import (
 	"errors"
 	"fmt"
 	"net/http"
 
+	"art-gallery-server/middleware/auth"
 	m "art-gallery-server/models"
+	"art-gallery-server/utils"
+
+	u "art-gallery-server/utils"
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
@@ -20,16 +24,16 @@ type createUserRequest struct {
 
 func (r *createUserRequest) Validate() error {
 	return errors.Join(
-		ValidateNotEmpty(r.Name),
-		ValidateNotEmpty(r.Email),
-		ValidateNotEmpty(r.Password),
+		u.ValidateNotEmptyNamed(r.Name, "name"),
+		u.ValidateNotEmptyNamed(r.Email, "email"),
+		u.ValidateNotEmptyNamed(r.Password, "password"),
 	)
 }
 
 func CreateUserHandlers() []gin.HandlerFunc {
 	request := &createUserRequest{}
 	handlers := []gin.HandlerFunc{
-		ValidateRequest(request), createUser(request),
+		u.ValidateRequest(request), createUser(request),
 	}
 	return handlers
 }
@@ -42,7 +46,7 @@ func createUser(r *createUserRequest) gin.HandlerFunc {
 			ctx.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
-		db := ConnectToDbOrAbort(ctx)
+		db := u.ConnectToDbOrAbort(ctx)
 		if err := user.Save(db); err != nil {
 			log.Errorf("Failed to save user: %s", err)
 			ctx.AbortWithStatus(http.StatusInternalServerError)
@@ -59,7 +63,7 @@ type getUserRequest struct {
 
 func (r *getUserRequest) Validate() error {
 	return errors.Join(
-		ValidateMoreThan(r.Id, 0, "id"),
+		u.ValidateMoreThan(r.Id, 0, "id"),
 	)
 }
 
@@ -72,13 +76,13 @@ type getUserResponse struct {
 func GetUserHandlers() []gin.HandlerFunc {
 	request := &getUserRequest{}
 	handlers := []gin.HandlerFunc{
-		ValidateRequest(request), getUser(request),
+		utils.ValidateRequest(request), getUser(request),
 	}
 	return handlers
 }
 func getUser(r *getUserRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := ConnectToDbOrAbort(ctx)
+		db := u.ConnectToDbOrAbort(ctx)
 		var user m.User
 		query := fmt.Sprintf("id = %d", r.Id)
 		db.Model(&m.User{}).First(&user, query)
@@ -99,22 +103,22 @@ type editRequest struct {
 }
 
 func (r *editRequest) Validate() error {
-	return errors.Join(ValidateNotEmptyNamed(r.Name, "name"))
+	return errors.Join(u.ValidateNotEmptyNamed(r.Name, "name"))
 }
 
 func EditUserHandlers() []gin.HandlerFunc {
-	var user AuthUser
+	var user auth.AuthUser
 	var request editRequest
 	handlers := []gin.HandlerFunc{
-		Authorization(&user),
-		ValidateRequest(&request),
+		auth.Authorization(&user),
+		u.ValidateRequest(&request),
 		editUser(&request, &user),
 	}
 	return handlers
 }
-func editUser(r *editRequest, user *AuthUser) gin.HandlerFunc {
+func editUser(r *editRequest, user *auth.AuthUser) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := ConnectToDbOrAbort(ctx)
+		db := u.ConnectToDbOrAbort(ctx)
 
 		var dbUser m.User
 		query := fmt.Sprintf("id = %d", user.ID)

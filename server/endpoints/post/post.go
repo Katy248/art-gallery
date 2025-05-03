@@ -2,6 +2,7 @@ package post
 
 import (
 	"art-gallery-server/endpoints/post/create"
+	"art-gallery-server/endpoints/post/get_saved"
 	"art-gallery-server/endpoints/post/get_users"
 	"art-gallery-server/endpoints/post/save"
 	"art-gallery-server/endpoints/post/unsave"
@@ -24,6 +25,8 @@ func Setup(router *gin.RouterGroup) {
 	router.POST("/save", save.Handlers()...)
 	// unsave post
 	router.POST("/unsave", unsave.Handlers()...)
+	// get all saved post for specified user
+	router.POST("/get-saved", get_saved.Handlers()...)
 	// feed
 	router.POST("/feed")
 }

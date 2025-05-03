@@ -8,7 +8,8 @@ const routes = [
     { path: "/", component: HomeView },
     { path: "/about", component: AboutView },
     { path: "/help", component: HelpView },
-    { path: "/auth/login", component: import("./views/LoginView.vue") },
+    { path: "/auth/login", component: () => import("./views/LoginView.vue") },
+    { path: "/profile", component: () => import("./views/ProfileView.vue") },
 ];
 
 const router = createRouter({

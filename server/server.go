@@ -35,13 +35,13 @@ func CreateServer(addr string) *gin.Engine {
 	api := server.Group("/api")
 	{
 		e.Setup(api)
-		gallery := api.Group("/gallery")
-		{
-			gallery.GET("/:id")
-			gallery.POST("/")
-			gallery.POST("/update")
-			gallery.DELETE("/")
-		}
+		// gallery := api.Group("/gallery")
+		// {
+		// 	gallery.GET("/:id")
+		// 	gallery.POST("/")
+		// 	gallery.POST("/update")
+		// 	gallery.DELETE("/")
+		// }
 		api.Static("/images", database.ImagesDir())
 	}
 	return server

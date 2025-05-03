@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 
 let showMenu = ref(false);
-let authorized = ref(false);
 
 const menuClick = (event) => {
     showMenu.value = !showMenu.value;
@@ -11,6 +11,8 @@ const menuClick = (event) => {
 const backdropClick = (event) => {
     showMenu.value = false;
 };
+
+const auth = useAuthStore();
 </script>
 <template>
     <header class="flex flex-row p-3 sticky top-0 w-full bg-(--bg-2)">
@@ -40,7 +42,7 @@ const backdropClick = (event) => {
                     О нас
                 </RouterLink>
             </div>
-            <div class="nav rounded-md" v-if="authorized">
+            <div class="nav rounded-md" v-if="auth.isAuthenticated">
                 <a class="nav-item" href="/profile">
                     <i class="fas fa-user-plus nav-icon"></i>
                     Профиль</a

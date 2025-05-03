@@ -63,7 +63,7 @@ type getUserRequest struct {
 
 func (r *getUserRequest) Validate() error {
 	return errors.Join(
-		u.ValidateMoreThan(r.Id, 0, "id"),
+	// u.ValidateMoreThan(r.Id, 0, "id"),
 	)
 }
 
@@ -76,15 +76,24 @@ type getUserResponse struct {
 func GetUserHandlers() []gin.HandlerFunc {
 	request := &getUserRequest{}
 	handlers := []gin.HandlerFunc{
-		utils.ValidateRequest(request), getUser(request),
+		utils.ValidateRequest(request),
+		getUser(request),
 	}
 	return handlers
 }
 func getUser(r *getUserRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := u.ConnectToDbOrAbort(ctx)
+		userId := r.Id
+		if userId <= 0 {
+			if user, err := auth.GetUser(ctx); err != nil {
+				log.Warn("Invalid user id with non-authorized")
+			} else {
+				userId = user.ID
+			}
+		}
 		var user m.User
-		query := fmt.Sprintf("id = %d", r.Id)
+		query := fmt.Sprintf("id = %d", userId)
 		db.Model(&m.User{}).First(&user, query)
 		ctx.JSON(http.StatusOK, newGetUserResponse(user))
 	}

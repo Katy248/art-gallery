@@ -11,16 +11,10 @@ import (
 )
 
 func Setup(router *gin.RouterGroup) {
-	// get post by id
-	router.GET("/get")
 	// get users posts
 	router.POST("/get-users", get_users.GetUsersPostHandlers()...)
 	// create new post
 	router.POST("/create", create.CreatePostHandlers()...)
-	// update post info
-	router.POST("/update")
-	// delete post
-	router.DELETE("/delete")
 	// save post
 	router.POST("/save", save.Handlers()...)
 	// unsave post
@@ -28,5 +22,11 @@ func Setup(router *gin.RouterGroup) {
 	// get all saved post for specified user
 	router.POST("/get-saved", get_saved.Handlers()...)
 	// feed
-	router.POST("/feed")
+	// router.POST("/feed")
+	// update post info
+	// router.POST("/update")
+	// delete post
+	// router.DELETE("/delete")
+	// get post by id
+	// router.GET("/get")
 }

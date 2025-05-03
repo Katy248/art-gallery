@@ -59,13 +59,19 @@ func auth(r *authRequest) gin.HandlerFunc {
 		result := db.Model(&models.User{}).First(&user, query)
 		if result.Error != nil {
 			log.Warnf("Error while getting user '%s': %s", r.Email, result.Error)
-			ctx.AbortWithStatus(http.StatusNotFound)
+			ctx.JSON(http.StatusNotFound, authResponse{
+				Success: false,
+				Error:   "Wrong email or password",
+			})
 			// TODO: return response with error message for frontend
 			return
 		}
 		if !user.CheckPassword(r.Password) {
 			log.Warnf("Wrong password for user '%s'", r.Email)
-			ctx.AbortWithStatus(http.StatusNotFound)
+			ctx.JSON(http.StatusNotFound, authResponse{
+				Success: false,
+				Error:   "Wrong email or password",
+			})
 			// TODO: return response with error message for frontend
 			return
 		}
@@ -107,6 +113,26 @@ func Authorization(u *AuthUser) gin.HandlerFunc {
 		u.ID = int(claims["id"].(float64))
 
 	}
+}
+
+func GetUser(ctx *gin.Context) (*AuthUser, error) {
+	authHeader := strings.Split(ctx.Request.Header.Get("Authorization"), " ")
+	if len(authHeader) < 2 || authHeader[0] != bearer {
+		log.Warn("Authorization failed: bad auth header")
+		return nil, fmt.Errorf("bad auth header")
+	}
+	tokenString := authHeader[1]
+	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) { return jwtKey, nil })
+	if err != nil {
+		log.Warnf("Authorization failed: %s", err)
+		return nil, fmt.Errorf("auth failed: %s", err)
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	user := AuthUser{
+		Email: claims["email"].(string),
+		ID:    int(claims["id"].(float64)),
+	}
+	return &user, nil
 }
 
 const (

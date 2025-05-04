@@ -32,9 +32,9 @@ func handler(r *request, u *auth.AuthUser) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 		var existingSave models.PostSave
-		db.First(&existingSave, "post_id = ? and user_id = ?", r.PostID, u.ID)
+		db.Unscoped().First(&existingSave, "post_id = ? and user_id = ?", r.PostID, u.ID)
 		if existingSave.ID != 0 {
-			db.Delete(&existingSave)
+			db.Unscoped().Delete(&existingSave)
 		}
 
 		ctx.JSON(http.StatusOK, gin.H{"saved": false})

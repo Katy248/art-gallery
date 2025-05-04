@@ -66,4 +66,8 @@ const rawSql = `
 			LEFT JOIN users u ON p.publisher_id = u.id
 			LEFT JOIN post_saves ps ON p.id = ps.post_id and ps.user_id = u.id
 
-	WHERE publisher_id = ?`
+	WHERE publisher_id = ?
+	
+	ORDER BY 
+		p.created_at DESC
+`

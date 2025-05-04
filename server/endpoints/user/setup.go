@@ -1,6 +1,10 @@
 package user
 
-import "github.com/gin-gonic/gin"
+import (
+	"art-gallery-server/endpoints/user/avatar"
+
+	"github.com/gin-gonic/gin"
+)
 
 func Setup(router *gin.RouterGroup) {
 	// get user by id
@@ -9,4 +13,6 @@ func Setup(router *gin.RouterGroup) {
 	router.POST("/create", CreateUserHandlers()...)
 	// update user info
 	router.POST("/edit", EditUserHandlers()...)
+	// get user avatar
+	router.GET("/avatar/:id", avatar.Handlers()...)
 }

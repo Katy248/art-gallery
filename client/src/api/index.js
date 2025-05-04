@@ -1,9 +1,12 @@
 import { useAuthStore } from "../stores/auth";
-import { useRouter } from "vue-router";
 
 const runFetch = (url, method, body, headers, inJson = true) => {
     if (inJson) {
         body = JSON.stringify(body);
+    }
+
+    if (method === "GET" || method === "HEAD") {
+        body = null;
     }
 
     const authStore = useAuthStore();
@@ -59,12 +62,20 @@ const getPosts = (userId, page) => {
 };
 
 const savePost = (postId) => {
-    postId = parseInt(postId);
     return runFetch("/api/post/save", "POST", { postId: postId }, {});
 };
 const unsavePost = (postId) => {
-    postId = parseInt(postId);
     return runFetch("/api/post/unsave", "POST", { postId: postId }, {});
 };
+const getSavedPosts = (userId, page) => {
+    return runFetch("/api/post/get-saved", "POST", { userId: userId, page: page }, {});
+};
+const getAvatar = (userId) => {
+    return runFetch(`/api/user/avatar/${userId}`, "GET", {}, {});
+};
 
-export { authenticate, getProfileInfo, register, createPost, getUserInfo, getPosts, savePost, unsavePost };
+const getAllPosts = (page) => {
+    return runFetch("/api/post/all", "POST", { page: page }, {});
+};
+
+export { authenticate, getProfileInfo, register, createPost, getUserInfo, getPosts, savePost, unsavePost, getSavedPosts, getAvatar, getAllPosts };

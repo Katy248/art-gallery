@@ -1,4 +1,4 @@
-package get
+package all
 
 import (
 	"art-gallery-server/middleware/auth"
@@ -26,26 +26,25 @@ func (r *Request) Validate() error {
 	return validation.GreaterOrEqual(r.Page, 0, "page")
 }
 
-type responsePost struct {
-	ID          int    `json:"id"`
-	Description string `json:"description"`
-	ImageUrl    string `json:"imageUrl"`
-	PublisherID int    `json:"publisherId"`
-	Name        string `json:"name"`
-	Saved       bool   `json:"saved"`
-	CreatedAt   string `json:"createdAt"`
-}
-
-func handler(r *Request, user *auth.AuthUser) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		db := utils.ConnectToDbOrAbort(c)
+func handler(r *Request, u *auth.AuthUser) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		db := utils.ConnectToDbOrAbort(ctx)
 		var posts []responsePost
-		db.Raw(rawSql, user.ID).Order("p.created_at ASC").Offset(r.Page * 20).Limit(20).Find(&posts)
-		// db.Where("publisher_id = ?", user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
-		c.JSON(200, gin.H{
+		db.Raw(rawSql, u.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
+
+		ctx.JSON(200, gin.H{
 			"posts": posts,
 		})
 	}
+}
+
+type responsePost struct {
+	ID            int    `json:"id"`
+	Description   string `json:"description"`
+	ImageUrl      string `json:"imageUrl"`
+	PublisherID   int    `json:"publisherId"`
+	PublisherName string `json:"publisherName"`
+	Saved         bool   `json:"saved"`
 }
 
 const rawSql = `
@@ -54,13 +53,13 @@ const rawSql = `
 		, p.description
 		, p.image_url
 		, p.publisher_id
-		, p.created_at
-		, u.name
+		, u.name as publisher_name
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved
 	FROM 
 		posts p 
 			LEFT JOIN users u ON p.publisher_id = u.id
-			LEFT JOIN post_saves ps ON p.id = ps.post_id and ps.user_id = u.id
+			LEFT JOIN post_saves ps ON p.id = ps.post_id and ps.user_id = ?
 
-	WHERE publisher_id = ?
+	ORDER BY 
+		p.created_at DESC
 `

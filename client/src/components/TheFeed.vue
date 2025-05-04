@@ -2,7 +2,8 @@
 import { RouterLink } from "vue-router";
 import PictureFullView from "./PictureFullView.vue";
 import { ref } from "vue";
-defineProps({
+import { getAvatar } from "../api";
+const props = defineProps({
     posts: {},
 });
 const currentPic = ref(null);
@@ -13,16 +14,24 @@ const zoomIn = (picture) => {
 const zoomOut = () => {
     currentPic.value = null;
 };
+
+props.posts.forEach((p) => {
+    console.log("Getting avatar ");
+    getAvatar(p.publisherId).then((r) => {
+        p.publisherAvatarUrl = r.url;
+        console.log(r);
+    });
+});
 </script>
 <template>
     <PictureFullView :img="currentPic" :resetImg="zoomOut" />
     <div class="flex flex-col gap-5 items-center">
         <div v-for="p in posts" class="rounded-lg p-3 flex flex-col gap-3 bg-bg-2 w-full">
             <div class="flex justify-between items-stretch">
-                <RouterLink class="flex gap-2 justify-baseline text-tx-2 btn-base hover:text-tx w-fit p-2 rounded-lg" :to="`/user/${p.author.id}`">
-                    <div><img :src="p.author.avatarUrl" class="w-6 rounded-full" /></div>
+                <RouterLink class="flex gap-2 justify-baseline text-tx-2 btn-base hover:text-tx w-fit p-2 rounded-lg" :to="`/user/${p.publisherId}`">
+                    <div v-if="p.publisherAvatarUrl"><img :src="p.publisherAvatarUrl" class="w-6 rounded-full" /></div>
                     <div class="">
-                        {{ p.author.name }}
+                        {{ p.publisherName }}
                     </div>
                 </RouterLink>
                 <div class="h-max">
@@ -38,7 +47,7 @@ const zoomOut = () => {
                 </button>
                 <img :src="p.imageUrl" class="rounded-lg w-full" />
             </div>
-            <div class="">{{ p.comment }}</div>
+            <div class="">{{ p.description }}</div>
             <!-- </div> -->
             <div class="flex gap-2 text-sm flex-wrap">
                 <button class="btn btn-primary"><i class="far fa-bookmark"></i> Сохранить</button>

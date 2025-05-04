@@ -50,7 +50,7 @@ const auth = useAuthStore();
                     Профиль</a
                 >
                 <RouterLink to="/auth/logout" class="nav-item text-red">
-                    <i class="fas fa-arrow-left-from-bracket nav-icon"></i>
+                    <i class="fas fa-arrow-right-from-bracket nav-icon"></i>
                     Выход
                 </RouterLink>
             </div>

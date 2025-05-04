@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 let showMenu = ref(false);
 
@@ -20,8 +21,9 @@ if (auth.isAuthenticated) {
 }
 </script>
 <template>
-    <header class="flex flex-row p-3 sticky top-0 w-full bg-(--bg-2)">
+    <header class="flex flex-row p-3 sticky top-0 w-full bg-bg-2 justify-between">
         <button class="btn-base text-magenta px-6 py-2 rounded-md z-50 font-bold" @click="menuClick">ArtGallery</button>
+        <!-- <button class="btn-base px-6 py-2 rounded-md font-bold">Profile</button> -->
     </header>
     <div v-show="showMenu" class="w-full h-screen fixed top-0 left-0 bg-black/60 z-10 flex flex-col items-center" @click="backdropClick">
         <nav class="absolute z-50 left-3 top-[60px] flex flex-col min-w-[10rem] rounded-md gap-2">

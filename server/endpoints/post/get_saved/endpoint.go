@@ -1,6 +1,7 @@
 package get_saved
 
 import (
+	"art-gallery-server/middleware/auth"
 	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
 	"errors"
@@ -10,10 +11,12 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
+	var u auth.AuthUser
 	var r request
 	return []gin.HandlerFunc{
+		auth.Authorization(&u),
 		utils.ValidateRequest(&r),
-		handler(&r),
+		handler(&r, &u),
 	}
 }
 
@@ -29,12 +32,12 @@ func (r *request) Validate() error {
 	)
 }
 
-func handler(r *request) gin.HandlerFunc {
+func handler(r *request, user *auth.AuthUser) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 
 		var posts []responsePost
-		db.Raw(rawQuery, r.UserID).Offset(r.Page * PageSize).Limit(PageSize).Find(&posts)
+		db.Raw(rawQuery, user.ID, r.UserID).Offset(r.Page * PageSize).Limit(PageSize).Find(&posts)
 		ctx.JSON(http.StatusOK, posts)
 	}
 }
@@ -49,28 +52,26 @@ type responsePost struct {
 	PublisherID   int    `json:"publisherId"`
 	Saved         bool   `json:"saved"`
 	PublisherName string `json:"publisherName"`
-	// Name        string `json:"name"`
 }
 
 const rawQuery = `
 	SELECT 
 		p.id
-		, p.created_at
 		, p.description
 		, p.image_url
 		, p.publisher_id
-		
+		, p.created_at
 		, u.name as publisher_name
-		
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved
-
 	FROM 
-		posts p
-			LEFT JOIN post_saves ps ON ps.post_id = p.id
-			LEFT JOIN users u ON u.id = p.publisher_id
-	WHERE 
-		saved = true and ps.user_id = ?
+		posts p 
+			LEFT JOIN users u ON p.publisher_id = u.id
+			LEFT JOIN post_saves ps ON 
+				p.id = ps.post_id 
+				and ps.user_id = ?
+
+	WHERE (SELECT COUNT(*) FROM post_saves WHERE post_id = p.id and user_id = ?) <> 0
 	
 	ORDER BY 
-		ps.created_at DESC
+		p.created_at DESC
 `

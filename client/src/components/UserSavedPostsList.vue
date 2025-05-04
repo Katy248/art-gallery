@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { getAvatar, savePost, unsavePost, getSavedPosts } from "../api";
 import { useRoute } from "vue-router";
+import PostCard from "./PostCard.vue";
 
 const props = defineProps({
     userId: {
@@ -39,7 +40,8 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div v-for="post in posts" class="bg-bg-2 p-2 gap-2 flex flex-col rounded-lg">
+    <PostCard v-for="post in posts" :post="post" :showPublisher="true" />
+    <!-- <div v-for="post in posts" class="bg-bg-2 p-2 gap-2 flex flex-col rounded-lg">
         <div class="flex items-center gap-2">
             <img :src="post.publisherAvatar" class="h-10 rounded-full" />
             <span>{{ post.publisherName }}</span>
@@ -57,5 +59,5 @@ onMounted(() => {
             </button>
             <button class="btn btn-base">В коллекцию</button>
         </div>
-    </div>
+    </div> -->
 </template>

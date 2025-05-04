@@ -42,10 +42,10 @@ getUserInfo(route.params.id).then((r) => {
             </div>
         </div>
 
-        <div v-if="user.id" class="flex justify-center items-center flex-col gap-4">
+        <div v-if="user.id" class="flex justify-center items-center flex-col gap-4 w-full grow">
             <TabGroup>
                 <TabList>
-                    <div class="flex gap-2 bg-bg-2 p-2 rounded-lg">
+                    <div class="flex gap-2 bg-bg-2 p-2 rounded-lg w-full">
                         <Tab as="template" v-slot="{ selected }">
                             <button class="btn outline-none" :class="selected ? 'bg-ui-2' : ''">Публикации</button>
                         </Tab>

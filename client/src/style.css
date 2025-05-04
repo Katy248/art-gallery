@@ -64,7 +64,7 @@ body {
 }
 
 .btn {
-    @apply cursor-pointer px-4 py-1 rounded-md h-fit flex flex-row items-center gap-2;
+    @apply cursor-pointer px-4 py-1 rounded-md h-fit flex flex-row items-center gap-2 justify-center;
 }
 
 .btn-base {

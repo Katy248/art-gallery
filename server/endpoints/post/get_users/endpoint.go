@@ -1,6 +1,7 @@
 package get_users
 
 import (
+	"art-gallery-server/middleware/auth"
 	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
 	"errors"
@@ -10,10 +11,12 @@ import (
 )
 
 func GetUsersPostHandlers() []gin.HandlerFunc {
+	var u auth.AuthUser
 	var r request
 	return []gin.HandlerFunc{
+		auth.Authorization(&u),
 		utils.ValidateRequest(&r),
-		handler(&r),
+		handler(&r, &u),
 	}
 }
 
@@ -40,11 +43,11 @@ type responsePost struct {
 	Saved       bool   `json:"saved"`
 }
 
-func handler(r *request) gin.HandlerFunc {
+func handler(r *request, user *auth.AuthUser) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 		var posts []responsePost
-		db.Raw(rawSql, r.UserID).
+		db.Raw(rawSql, user.ID, r.UserID).
 			Offset(PageLimit * r.Page).
 			Limit(PageLimit).
 			Find(&posts)
@@ -64,7 +67,9 @@ const rawSql = `
 	FROM 
 		posts p 
 			LEFT JOIN users u ON p.publisher_id = u.id
-			LEFT JOIN post_saves ps ON p.id = ps.post_id and ps.user_id = u.id
+			LEFT JOIN post_saves ps ON 
+				p.id = ps.post_id 
+				and ps.user_id = ?
 
 	WHERE publisher_id = ?
 	

@@ -8,6 +8,11 @@ export const useAuthStore = defineStore("auth", {
         isAuthenticated() {
             return this.token && this.token !== "";
         },
+        authData() {
+            if (!this.isAuthenticated) return {};
+            const arrayToken = this.token.split(".");
+            return JSON.parse(atob(arrayToken[1]));
+        },
     },
     actions: {
         authenticate(token) {

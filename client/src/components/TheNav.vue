@@ -12,7 +12,12 @@ const backdropClick = (event) => {
     showMenu.value = false;
 };
 
+const profileUrl = ref("");
 const auth = useAuthStore();
+if (auth.isAuthenticated) {
+    const data = auth.authData;
+    profileUrl.value = `/user/${data.id}`;
+}
 </script>
 <template>
     <header class="flex flex-row p-3 sticky top-0 w-full bg-(--bg-2)">
@@ -45,9 +50,9 @@ const auth = useAuthStore();
                 </RouterLink>
             </div>
             <div class="nav rounded-md" v-if="auth.isAuthenticated">
-                <a class="nav-item" href="/profile">
+                <RouterLink class="nav-item" :to="profileUrl">
                     <i class="fas fa-user-plus nav-icon"></i>
-                    Профиль</a
+                    Профиль</RouterLink
                 >
                 <RouterLink to="/auth/logout" class="nav-item text-red">
                     <i class="fas fa-arrow-right-from-bracket nav-icon"></i>

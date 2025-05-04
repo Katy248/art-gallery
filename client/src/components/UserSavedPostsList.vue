@@ -47,8 +47,14 @@ onMounted(() => {
         <img :src="post.imageUrl" class="rounded-md border border-ui-2" />
         <div class="grow">{{ post.description }}</div>
         <div class="flex gap-2">
-            <button v-if="post.saved" class="btn btn-base" @click="() => unsavePostHandler(post)">Сохранено</button>
-            <button v-else class="btn btn-primary" @click="() => savePostHandler(post)">Сохранить</button>
+            <button v-if="post.saved" class="btn btn-base" @click="() => unsavePostHandler(post)">
+                <i class="fas fa-bookmark"></i>
+                Сохранено
+            </button>
+            <button v-else class="btn btn-primary" @click="() => savePostHandler(post)">
+                <i class="far fa-bookmark"></i>
+                Сохранить
+            </button>
             <button class="btn btn-base">В коллекцию</button>
         </div>
     </div>

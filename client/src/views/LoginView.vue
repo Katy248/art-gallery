@@ -31,15 +31,3 @@ if (authStore.isAuthenticated) {
         </form>
     </div>
 </template>
-<style>
-@import "../style.css";
-.input-group {
-    @apply flex flex-col grow gap-1;
-    & > label {
-        @apply text-sm;
-    }
-}
-.text-entry {
-    @apply bg-ui outline-0 px-2 py-1 rounded-md border-ui-2 border;
-}
-</style>

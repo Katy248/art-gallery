@@ -74,6 +74,7 @@ body {
 .btn-base-overlay {
     @apply text-tx hover:bg-ui-2/70 bg-ui/70 active:bg-ui-3/70;
 }
+
 .btn-primary {
     @apply hover:bg-green bg-green-2 active:text-tx-3 text-tx;
 }
@@ -86,21 +87,36 @@ body {
     & p {
         @apply mb-4 px-2 text-tx-2 hover:text-tx border-l-2 border-transparent hover:border-l-2 hover:border-red transition-all duration-300;
     }
+
     & h2,
     & h3,
-    & h4 {
-    }
+    & h4 {}
 
     & h2 {
         @apply text-2xl font-bold;
     }
+
     & h3 {
         @apply text-xl mb-5 font-bold;
     }
+
     & h4 {
         @apply mb-3 font-semibold;
     }
+
     & a {
         @apply hover:underline text-purple-2 hover:text-purple;
+    }
+}
+
+.text-entry {
+    @apply bg-ui outline-0 px-2 py-1 rounded-md border-ui-2 border;
+}
+
+.input-group {
+    @apply flex flex-col grow gap-1;
+
+    &>label {
+        @apply text-sm;
     }
 }

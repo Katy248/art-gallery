@@ -1,34 +1,29 @@
-package get_users
+package get
 
 import (
+	"art-gallery-server/middleware/auth"
 	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
-	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetUsersPostHandlers() []gin.HandlerFunc {
-	var r request
+func Handlers() []gin.HandlerFunc {
+	var u auth.AuthUser
+	var r Request
 	return []gin.HandlerFunc{
+		auth.Authorization(&u),
 		utils.ValidateRequest(&r),
-		handler(&r),
+		handler(&r, &u),
 	}
 }
 
-const PageLimit = 20
-
-type request struct {
-	UserID int `json:"userId"`
-	Page   int `json:"page"`
+type Request struct {
+	Page int `json:"page"`
 }
 
-func (r *request) Validate() error {
-	return errors.Join(
-		validation.GreaterThan(r.UserID, 0, "userID"),
-		validation.GreaterOrEqual(r.Page, 0, "page"),
-	)
+func (r *Request) Validate() error {
+	return validation.GreaterOrEqual(r.Page, 0, "page")
 }
 
 type responsePost struct {
@@ -40,16 +35,15 @@ type responsePost struct {
 	Saved       bool   `json:"saved"`
 }
 
-func handler(r *request) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		db := utils.ConnectToDbOrAbort(ctx)
+func handler(r *Request, user *auth.AuthUser) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := utils.ConnectToDbOrAbort(c)
 		var posts []responsePost
-		db.Raw(rawSql, r.UserID).
-			Offset(PageLimit * r.Page).
-			Limit(PageLimit).
-			Find(&posts)
-
-		ctx.JSON(http.StatusOK, posts)
+		db.Raw(rawSql, user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
+		// db.Where("publisher_id = ?", user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
+		c.JSON(200, gin.H{
+			"posts": posts,
+		})
 	}
 }
 

@@ -37,6 +37,6 @@ func handler(r *request, u *auth.AuthUser) gin.HandlerFunc {
 			db.Delete(&existingSave)
 		}
 
-		ctx.AbortWithStatus(http.StatusOK)
+		ctx.JSON(http.StatusOK, gin.H{"saved": false})
 	}
 }

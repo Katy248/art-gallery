@@ -9,7 +9,10 @@ const routes = [
     { path: "/about", component: AboutView },
     { path: "/help", component: HelpView },
     { path: "/auth/login", component: () => import("./views/LoginView.vue") },
+    { path: "/auth/register", component: () => import("./views/auth/RegisterView.vue") },
     { path: "/profile", component: () => import("./views/ProfileView.vue") },
+    { path: "/post/create", component: () => import("./views/CreatePostView.vue") },
+    { path: "/user/:id", component: () => import("./views/user/UserView.vue") },
 ];
 
 const router = createRouter({

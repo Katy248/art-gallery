@@ -5,7 +5,7 @@ const name = ref("");
 const img = ref("");
 getProfileInfo().then((response) => {
     name.value = response.name;
-    img.value = response["avatar.url"];
+    img.value = response.avatarUrl;
     console.log(response);
 });
 </script>

@@ -19,7 +19,7 @@ const zoomOut = () => {
     <div class="flex flex-col gap-5 items-center">
         <div v-for="p in posts" class="rounded-lg p-3 flex flex-col gap-3 bg-bg-2 w-full">
             <div class="flex justify-between items-stretch">
-                <RouterLink class="flex gap-2 justify-baseline text-tx-2 btn-base hover:text-tx w-fit p-2 rounded-lg" to="/">
+                <RouterLink class="flex gap-2 justify-baseline text-tx-2 btn-base hover:text-tx w-fit p-2 rounded-lg" :to="`/user/${p.author.id}`">
                     <div><img :src="p.author.avatarUrl" class="w-6 rounded-full" /></div>
                     <div class="">
                         {{ p.author.name }}

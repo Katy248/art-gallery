@@ -25,14 +25,16 @@ const auth = useAuthStore();
                     <i class="fas fa-home nav-icon"></i>
                     Главная
                 </RouterLink>
-                <a class="nav-item" href="/gallery.html">
+                <a class="nav-item" href="/gallery.html" v-if="auth.isAuthenticated">
                     <i class="fas fa-image nav-icon"></i>
                     Моя галерея</a
                 >
-                <a class="nav-item" href="#upload">
+                <RouterLink class="nav-item" to="/post/create" v-if="auth.isAuthenticated">
                     <i class="fas fa-upload nav-icon"></i>
                     Загрузить
-                </a>
+                </RouterLink>
+            </div>
+            <div class="nav rounded-md">
                 <RouterLink class="nav-item" to="/help">
                     <i class="fas fa-question nav-icon"></i>
                     Помощь
@@ -47,11 +49,15 @@ const auth = useAuthStore();
                     <i class="fas fa-user-plus nav-icon"></i>
                     Профиль</a
                 >
+                <RouterLink to="/auth/logout" class="nav-item text-red">
+                    <i class="fas fa-arrow-left-from-bracket nav-icon"></i>
+                    Выход
+                </RouterLink>
             </div>
             <div class="nav rounded-md" v-else>
-                <a class="nav-item" href="/registration.html">
+                <RouterLink class="nav-item" to="/auth/register">
                     <i class="fas fa-user-plus nav-icon"></i>
-                    Регистрация</a
+                    Регистрация</RouterLink
                 >
                 <RouterLink to="/auth/login" class="nav-item">
                     <i class="fas fa-arrow-right-to-bracket nav-icon"></i>

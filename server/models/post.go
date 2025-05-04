@@ -5,10 +5,10 @@ import "gorm.io/gorm"
 type Post struct {
 	*gorm.Model
 
-	Description string // Comment
-	Publisher   User
-	PublisherID int
-	ImageUrl    string
+	Description string `json:"description"` // Comment
+	Publisher   User   `json:"publisher"`
+	PublisherID int    `json:"publisherId"`
+	ImageUrl    string `json:"imageUrl"`
 
 	PostSaves []PostSave
 }

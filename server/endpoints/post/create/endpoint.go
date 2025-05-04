@@ -37,7 +37,7 @@ func createPost(user *auth.AuthUser) gin.HandlerFunc {
 		err := ctx.Bind(&request)
 		if err != nil {
 			log.Errorf("Failed bind form data: %s", err)
-			ctx.AbortWithStatus(http.StatusBadRequest)
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "success": false})
 			return
 		}
 
@@ -67,6 +67,6 @@ func createPost(user *auth.AuthUser) gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, gin.H{"Success": true})
+		ctx.JSON(http.StatusOK, gin.H{"success": true, "id": post.ID})
 	}
 }

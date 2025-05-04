@@ -47,6 +47,6 @@ func handler(r *request, user *auth.AuthUser) gin.HandlerFunc {
 			UserID: user.ID,
 		}
 		db.Create(&newSave)
-		ctx.AbortWithStatus(http.StatusOK)
+		ctx.JSON(http.StatusOK, gin.H{"saved": true})
 	}
 }

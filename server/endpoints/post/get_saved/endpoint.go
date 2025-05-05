@@ -7,6 +7,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,8 +38,16 @@ func handler(r *request, user *auth.AuthUser) gin.HandlerFunc {
 		db := utils.ConnectToDbOrAbort(ctx)
 
 		var posts []responsePost
+		var count int64
+		db.Raw(pagesQuery, user.ID, r.UserID).Count(&count)
 		db.Raw(rawQuery, user.ID, r.UserID).Offset(r.Page * PageSize).Limit(PageSize).Find(&posts)
-		ctx.JSON(http.StatusOK, posts)
+
+		pages := count / PageSize
+		if count%PageSize != 0 {
+			pages++
+		}
+		log.Debugf("Count: %d, pages: %d", count, pages)
+		ctx.JSON(http.StatusOK, gin.H{"posts": posts, "pages": pages})
 	}
 }
 
@@ -63,6 +72,21 @@ const rawQuery = `
 		, p.created_at
 		, u.name as publisher_name
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved
+	FROM 
+		posts p 
+			LEFT JOIN users u ON p.publisher_id = u.id
+			LEFT JOIN post_saves ps ON 
+				p.id = ps.post_id 
+				and ps.user_id = ?
+
+	WHERE (SELECT COUNT(*) FROM post_saves WHERE post_id = p.id and user_id = ?) <> 0
+	
+	ORDER BY 
+		p.created_at DESC
+`
+const pagesQuery = `
+	SELECT 
+		COUNT(*)
 	FROM 
 		posts p 
 			LEFT JOIN users u ON p.publisher_id = u.id

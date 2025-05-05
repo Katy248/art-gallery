@@ -2,7 +2,7 @@ log:
    level: debug
 database:
   connection_string: "../art-gallery.db"
-  images_dir: "/tmp/art-gallery/images"
+  images_dir: "/home/katy/.local/share/art-gallery/images"
 
 server:
   mode: "debug"

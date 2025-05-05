@@ -17,28 +17,18 @@ getUserInfo(route.params.id).then((r) => {
     user.value = r;
     console.log(user.value);
 });
-// getPosts(route.params.id, pageXOffset.value).then((r) => {
-//     posts.value = r;
-//     console.log(r);
-// });
-
-// const savePostHandler = (post) => {
-//     savePost(post.id).then((r) => {
-//         post.saved = r.saved;
-//     });
-// };
-// const unsavePostHandler = (post) => {
-//     unsavePost(post.id).then((r) => {
-//         post.saved = r.saved;
-//     });
-// };
 </script>
 <template>
     <div class="flex flex-col gap-8">
         <div class="flex flex-row gap-4 justify-center items-center">
             <img :src="user.avatarUrl" class="h-50 rounded-full" />
-            <div class="text-center text-xl font-semibold">
-                {{ user.name }}
+            <div class="font-semibold flex flex-col">
+                <div class="text-2xl">
+                    {{ user.name }}
+                </div>
+                <div>
+                    {{ user.email }}
+                </div>
             </div>
         </div>
 
@@ -61,9 +51,7 @@ getUserInfo(route.params.id).then((r) => {
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <UserSavedPostsList :userId="user.id" />
-                        </div>
+                        <UserSavedPostsList :userId="user.id" />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

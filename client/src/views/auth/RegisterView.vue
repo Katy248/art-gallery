@@ -16,7 +16,7 @@ const onSubmit = () => {
         return;
     }
 
-    register(name.value, email.value, password.value).then(() => {
+    register(email.value, name.value, password.value).then(() => {
         console.log("Регистрация прошла успешно");
         router.push("/");
     });

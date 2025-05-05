@@ -38,7 +38,7 @@ if (auth.isAuthenticated) {
                 >
                 <RouterLink class="nav-item" to="/post/create" v-if="auth.isAuthenticated">
                     <i class="fas fa-upload nav-icon"></i>
-                    Загрузить
+                    Создать публикацию
                 </RouterLink>
             </div>
             <div class="nav rounded-md">

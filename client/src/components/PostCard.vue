@@ -56,7 +56,7 @@ onMounted(() => {
                     <i class="fas fa-share"></i>
                     Поделиться
                 </button>
-                <a class="btn btn-base">
+                <a type="_blank" class="btn btn-base" :href="post.imageUrl">
                     <i class="fas fa-image"></i>
                     Оригинал
                 </a>

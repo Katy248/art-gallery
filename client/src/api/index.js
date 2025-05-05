@@ -11,10 +11,7 @@ const runFetch = (url, method, body, headers, inJson = true) => {
 
     const authStore = useAuthStore();
     if (authStore.isAuthenticated) {
-        console.log("Authenticated");
-        console.log(authStore.token);
         headers.Authorization = `Bearer ${authStore.token}`;
-        console.log(headers);
     }
 
     return fetch(url, {

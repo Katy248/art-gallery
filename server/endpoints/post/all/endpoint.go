@@ -5,6 +5,7 @@ import (
 	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
 
+	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,14 +27,25 @@ func (r *Request) Validate() error {
 	return validation.GreaterOrEqual(r.Page, 0, "page")
 }
 
+const PageLimit = 20
+
 func handler(r *Request, u *auth.AuthUser) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 		var posts []responsePost
-		db.Raw(rawSql, u.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
+		var postsCount int64
+		db.Raw(rawSql, u.ID, PageLimit, r.Page*PageLimit).Find(&posts)
+		db.Raw(rawPagesQuery).Count(&postsCount)
+
+		pages := postsCount / PageLimit
+		if pages%PageLimit != 0 {
+			pages++
+		}
+		log.Debugf("Posts: %d, pages: %d", postsCount, pages)
 
 		ctx.JSON(200, gin.H{
 			"posts": posts,
+			"pages": pages,
 		})
 	}
 }
@@ -62,4 +74,10 @@ const rawSql = `
 
 	ORDER BY 
 		p.created_at DESC
+	LIMIT ?
+	OFFSET ?
+`
+const rawPagesQuery = `
+	SELECT count(*)
+	FROM posts
 `

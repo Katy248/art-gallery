@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { getAvatar, savePost, unsavePost, getSavedPosts } from "../api";
 import PostCard from "./PostCard.vue";
+import ListPager from "./ListPager.vue";
 
 const props = defineProps({
     userId: {
@@ -23,6 +24,10 @@ const loadPosts = () => {
 onMounted(() => {
     loadPosts();
 });
+const switchPage = (page) => {
+    page.value = page;
+    loadPosts();
+};
 </script>
 <template>
     <div class="flex flex-col gap-4">
@@ -30,7 +35,7 @@ onMounted(() => {
             <PostCard v-for="post in posts" :post="post" :showPublisher="true" />
         </div>
         <div class="flex gap-1 justify-center">
-            <button class="btn-base px-4 py-1 rounded" v-for="p in [...Array(pages).keys()]">{{ p + 1 }}</button>
+            <ListPager :pages="[...Array(pages).keys()]" :pageButtonActivatedHandler="switchPage" :currentPage="page" />
         </div>
     </div>
 </template>

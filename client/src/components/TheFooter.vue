@@ -17,7 +17,7 @@ const currentYear = ref(new Date());
                 </ul>
             </section>
         </div>
-        <p class="text-center py-2 text-tx">© 2023-{{ currentYear.getFullYear() }} ArtGallery. Все права защищены.</p>
+        <p class="text-center py-2 text-tx-2">© 2023-{{ currentYear.getFullYear() }} ArtGallery. Все права защищены.</p>
     </footer>
 </template>
 

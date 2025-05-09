@@ -18,9 +18,13 @@ const runFetch = (url, method, body, headers, inJson = true) => {
         headers: headers,
         method: method,
         body: body,
-    }).then((response) => {
-        return response.json();
-    });
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .catch((err) => {
+            console.error(err);
+        });
 };
 
 const authenticate = (email, password) => {

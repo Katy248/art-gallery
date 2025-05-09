@@ -6,8 +6,9 @@ import UserPostsList from "../../components/UserPostsList.vue";
 import UserSavedPostsList from "../../components/UserSavedPostsList.vue";
 import { TabGroup, TabList, Tab, TabPanel, TabPanels } from "@headlessui/vue";
 import { useAuthStore } from "../../stores/auth";
+import ErrorPresenter from "../../components/ErrorPresenter.vue";
 
-const user = ref({});
+const user = ref(null);
 const selectedTabIndex = ref(0);
 const authStore = useAuthStore();
 const route = useRoute();
@@ -15,22 +16,34 @@ const route = useRoute();
 const changeTab = (tab) => {
     selectedTabIndex.value = tab;
 };
-getUserInfo(route.params.id).then((r) => {
-    user.value = r;
-    console.log(user.value);
-});
+const error = ref(null);
+
+const getInfo = (id) => {
+    getUserInfo(id)
+        .then((r) => {
+            console.log(r);
+
+            if (r.error) {
+                error.value = r;
+                return;
+            }
+            user.value = r;
+            console.log(user.value);
+        })
+        .catch((err) => {
+            log.error(err);
+        });
+};
 
 onBeforeRouteUpdate(async (to, from) => {
-    getUserInfo(to.params.id).then((r) => {
-        user.value = r;
-        console.log(user.value);
-    });
+    getInfo(to.params.id);
     selectedTabIndex.value = 0;
     window.scrollTo(0, 0);
 });
+getInfo(route.params.id);
 </script>
 <template>
-    <div class="flex flex-col gap-8 items-center">
+    <div v-if="user" class="flex flex-col gap-8 items-center">
         <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
             <img :src="user.avatarUrl" class="h-50 rounded-full" />
             <div class="font-semibold flex flex-col">
@@ -77,4 +90,5 @@ onBeforeRouteUpdate(async (to, from) => {
             </TabGroup>
         </div>
     </div>
+    <ErrorPresenter v-if="error?.error" :error="error" />
 </template>

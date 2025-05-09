@@ -25,7 +25,7 @@ if (auth.isAuthenticated) {
         <button class="btn-base text-magenta px-6 py-2 rounded-md z-50 font-bold" @click="menuClick">ArtGallery</button>
         <!-- <button class="btn-base px-6 py-2 rounded-md font-bold">Profile</button> -->
     </header>
-    <div v-show="showMenu" class="w-full h-screen fixed top-0 left-0 bg-black/60 z-10 flex flex-col items-center" @click="backdropClick">
+    <div v-show="showMenu" class="w-full h-screen fixed top-0 left-0 bg-black/60 backdrop-blur-sm z-10 flex flex-col items-center" @click="backdropClick">
         <nav class="absolute z-50 left-3 top-[60px] flex flex-col min-w-[10rem] rounded-md gap-2">
             <div class="nav rounded-md">
                 <RouterLink class="nav-item" to="/">

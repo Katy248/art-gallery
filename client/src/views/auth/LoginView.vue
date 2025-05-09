@@ -1,18 +1,27 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { authenticate } from "../../api";
 import { useAuthStore } from "../../stores/auth";
 import { useRouter } from "vue-router";
 const authStore = useAuthStore();
 const email = ref("");
 const password = ref("");
+const router = useRouter();
+
 const onSubmit = (e) => {
     authenticate(email.value, password.value);
 };
-if (authStore.isAuthenticated) {
-    const router = useRouter();
-    router.push("/");
-}
+
+const checkAuthAndRedirect = () => {
+    if (authStore.isAuthenticated) {
+        router.push("/");
+    }
+};
+
+authStore.$subscribe((mutation, state) => {
+    checkAuthAndRedirect();
+});
+checkAuthAndRedirect();
 </script>
 <template>
     <div class="flex w-full justify-center items-center">

@@ -3,7 +3,7 @@ import { ref } from "vue";
 const currentYear = ref(new Date());
 </script>
 <template>
-    <footer>
+    <footer class="w-full">
         <div class="flex gap-10 px-20 justify-center">
             <section>
                 <h5>Контакты</h5>

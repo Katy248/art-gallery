@@ -70,6 +70,7 @@ func getUser(r *getUserRequest) gin.HandlerFunc {
 				"message": "user not found",
 				"code":    404,
 			})
+			return
 		}
 		ctx.JSON(http.StatusOK, newGetUserResponse(user, authorized))
 	}

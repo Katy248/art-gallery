@@ -10,6 +10,7 @@ const routes = [
     { path: "/help", component: HelpView },
     { path: "/auth/login", component: () => import("./views/auth/LoginView.vue") },
     { path: "/auth/register", component: () => import("./views/auth/RegisterView.vue") },
+    { path: "/auth/logout", component: () => import("./views/auth/LogoutView.vue") },
     { path: "/profile", component: () => import("./views/ProfileView.vue") },
     { path: "/post/create", component: () => import("./views/CreatePostView.vue") },
     { path: "/user/:id", component: () => import("./views/user/UserView.vue"), sensitive: true },

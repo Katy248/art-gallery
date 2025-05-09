@@ -4,19 +4,18 @@ import { getAllPosts } from "../api";
 import TheFeed from "../components/TheFeed.vue";
 import { onMounted, ref } from "vue";
 import ListPager from "../components/ListPager.vue";
-const dummyImg = "https://thewowstyle.com/wp-content/uploads/2015/01/nature-images..jpg";
-const dummyImg2 = "https://loremflickr.com/cache/resized/defaultImage.small_1000_1000_nofilter.jpg";
-const dummyAuthor = {
-    id: 2,
-    name: "Katy248",
-    avatarUrl: "https://gravatar.com/avatar/33396cb6c169b7fa08fafb345653aee268e9e618fda5de8b2bf9889d0413ea2e?size=256",
-};
+import { useAuthStore } from "../stores/auth";
 const posts = ref([]);
+
+const authStore = useAuthStore();
 
 const page = ref(0);
 const pagesCount = ref(0);
 
 onMounted(() => {
+if (!authStore.isAuthenticated) {
+    return
+}
     getAllPosts(page.value).then((res) => {
         posts.value = res.posts;
         pagesCount.value = res.pages;
@@ -36,7 +35,7 @@ const switchPage = (p) => {
 };
 </script>
 <template>
-    <div class="flex flex-col gap-8 w-full">
+    <div v-if="authStore.isAuthenticated" class="flex flex-col gap-8 w-full">
         <div>
             <RouterLink class="btn btn-primary" to="/post/create">
                 <i class="fas fa-upload"></i>
@@ -46,6 +45,22 @@ const switchPage = (p) => {
         <TheFeed :posts="posts" />
         <div class="flex justify-center gap-2">
             <ListPager :pages="pagesCount" :currentPage="page" :pageButtonActivatedHandler="switchPage" />
+        </div>
+    </div>
+    <div v-else>
+        <h1 class="text-center text-5xl font-bold text-magenta-2 pb-10">ArtGallery</h1>
+        <p class="pb-10 plain-text">Для всякого
+            <div>
+                <RouterLink to="/about">Подробнее...</RouterLink>
+            </div>
+        </p>
+
+        <div class="flex flex-col md:flex-row gap-4">
+            <RouterLink class="btn btn-base" to="/auth/login">
+                <i class="fas fa-arrow-right-to-bracket"></i>
+                Вход</RouterLink
+            >
+            <RouterLink class="btn btn-base" to="/help"> <i class="fas fa-question"></i> Помощь</RouterLink>
         </div>
     </div>
 </template>

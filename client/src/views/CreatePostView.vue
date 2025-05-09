@@ -24,7 +24,7 @@ const onSubmit = () => {
     createPost(description.value, image.value)
         .then((r) => {
             if (r.success) {
-                router.push(`/post/${r.id}`);
+                router.push(`/`);
             } else {
                 console.error(r.error);
             }

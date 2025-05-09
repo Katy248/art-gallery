@@ -8,13 +8,21 @@ import { TabGroup, TabList, Tab, TabPanel, TabPanels } from "@headlessui/vue";
 import { useAuthStore } from "../../stores/auth";
 
 const user = ref({});
+const selectedTabIndex = ref(0);
 const authStore = useAuthStore();
+
+getUserInfo(to.params.id).then((r) => {
+    user.value = r;
+    console.log(user.value);
+});
 
 onBeforeRouteUpdate((to, from) => {
     getUserInfo(to.params.id).then((r) => {
         user.value = r;
         console.log(user.value);
     });
+    selectedTabIndex.value = 0;
+    window.scrollTo(0, 0);
 });
 </script>
 <template>
@@ -43,7 +51,7 @@ onBeforeRouteUpdate((to, from) => {
                 </button>
             </div> -->
 
-            <TabGroup>
+            <TabGroup :selectedIndex="selectedTabIndex">
                 <TabList>
                     <div class="flex gap-2 bg-bg-2 p-2 rounded-lg w-full grow">
                         <Tab as="template" v-slot="{ selected }">

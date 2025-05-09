@@ -23,8 +23,8 @@ const onSubmit = () => {
 };
 </script>
 <template>
-    <div class="bg-bg-2 p-4 rounded-lg">
-        <form class="flex flex-col gap-4" @submit.prevent="onSubmit">
+    <div class="w-full flex justify-center items-center">
+        <form class="bg-bg-2 p-4 rounded-lg flex flex-col gap-4 w-full sm:w-fit" @submit.prevent="onSubmit">
             <div class="input-group">
                 <label>Имя:</label>
                 <input v-model="name" class="text-entry" placeholder="CoolGuy" autocomplete="username" />
@@ -42,7 +42,7 @@ const onSubmit = () => {
                 <input v-model="passwordRepeated" class="text-entry" type="password" placeholder="******" autocomplete="new-password" />
             </div>
             <div class="input-group">
-                <input class="btn btn-primary" type="submit" value="Войти" />
+                <input class="btn btn-primary" type="submit" value="Зарегистрироваться" />
             </div>
         </form>
     </div>

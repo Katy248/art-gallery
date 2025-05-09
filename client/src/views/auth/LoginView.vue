@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import { authenticate } from "../api";
-import { useAuthStore } from "../stores/auth";
+import { authenticate } from "../../api";
+import { useAuthStore } from "../../stores/auth";
 import { useRouter } from "vue-router";
 const authStore = useAuthStore();
 const email = ref("");
@@ -15,8 +15,8 @@ if (authStore.isAuthenticated) {
 }
 </script>
 <template>
-    <div class="bg-bg-2 p-4 rounded-lg">
-        <form class="flex flex-col gap-4" @submit.prevent="onSubmit">
+    <div class="flex w-full justify-center items-center">
+        <form class="bg-bg-2 p-4 rounded-lg flex flex-col gap-4" @submit.prevent="onSubmit">
             <div class="input-group">
                 <label>Логин:</label>
                 <input v-model="email" class="text-entry" placeholder="example@mail.ru" autocomplete="username" />

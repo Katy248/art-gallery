@@ -39,12 +39,13 @@ onMounted(() => {
             </RouterLink>
             <img :src="post.imageUrl" class="rounded-md border border-ui-2" />
             <div class="grow">{{ post.description }}</div>
-            <div class="grid grid-cols-2 md:flex sm:flex-row sm:flex-wrap gap-2">
-                <button v-if="post.saved" class="btn bg-ui hover:bg-red-2 active:bg-red" @click="() => unsavePostHandler(post)">
+            <div v-if="post.createdAt" class="text-ui-3">{{ new Date(post.createdAt).toLocaleDateString("ru-RU") }}</div>
+            <div class="grid grid-cols-2 md:flex sm:flex-row sm:flex-wrap gap-2 justify-evenly">
+                <button v-if="post.saved" class="btn grow bg-ui hover:bg-red-2 active:bg-red" @click="() => unsavePostHandler(post)">
                     <i class="fas fa-bookmark"></i>
                     Сохранено
                 </button>
-                <button v-else class="btn btn-primary" @click="() => savePostHandler(post)">
+                <button v-else class="btn grow btn-primary" @click="() => savePostHandler(post)">
                     <i class="far fa-bookmark"></i>
                     Сохранить
                 </button>
@@ -56,7 +57,7 @@ onMounted(() => {
                     <i class="fas fa-share"></i>
                     Поделиться
                 </button> -->
-                <a type="_blank" class="btn btn-base" :href="post.imageUrl">
+                <a type="_blank" class="grow btn btn-base" :href="post.imageUrl">
                     <i class="fas fa-image"></i>
                     Оригинал
                 </a>

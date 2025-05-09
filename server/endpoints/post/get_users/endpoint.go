@@ -41,6 +41,7 @@ type responsePost struct {
 	PublisherID int    `json:"publisherId"`
 	Name        string `json:"name"`
 	Saved       bool   `json:"saved"`
+	CreatedAt   string `json:"createdAt"`
 }
 
 func handler(r *request, user *auth.AuthUser) gin.HandlerFunc {
@@ -62,6 +63,7 @@ const rawSql = `
 		, p.description
 		, p.image_url
 		, p.publisher_id
+		, p.created_at
 		, u.name
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved
 	FROM 

@@ -57,12 +57,14 @@ type responsePost struct {
 	PublisherID   int    `json:"publisherId"`
 	PublisherName string `json:"publisherName"`
 	Saved         bool   `json:"saved"`
+	CreatedAt     string `json:"createdAt"`
 }
 
 const rawSql = `
 	SELECT 
 		p.id
 		, p.description
+		, p.created_at
 		, p.image_url
 		, p.publisher_id
 		, u.name as publisher_name

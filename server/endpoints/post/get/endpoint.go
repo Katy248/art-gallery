@@ -40,7 +40,7 @@ func handler(r *Request, user *auth.AuthUser) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := utils.ConnectToDbOrAbort(c)
 		var posts []responsePost
-		db.Raw(rawSql, user.ID).Order("p.created_at ASC").Offset(r.Page * 20).Limit(20).Find(&posts)
+		db.Raw(rawSql, user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
 		// db.Where("publisher_id = ?", user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
 		c.JSON(200, gin.H{
 			"posts": posts,
@@ -63,4 +63,7 @@ const rawSql = `
 			LEFT JOIN post_saves ps ON p.id = ps.post_id and ps.user_id = u.id
 
 	WHERE publisher_id = ?
+	
+	ORDER
+		p.created_at DESC
 `

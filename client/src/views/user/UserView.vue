@@ -31,7 +31,7 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 <template>
     <div class="flex flex-col gap-8 items-center">
-        <div class="flex flex-row gap-4 justify-center items-center">
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
             <img :src="user.avatarUrl" class="h-50 rounded-full" />
             <div class="font-semibold flex flex-col">
                 <div class="text-2xl">

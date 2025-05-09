@@ -12,7 +12,7 @@ const routes = [
     { path: "/auth/register", component: () => import("./views/auth/RegisterView.vue") },
     { path: "/profile", component: () => import("./views/ProfileView.vue") },
     { path: "/post/create", component: () => import("./views/CreatePostView.vue") },
-    { path: "/user/:id", component: () => import("./views/user/UserView.vue") },
+    { path: "/user/:id", component: () => import("./views/user/UserView.vue"), sensitive: true },
 ];
 
 const router = createRouter({

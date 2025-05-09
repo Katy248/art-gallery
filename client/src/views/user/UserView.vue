@@ -1,24 +1,21 @@
 <script setup>
 import { ref } from "vue";
-import { getPosts, getUserInfo, savePost, unsavePost } from "../../api";
-import { useRoute } from "vue-router";
+import { getUserInfo } from "../../api";
+import { onBeforeRouteUpdate } from "vue-router";
 import UserPostsList from "../../components/UserPostsList.vue";
 import UserSavedPostsList from "../../components/UserSavedPostsList.vue";
 import { TabGroup, TabList, Tab, TabPanel, TabPanels } from "@headlessui/vue";
 import { useAuthStore } from "../../stores/auth";
 
-const route = useRoute();
-
 const user = ref({});
-const postsPage = ref(0);
-
-const posts = ref([]);
-
-getUserInfo(route.params.id).then((r) => {
-    user.value = r;
-    console.log(user.value);
-});
 const authStore = useAuthStore();
+
+onBeforeRouteUpdate((to, from) => {
+    getUserInfo(to.params.id).then((r) => {
+        user.value = r;
+        console.log(user.value);
+    });
+});
 </script>
 <template>
     <div class="flex flex-col gap-8 items-center">

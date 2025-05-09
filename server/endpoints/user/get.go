@@ -63,7 +63,14 @@ func getUser(r *getUserRequest) gin.HandlerFunc {
 		}
 		var user m.User
 		query := fmt.Sprintf("id = %d", userId)
-		db.Model(&m.User{}).First(&user, query)
+		result := db.Model(&m.User{}).First(&user, query)
+		if result.Error != nil {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"error":   true,
+				"message": "user not found",
+				"code":    404,
+			})
+		}
 		ctx.JSON(http.StatusOK, newGetUserResponse(user, authorized))
 	}
 }

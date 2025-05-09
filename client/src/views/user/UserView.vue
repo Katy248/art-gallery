@@ -12,6 +12,9 @@ const selectedTabIndex = ref(0);
 const authStore = useAuthStore();
 const route = useRoute();
 
+const changeTab = (tab) => {
+    selectedTabIndex.value = tab;
+};
 getUserInfo(route.params.id).then((r) => {
     user.value = r;
     console.log(user.value);
@@ -52,7 +55,7 @@ onBeforeRouteUpdate(async (to, from) => {
                 </button>
             </div> -->
 
-            <TabGroup :selectedIndex="selectedTabIndex">
+            <TabGroup :selectedIndex="selectedTabIndex" @change="changeTab">
                 <TabList>
                     <div class="flex gap-2 bg-bg-2 p-2 rounded-lg w-full grow">
                         <Tab as="template" v-slot="{ selected }">

@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Post struct {
-	*gorm.Model
+	*BaseModel
 
 	Description string `json:"description"` // Comment
 	Publisher   User   `json:"publisher"`
@@ -14,7 +12,7 @@ type Post struct {
 }
 
 type PostSave struct {
-	*gorm.Model
+	*BaseModel
 	User   User
 	UserID int
 	Post   Post

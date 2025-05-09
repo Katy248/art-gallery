@@ -48,14 +48,14 @@ onMounted(() => {
                     <i class="far fa-bookmark"></i>
                     Сохранить
                 </button>
-                <button class="btn btn-base">
+                <!-- <button class="btn btn-base">
                     <i class="fas fa-plus"></i>
                     В коллекцию
                 </button>
                 <button class="btn btn-base">
                     <i class="fas fa-share"></i>
                     Поделиться
-                </button>
+                </button> -->
                 <a type="_blank" class="btn btn-base" :href="post.imageUrl">
                     <i class="fas fa-image"></i>
                     Оригинал

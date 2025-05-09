@@ -32,10 +32,10 @@ if (auth.isAuthenticated) {
                     <i class="fas fa-home nav-icon"></i>
                     Главная
                 </RouterLink>
-                <a class="nav-item" href="/gallery.html" v-if="auth.isAuthenticated">
+                <!-- <a class="nav-item" href="/gallery.html" v-if="auth.isAuthenticated">
                     <i class="fas fa-image nav-icon"></i>
                     Моя галерея</a
-                >
+                > -->
                 <RouterLink class="nav-item" to="/post/create" v-if="auth.isAuthenticated">
                     <i class="fas fa-upload nav-icon"></i>
                     Создать публикацию

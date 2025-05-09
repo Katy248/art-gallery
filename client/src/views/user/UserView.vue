@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { getUserInfo } from "../../api";
-import { onBeforeRouteUpdate } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import UserPostsList from "../../components/UserPostsList.vue";
 import UserSavedPostsList from "../../components/UserSavedPostsList.vue";
 import { TabGroup, TabList, Tab, TabPanel, TabPanels } from "@headlessui/vue";
@@ -10,8 +10,9 @@ import { useAuthStore } from "../../stores/auth";
 const user = ref({});
 const selectedTabIndex = ref(0);
 const authStore = useAuthStore();
+const route = useRoute();
 
-getUserInfo(to.params.id).then((r) => {
+getUserInfo(route.params.id).then((r) => {
     user.value = r;
     console.log(user.value);
 });

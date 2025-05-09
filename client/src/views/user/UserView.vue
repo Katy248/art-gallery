@@ -16,7 +16,7 @@ getUserInfo(to.params.id).then((r) => {
     console.log(user.value);
 });
 
-onBeforeRouteUpdate((to, from) => {
+onBeforeRouteUpdate(async (to, from) => {
     getUserInfo(to.params.id).then((r) => {
         user.value = r;
         console.log(user.value);

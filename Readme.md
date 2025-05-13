@@ -10,3 +10,12 @@
 cd client/
 npm run dev
 ```
+
+### Сервер
+
+Для запуска сервера:
+
+```bash
+cd server/
+go run .
+```

@@ -3,5 +3,5 @@ Description=ArtGallery server
 
 [Service]
 Type=simple
-ExecStart=cd /root/art-gallery/server && go run .
+ExecStart=/root/art-gallery/start.sh server
 Restart=always

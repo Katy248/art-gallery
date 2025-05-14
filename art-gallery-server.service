@@ -1,0 +1,7 @@
+[Unit]
+Description=ArtGallery server
+
+[Service]
+Type=simple
+ExecStart=cd /root/art-gallery/server && go run .
+Restart=always

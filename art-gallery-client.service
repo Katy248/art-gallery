@@ -1,0 +1,8 @@
+
+[Unit]
+Description=ArtGallery client
+
+[Service]
+Type=simple
+ExecStart=cd /root/art-gallery/client && npm run dev
+Restart=always

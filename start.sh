@@ -5,6 +5,8 @@ if [[ $1 == "server" ]]; then
     
     export GOPATH='/root/go'
     export GOENV='/root/.config/go/env'
+    GOCACHE='/root/.cache/go-build'
+    GOMODCACHE='/root/go/pkg/mod'
     go run .
     elif [[ $1 == "client" ]]; then
     cd /root/art-gallery/client || exit 2

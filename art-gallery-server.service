@@ -5,3 +5,6 @@ Description=ArtGallery server
 Type=simple
 ExecStart=/root/art-gallery/start.sh server
 Restart=always
+
+[Install]
+WantedBy=default.target

@@ -6,3 +6,6 @@ Description=ArtGallery client
 Type=simple
 ExecStart=/root/art-gallery/start.sh client
 Restart=always
+
+[Install]
+WantedBy=default.target

@@ -21,7 +21,7 @@ func (r *editRequest) Validate() error {
 }
 
 func EditUserHandlers() []gin.HandlerFunc {
-	var user auth.AuthUser
+	var user auth.User
 	var request editRequest
 	handlers := []gin.HandlerFunc{
 		auth.Authorization(&user),
@@ -30,7 +30,7 @@ func EditUserHandlers() []gin.HandlerFunc {
 	}
 	return handlers
 }
-func editUser(r *editRequest, user *auth.AuthUser) gin.HandlerFunc {
+func editUser(r *editRequest, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := u.ConnectToDbOrAbort(ctx)
 

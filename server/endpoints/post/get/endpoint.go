@@ -9,7 +9,7 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.AuthUser
+	var u auth.User
 	var r Request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
@@ -36,7 +36,7 @@ type responsePost struct {
 	CreatedAt   string `json:"createdAt"`
 }
 
-func handler(r *Request, user *auth.AuthUser) gin.HandlerFunc {
+func handler(r *Request, user *auth.User) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := utils.ConnectToDbOrAbort(c)
 		var posts []responsePost

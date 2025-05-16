@@ -88,12 +88,12 @@ func auth(r *authRequest) gin.HandlerFunc {
 	}
 }
 
-type AuthUser struct {
+type User struct {
 	ID    int
 	Email string
 }
 
-func Authorization(u *AuthUser) gin.HandlerFunc {
+func Authorization(u *User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authHeader := strings.Split(ctx.Request.Header.Get("Authorization"), " ")
 		if len(authHeader) < 2 || authHeader[0] != bearer {
@@ -115,7 +115,7 @@ func Authorization(u *AuthUser) gin.HandlerFunc {
 	}
 }
 
-func GetUser(ctx *gin.Context) (*AuthUser, error) {
+func GetUser(ctx *gin.Context) (*User, error) {
 	authHeader := strings.Split(ctx.Request.Header.Get("Authorization"), " ")
 	if len(authHeader) < 2 || authHeader[0] != bearer {
 		log.Warn("Authorization failed: bad auth header")
@@ -128,7 +128,7 @@ func GetUser(ctx *gin.Context) (*AuthUser, error) {
 		return nil, fmt.Errorf("auth failed: %s", err)
 	}
 	claims := token.Claims.(jwt.MapClaims)
-	user := AuthUser{
+	user := User{
 		Email: claims["email"].(string),
 		ID:    int(claims["id"].(float64)),
 	}

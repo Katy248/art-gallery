@@ -15,6 +15,17 @@ type Validatable interface {
 	Validate() error
 }
 
+// Binds JSON to request pointer
+func BindRequest(r interface{}) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		if err := ctx.BindJSON(&r); err != nil {
+			log.Errorf("Failed bind JSON data: %s", err)
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
+			return
+		}
+	}
+}
+
 // Bind JSON to request pointer, validate it, and if it not valid return BadRequest
 func ValidateRequest(r Validatable) gin.HandlerFunc {
 	return func(ctx *gin.Context) {

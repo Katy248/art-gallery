@@ -13,7 +13,7 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var user auth.AuthUser
+	var user auth.User
 	var r request
 	return []gin.HandlerFunc{
 		auth.Authorization(&user),
@@ -32,7 +32,7 @@ func (r *request) Validate() error {
 	)
 }
 
-func handler(r *request, user *auth.AuthUser) gin.HandlerFunc {
+func handler(r *request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 		var existingPostSave []models.PostSave

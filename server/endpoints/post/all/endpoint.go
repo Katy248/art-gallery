@@ -10,7 +10,7 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.AuthUser
+	var u auth.User
 	var r Request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
@@ -29,7 +29,7 @@ func (r *Request) Validate() error {
 
 const PageLimit = 20
 
-func handler(r *Request, u *auth.AuthUser) gin.HandlerFunc {
+func handler(r *Request, u *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 		var posts []responsePost

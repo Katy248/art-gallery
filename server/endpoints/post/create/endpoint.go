@@ -22,7 +22,7 @@ func (r *createPostRequest) Validate() error {
 }
 
 func CreatePostHandlers() []gin.HandlerFunc {
-	var user auth.AuthUser
+	var user auth.User
 	// var request createPostRequest
 	return []gin.HandlerFunc{
 		auth.Authorization(&user),
@@ -31,7 +31,7 @@ func CreatePostHandlers() []gin.HandlerFunc {
 	}
 }
 
-func createPost(user *auth.AuthUser) gin.HandlerFunc {
+func createPost(user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var request createPostRequest
 		err := ctx.Bind(&request)

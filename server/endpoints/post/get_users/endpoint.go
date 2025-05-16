@@ -11,7 +11,7 @@ import (
 )
 
 func GetUsersPostHandlers() []gin.HandlerFunc {
-	var u auth.AuthUser
+	var u auth.User
 	var r request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
@@ -44,7 +44,7 @@ type responsePost struct {
 	CreatedAt   string `json:"createdAt"`
 }
 
-func handler(r *request, user *auth.AuthUser) gin.HandlerFunc {
+func handler(r *request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 		var posts []responsePost

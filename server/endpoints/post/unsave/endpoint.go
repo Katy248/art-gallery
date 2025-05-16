@@ -11,7 +11,7 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.AuthUser
+	var u auth.User
 	var r request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
@@ -28,7 +28,7 @@ func (r *request) Validate() error {
 	return validation.GreaterOrEqual(r.PostID, 0, "postID")
 }
 
-func handler(r *request, u *auth.AuthUser) gin.HandlerFunc {
+func handler(r *request, u *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 		var existingSave models.PostSave

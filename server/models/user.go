@@ -17,6 +17,7 @@ type User struct {
 	ID           int
 	Name         string
 	Email        string `gorm:"unique"`
+	Description  string
 	PasswordHash string
 	PostSaves    []PostSave
 	IsAdmin      bool

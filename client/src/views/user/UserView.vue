@@ -46,12 +46,15 @@ getInfo(route.params.id);
     <div v-if="user" class="flex flex-col gap-8 items-center">
         <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
             <img :src="user.avatarUrl" class="h-50 rounded-full" />
-            <div class="font-semibold flex flex-col">
-                <div class="text-2xl">
+            <div class="flex flex-col">
+                <div class="text-2xl font-semibold">
                     {{ user.name }}
                 </div>
-                <div>
+                <div class="font-semibold">
                     {{ user.email }}
+                </div>
+                <div class="pt-2">
+                    {{ user.description }}
                 </div>
             </div>
         </div>

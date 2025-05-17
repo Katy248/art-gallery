@@ -24,17 +24,19 @@ func (r *getUserRequest) Validate() error {
 }
 
 type getUserResponse struct {
-	Id        int    `json:"id"`
-	Name      string `json:"name"`
-	AvatarUrl string `json:"avatarUrl"`
-	Email     string `json:"email"`
+	Id          int    `json:"id"`
+	Name        string `json:"name"`
+	AvatarUrl   string `json:"avatarUrl"`
+	Email       string `json:"email"`
+	Description string `json:"description"`
 }
 
 func newGetUserResponse(u m.User, authorized bool) *getUserResponse {
 	resp := &getUserResponse{
-		Id:        u.ID,
-		Name:      u.Name,
-		AvatarUrl: gravatar.NewAvatarUrl(u.Email, gravatar.DefaultImage(gravatar.DefaultRetro), gravatar.Size(512)),
+		Id:          u.ID,
+		Name:        u.Name,
+		AvatarUrl:   gravatar.NewAvatarUrl(u.Email, gravatar.DefaultImage(gravatar.DefaultRetro), gravatar.Size(512)),
+		Description: u.Description,
 	}
 	if authorized {
 		resp.Email = u.Email

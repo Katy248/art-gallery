@@ -49,7 +49,11 @@ const deletePostHandler = () => {
         <div class="bg-bg-2 p-2 gap-2 flex flex-col rounded-lg w-full">
             <div class="flex flex-row justify-between">
                 <div>
-                    <RouterLink v-if="showPublisher" class="flex items-center gap-2 hover:bg-ui-2 py-1 px-1 rounded-sm justify-start w-fit" :to="`/user/${post.publisherId}`">
+                    <RouterLink
+                        v-if="showPublisher"
+                        class="flex items-center gap-2 hover:bg-ui-2 transition-all duration-200 py-1 px-1 rounded-sm justify-start w-fit"
+                        title="Публикация пользователя {{ post.publisherName }}"
+                        :to="`/user/${post.publisherId}`">
                         <img v-if="post.publisherAvatar" :src="post.publisherAvatar" class="h-6 rounded-full" />
                         <span>{{ post.publisherName }}</span>
                     </RouterLink>

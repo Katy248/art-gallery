@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { CONTACTS, LINKS } from "../data";
 const currentYear = ref(new Date());
 </script>
 <template>
@@ -7,13 +8,24 @@ const currentYear = ref(new Date());
         <div class="flex gap-10 px-20 justify-center">
             <section>
                 <h5>Контакты</h5>
-                <a class="item" href="mailto:support@artgallery.com">support@artgallery.com</a>
+                <ul>
+                    <li v-for="contact in CONTACTS">
+                        <a class="item" :href="contact.url" target="_blank" :title="contact.name">
+                            <span v-if="contact.email">{{ contact.email }}</span>
+                            <span v-else>{{ contact.name }}</span>
+                        </a>
+                    </li>
+                </ul>
             </section>
             <section>
                 <h5>Ссылки</h5>
                 <ul>
-                    <li><a class="item" href="https://vk.com/artgallery" target="_blank">VK</a></li>
-                    <li><a class="item" href="https://rutube.ru/artgallery" target="_blank">Rutube</a></li>
+                    <li v-for="link in LINKS" class="item">
+                        <a :href="link.url" target="_blank">
+                            <i v-if="link.icon" :class="link.icon" class="me-1"></i>
+                            {{ link.name }}</a
+                        >
+                    </li>
                 </ul>
             </section>
         </div>

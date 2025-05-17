@@ -27,7 +27,7 @@ const onSubmit = () => {
         <form class="bg-bg-2 p-4 rounded-lg flex flex-col gap-4 w-full sm:w-fit" @submit.prevent="onSubmit">
             <div class="input-group">
                 <label>Имя:</label>
-                <input v-model="name" class="text-entry" placeholder="CoolGuy" autocomplete="username" />
+                <input v-model="name" class="text-entry" placeholder="CoolGuy" autocomplete="name" />
             </div>
             <div class="input-group">
                 <label>Email:</label>

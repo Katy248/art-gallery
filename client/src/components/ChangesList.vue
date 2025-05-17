@@ -1,20 +1,17 @@
 <script setup>
 import { ref } from "vue";
 import { Dialog, DialogPanel, TransitionRoot } from "@headlessui/vue";
-const changelogs = [
-    { title: "Версия 0.0.3", changes: ["Добавлено описание пользователя", "Добавлено изменение текста публикации", "Исправлена проблема при создании публикации"] },
-    { title: "Версия 0.0.2", changes: ["Добавлено удаление постов", "Добавлена роль администратора", "Добавлено отображение времени публикации (не только даты)"] },
-];
-
+import { CHANGELOGS } from "../data";
+const lastChange = ref(CHANGELOGS.filter((change) => !change.preview)[0]);
 const showModal = ref(false);
 </script>
 <template>
     <div class="bg-bg-2 p-4 rounded-lg flex flex-col gap-6">
         <h2 class="text-lg font-bold">Список изменений:</h2>
         <div class="flex flex-col gap-3">
-            <h3 class="font-bold mb-2"><i class="fa-solid fa-code-commit"></i> {{ changelogs[0].title }}</h3>
+            <h3 class="font-bold mb-2"><i class="fa-solid fa-code-commit"></i> {{ lastChange.title }}</h3>
             <ul>
-                <li v-for="change in changelogs[0].changes" :key="change" class="ps-2">• {{ change }}</li>
+                <li v-for="change in lastChange.changes" :key="change" class="ps-2">• {{ change }}</li>
             </ul>
         </div>
 
@@ -26,8 +23,11 @@ const showModal = ref(false);
                         <div class="bg-bg-2 p-8 rounded-lg flex flex-col gap-6 border-ui border">
                             <h2 class="text-lg font-bold">Список изменений:</h2>
                             <ul class="flex flex-col gap-3">
-                                <li v-for="version in changelogs" :key="version.title">
-                                    <h3 class="font-bold mb-2"><i class="fa-solid fa-code-commit"></i> {{ version.title }}</h3>
+                                <li v-for="version in CHANGELOGS" :key="version.title">
+                                    <h3 class="font-bold mb-2">
+                                        <i class="fa-solid fa-code-commit"></i> {{ version.title }}
+                                        <span v-if="version.preview" class="text-tx-2 font-normal">preview</span>
+                                    </h3>
                                     <ul>
                                         <li v-for="change in version.changes" :key="change" class="ps-2">• {{ change }}</li>
                                     </ul>

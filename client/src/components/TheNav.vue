@@ -82,18 +82,4 @@ if (auth.isAuthenticated) {
     --sidebar-min-width: 10rem;
 }
 
-.nav {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    gap: 0.5rem;
-    padding: 0.5rem;
-    @apply bg-bg flex flex-col;
-}
-
-.nav-icon {
-    @apply w-[1rem] text-center mr-[.3rem];
-}
-
-.nav-item {
-    @apply py-2 px-3 rounded-sm cursor-pointer hover:bg-ui active:bg-ui-2;
-}
 </style>

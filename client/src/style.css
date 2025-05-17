@@ -76,7 +76,11 @@ body {
 }
 
 .btn-primary {
-    @apply hover:bg-green bg-green-2 active:text-tx-3 text-tx;
+    @apply active:bg-green/80 hover:bg-green bg-green-2;
+}
+
+.btn-danger {
+    @apply hover:bg-red bg-red-2 active:bg-red/80;
 }
 
 .plain-text {
@@ -119,4 +123,19 @@ body {
     &>label {
         @apply text-sm;
     }
+}
+
+.nav {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    gap: 0.5rem;
+    padding: 0.5rem;
+    @apply bg-bg flex flex-col;
+}
+
+.nav-icon {
+    @apply w-[1rem] text-center mr-[.3rem];
+}
+
+.nav-item {
+    @apply py-2 px-3 rounded-sm cursor-pointer hover:bg-ui active:bg-ui-2;
 }

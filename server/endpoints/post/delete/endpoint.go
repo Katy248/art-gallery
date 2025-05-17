@@ -1,9 +1,13 @@
 package delete
 
 import (
+	"art-gallery-server/database/users"
 	"art-gallery-server/middleware/auth"
+	"art-gallery-server/models"
 	"art-gallery-server/utils"
+	"net/http"
 
+	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,6 +27,32 @@ func Handlers() []gin.HandlerFunc {
 
 func handler(request *Request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		db := utils.ConnectToDbOrAbort(ctx)
+		var post models.Post
+		result := db.Raw(rawGetPostQuery, request.PostId).First(&post)
+		if result.Error != nil {
+			log.Errorf("Failed to get post: %s", result.Error)
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Failed to get post", "success": false})
+			return
+		}
 
+		if post.PublisherID != user.ID || users.IsAdmin(db, user.ID) {
+			log.Warnf("Unauthorized try to delete post %d by user %d", post.ID, request.PostId)
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You are not authorized to delete this post", "success": false})
+			return
+		}
+
+		result = db.Unscoped().Delete(&post)
+		if result.Error != nil {
+			log.Errorf("Failed to delete post: %s", result.Error)
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete post", "success": false})
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{"success": true})
 	}
 }
+
+var rawGetPostQuery = `
+	SELECT * FROM posts WHERE id = ?
+`

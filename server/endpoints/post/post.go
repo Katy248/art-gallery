@@ -3,6 +3,7 @@ package post
 import (
 	"art-gallery-server/endpoints/post/all"
 	"art-gallery-server/endpoints/post/create"
+	"art-gallery-server/endpoints/post/delete"
 	"art-gallery-server/endpoints/post/get_saved"
 	"art-gallery-server/endpoints/post/get_users"
 	"art-gallery-server/endpoints/post/save"
@@ -24,6 +25,8 @@ func Setup(router *gin.RouterGroup) {
 	router.POST("/get-saved", get_saved.Handlers()...)
 	// get all posts
 	router.POST("/all", all.Handlers()...)
+	// delete post
+	router.DELETE("/delete", delete.Handlers()...)
 	// feed
 	// router.POST("/feed")
 	// update post info

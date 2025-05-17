@@ -1,6 +1,12 @@
 <script setup>
-import { onMounted } from "vue";
-import { savePost, unsavePost, getAvatar } from "../api";
+import { onMounted, ref } from "vue";
+import { savePost, unsavePost, getAvatar, deletePost } from "../api";
+import { useAuthStore } from "../stores/auth";
+import { RouterLink } from "vue-router";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+const authStore = useAuthStore();
+const userId = authStore.authData.id;
+const deleted = ref(false);
 
 const props = defineProps({
     post: {
@@ -29,14 +35,41 @@ onMounted(() => {
         });
     }
 });
+const deletePostHandler = () => {
+    deletePost(props.post.id).then((r) => {
+        if (r.success) {
+            props.post.deleted = true;
+            deleted.value = true;
+        }
+    });
+};
 </script>
 <template>
-    <div class="w-full">
+    <div v-if="!deleted" class="w-full">
         <div class="bg-bg-2 p-2 gap-2 flex flex-col rounded-lg w-full">
-            <RouterLink v-if="showPublisher" class="flex items-center gap-2 hover:bg-ui-2 py-1 px-1 rounded-sm justify-start w-fit" :to="`/user/${post.publisherId}`">
-                <img v-if="post.publisherAvatar" :src="post.publisherAvatar" class="h-6 rounded-full" />
-                <span>{{ post.publisherName }}</span>
-            </RouterLink>
+            <div class="flex flex-row justify-between">
+                <div>
+                    <RouterLink v-if="showPublisher" class="flex items-center gap-2 hover:bg-ui-2 py-1 px-1 rounded-sm justify-start w-fit" :to="`/user/${post.publisherId}`">
+                        <img v-if="post.publisherAvatar" :src="post.publisherAvatar" class="h-6 rounded-full" />
+                        <span>{{ post.publisherName }}</span>
+                    </RouterLink>
+                </div>
+                <div v-if="post.publisherId == userId">
+                    <Menu>
+                        <MenuButton class="btn-base cursor-pointer rounded-sm py-1 px-3">
+                            <i class="fas fa-ellipsis"></i>
+                        </MenuButton>
+                        <MenuItems class="absolute mt-2 z-10 rounded nav backdrop-blur-sm">
+                            <MenuItem>
+                                <button class="nav-item text-left"><i class="fas fa-info-circle nav-icon"></i> Подробнее</button>
+                            </MenuItem>
+                            <MenuItem>
+                                <button @click="deletePostHandler" class="nav-item text-left text-red"><i class="fas fa-trash nav-icon"></i> Удалить</button>
+                            </MenuItem>
+                        </MenuItems>
+                    </Menu>
+                </div>
+            </div>
             <img :src="post.imageUrl" class="rounded-md border border-ui-2" />
             <div class="grow">{{ post.description }}</div>
             <div v-if="post.createdAt" class="text-ui-3">{{ new Date(post.createdAt).toLocaleDateString("ru-RU") }}</div>

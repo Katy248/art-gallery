@@ -25,7 +25,7 @@ onBeforeRouteUpdate(async (to, from) => {
         <button
             v-for="user in users"
             :key="user.id"
-            class="bg-ui first:rounded-t-xl last:rounded-b-xl px-4 py-2 not-last:border-b-2 border-ui-2 flex flex-col items-start hover:bg-ui-2 active:bg-ui-3">
+            class="bg-ui first:rounded-t-xl last:rounded-b-xl px-4 py-2 not-last:border-b-2 border-ui-2 flex flex-col items-start hover:bg-ui-2 active:bg-ui-3 transition-all duration-200">
             <h2 class="text-lg">{{ user.name }} <span class="text-red text-sm" v-if="user.isAdmin">админ</span></h2>
             <div class="text-tx-2">{{ user.email }}</div>
         </button>

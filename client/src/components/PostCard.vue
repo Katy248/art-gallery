@@ -60,7 +60,7 @@ const deletePostHandler = () => {
                         <i v-else class="fas fa-ellipsis"></i>
                     </MenuButton>
                     <Transition enter-active-class="transform scale-90" leave-active-class="transform scale-90">
-                        <MenuItems class="absolute rounded top-10 right-0 nav shadow-xl/30 shadow-text origin-top-right w-max">
+                        <MenuItems class="absolute rounded top-10 right-0 nav shadow-xl/30 shadow-text origin-top-right w-max bg-bg">
                             <MenuItem>
                                 <button class="nav-item text-left"><i class="fas fa-info-circle nav-icon"></i> Подробнее</button>
                             </MenuItem>

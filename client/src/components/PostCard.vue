@@ -5,7 +5,7 @@ import { useAuthStore } from "../stores/auth";
 import { RouterLink } from "vue-router";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 const authStore = useAuthStore();
-const userId = authStore.authData.id;
+const user = authStore.authData;
 const deleted = ref(false);
 
 const props = defineProps({
@@ -54,17 +54,33 @@ const deletePostHandler = () => {
                         <span>{{ post.publisherName }}</span>
                     </RouterLink>
                 </div>
-                <Menu as="div" class="relative">
+                <Menu as="div" class="relative" v-slot="{ open }">
                     <MenuButton class="btn-base cursor-pointer rounded-sm py-1 px-3">
-                        <i class="fas fa-ellipsis"></i>
+                        <i v-if="open" class="fas fa-angle-down"></i>
+                        <i v-else class="fas fa-ellipsis"></i>
                     </MenuButton>
                     <Transition enter-active-class="transform scale-90" leave-active-class="transform scale-90">
-                        <MenuItems class="absolute rounded top-10 right-0 nav shadow-xl/30 shadow-text origin-top-right">
+                        <MenuItems class="absolute rounded top-10 right-0 nav shadow-xl/30 shadow-text origin-top-right w-max">
                             <MenuItem>
                                 <button class="nav-item text-left"><i class="fas fa-info-circle nav-icon"></i> Подробнее</button>
                             </MenuItem>
-                            <MenuItem v-if="post.publisherId == userId">
-                                <button @click="deletePostHandler" class="nav-item text-left text-red"><i class="fas fa-trash nav-icon"></i> Удалить</button>
+                            <MenuItem v-if="post.publisherId == user.id || user.isAdmin">
+                                <RouterLink @click="deletePostHandler" class="nav-item" :to="`/post/${post.id}/edit`">
+                                    <i class="fas fa-edit nav-icon"></i>
+                                    <span>
+                                        Редактировать
+                                        <span v-if="post.publisherId != user.id && user.isAdmin">(админ)</span>
+                                    </span>
+                                </RouterLink>
+                            </MenuItem>
+                            <MenuItem v-if="post.publisherId == user.id || user.isAdmin">
+                                <button @click="deletePostHandler" class="nav-item text-left text-red">
+                                    <i class="fas fa-trash nav-icon"></i>
+                                    <span>
+                                        Удалить
+                                        <span v-if="post.publisherId != user.id && user.isAdmin">(админ)</span>
+                                    </span>
+                                </button>
                             </MenuItem>
                         </MenuItems>
                     </Transition>

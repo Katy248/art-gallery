@@ -84,5 +84,11 @@ const getAllPosts = (page) => {
 const deletePost = (postId) => {
     return runFetch("/api/post/delete", "DELETE", { postId: postId });
 };
+const getPost = (postId) => {
+    return runFetch("/api/post/get", "POST", { postId: postId });
+};
+const updatePost = (postId, description) => {
+    return runFetch("/api/post/update", "POST", { postId: postId, description: description });
+};
 
-export { authenticate, getProfileInfo, register, createPost, getUserInfo, getPosts, savePost, unsavePost, getSavedPosts, getAvatar, getAllPosts, deletePost };
+export { authenticate, getProfileInfo, register, createPost, getUserInfo, getPosts, savePost, unsavePost, getSavedPosts, getAvatar, getAllPosts, deletePost, getPost, updatePost };

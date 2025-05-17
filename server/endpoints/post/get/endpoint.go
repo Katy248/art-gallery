@@ -19,11 +19,11 @@ func Handlers() []gin.HandlerFunc {
 }
 
 type Request struct {
-	Page int `json:"page"`
+	PostId int `json:"postId"`
 }
 
 func (r *Request) Validate() error {
-	return validation.GreaterOrEqual(r.Page, 0, "page")
+	return validation.GreaterOrEqual(r.PostId, 0, "page")
 }
 
 type responsePost struct {
@@ -31,7 +31,6 @@ type responsePost struct {
 	Description string `json:"description"`
 	ImageUrl    string `json:"imageUrl"`
 	PublisherID int    `json:"publisherId"`
-	Name        string `json:"name"`
 	Saved       bool   `json:"saved"`
 	CreatedAt   string `json:"createdAt"`
 }
@@ -39,11 +38,12 @@ type responsePost struct {
 func handler(r *Request, user *auth.User) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := utils.ConnectToDbOrAbort(c)
-		var posts []responsePost
-		db.Raw(rawSql, user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
+		var post responsePost
+		db.Raw(rawSql, user.ID, r.PostId).First(&post)
 		// db.Where("publisher_id = ?", user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
 		c.JSON(200, gin.H{
-			"posts": posts,
+			"success": true,
+			"post":    post,
 		})
 	}
 }
@@ -60,10 +60,7 @@ const rawSql = `
 	FROM 
 		posts p 
 			LEFT JOIN users u ON p.publisher_id = u.id
-			LEFT JOIN post_saves ps ON p.id = ps.post_id and ps.user_id = u.id
+			LEFT JOIN post_saves ps ON p.id = ps.post_id and ps.user_id = ?
 
-	WHERE publisher_id = ?
-	
-	ORDER
-		p.created_at DESC
+	WHERE p.id = ?
 `

@@ -14,6 +14,7 @@ const routes = [
     { path: "/profile", component: () => import("./views/ProfileView.vue") },
     { path: "/post/create", component: () => import("./views/CreatePostView.vue") },
     { path: "/user/:id", component: () => import("./views/user/UserView.vue"), sensitive: true },
+    { path: "/post/:id/edit", component: () => import("./views/post/EditView.vue"), sensitive: true },
 ];
 
 const router = createRouter({

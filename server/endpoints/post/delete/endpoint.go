@@ -36,10 +36,12 @@ func handler(request *Request, user *auth.User) gin.HandlerFunc {
 			return
 		}
 
-		if post.PublisherID != user.ID || users.IsAdmin(db, user.ID) {
+		if post.PublisherID == user.ID || users.IsAdmin(db, user.ID) {
+		} else {
 			log.Warnf("Unauthorized try to delete post %d by user %d", post.ID, request.PostId)
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You are not authorized to delete this post", "success": false})
 			return
+
 		}
 
 		result = db.Unscoped().Delete(&post)

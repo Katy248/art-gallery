@@ -21,7 +21,7 @@ if (auth.isAuthenticated) {
 }
 </script>
 <template>
-    <header class="flex flex-row p-3 sticky top-0 w-full bg-bg-2 justify-between">
+    <header class="flex flex-row p-3 sticky top-0 w-full bg-bg-2 justify-between border-b border-ui">
         <button class="btn-base text-magenta px-6 py-2 rounded-md z-50 font-bold" @click="menuClick">ArtGallery</button>
         <!-- <button class="btn-base px-6 py-2 rounded-md font-bold">Profile</button> -->
     </header>

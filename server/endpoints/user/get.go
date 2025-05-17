@@ -24,7 +24,7 @@ func (r *getUserRequest) Validate() error {
 }
 
 type getUserResponse struct {
-	Id          int    `json:"id"`
+	Id          uint   `json:"id"`
 	Name        string `json:"name"`
 	AvatarUrl   string `json:"avatarUrl"`
 	Email       string `json:"email"`

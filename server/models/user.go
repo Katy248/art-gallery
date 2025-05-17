@@ -14,7 +14,7 @@ const (
 )
 
 type User struct {
-	ID           int
+	*BaseModel
 	Name         string
 	Email        string `gorm:"unique"`
 	Description  string

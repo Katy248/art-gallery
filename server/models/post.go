@@ -3,12 +3,13 @@ package models
 type Post struct {
 	*BaseModel
 
-	Description string `json:"description"` // Comment
+	Description string `json:"description"`
 	Publisher   User   `json:"publisher"`
 	PublisherID int    `json:"publisherId"`
 	ImageUrl    string `json:"imageUrl"`
 
 	PostSaves []PostSave
+	Comments  []Comment
 }
 
 type PostSave struct {
@@ -17,4 +18,14 @@ type PostSave struct {
 	UserID int
 	Post   Post
 	PostID int
+}
+
+type Comment struct {
+	*BaseModel
+	Post      Post
+	PostID    int
+	Creator   User
+	CreatorID int
+
+	Text string
 }

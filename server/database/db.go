@@ -24,7 +24,7 @@ func SetupConnectionString(conn string) {
 func MustMigrateDb() {
 	setupImages()
 	db := MustConnectToDb()
-	err := db.AutoMigrate(&m.User{}, &m.Post{}, &m.PostSave{})
+	err := db.AutoMigrate(&m.User{}, &m.Post{}, &m.PostSave{}, &m.Comment{})
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %s", err)
 	}

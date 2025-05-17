@@ -71,6 +71,12 @@ if (auth.isAuthenticated) {
                     Вход
                 </RouterLink>
             </div>
+            <div class="nav rounded-md bg-bg-2" v-if="auth.authData.isAdmin">
+                <RouterLink class="nav-item" to="/admin/users/0">
+                    <i class="fas fa-user nav-icon"></i>
+                    Пользователи</RouterLink
+                >
+            </div>
         </nav>
     </div>
 </template>

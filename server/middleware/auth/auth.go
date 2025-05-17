@@ -76,7 +76,7 @@ func auth(r *authRequest) gin.HandlerFunc {
 			return
 		}
 
-		token := jwt.NewWithClaims(signinMethod, jwt.MapClaims{"id": user.ID, "email": user.Email, "name": user.Name})
+		token := jwt.NewWithClaims(signinMethod, jwt.MapClaims{"id": user.ID, "email": user.Email, "name": user.Name, "isAdmin": user.IsAdmin})
 		stringToken, err := token.SignedString(jwtKey)
 		if err != nil {
 			log.Errorf("Failed to sign jwt token: %s", err)

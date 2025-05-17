@@ -33,11 +33,10 @@ func CreatePostHandlers() []gin.HandlerFunc {
 
 func createPost(user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var request createPostRequest
-		err := ctx.Bind(&request)
-		if err != nil {
-			log.Errorf("Failed bind form data: %s", err)
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "success": false})
+		desc := ctx.Request.Form.Get("description")
+		if desc != "" {
+			log.Errorf("Failed bind form data: description field is empty")
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "description field is empty", "success": false})
 			return
 		}
 
@@ -51,7 +50,7 @@ func createPost(user *auth.User) gin.HandlerFunc {
 		db := utils.ConnectToDbOrAbort(ctx)
 		post := models.Post{
 			PublisherID: user.ID,
-			Description: request.Description,
+			Description: desc,
 		}
 
 		db.Model(&post).Create(&post)

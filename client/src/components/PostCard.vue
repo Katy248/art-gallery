@@ -54,25 +54,28 @@ const deletePostHandler = () => {
                         <span>{{ post.publisherName }}</span>
                     </RouterLink>
                 </div>
-                <div v-if="post.publisherId == userId">
-                    <Menu>
-                        <MenuButton class="btn-base cursor-pointer rounded-sm py-1 px-3">
-                            <i class="fas fa-ellipsis"></i>
-                        </MenuButton>
-                        <MenuItems class="absolute mt-2 z-10 rounded nav backdrop-blur-sm">
+                <Menu as="div" class="relative">
+                    <MenuButton class="btn-base cursor-pointer rounded-sm py-1 px-3">
+                        <i class="fas fa-ellipsis"></i>
+                    </MenuButton>
+                    <Transition enter-active-class="transform scale-90" leave-active-class="transform scale-90">
+                        <MenuItems class="absolute rounded top-10 right-0 nav shadow-xl/30 shadow-text origin-top-right">
                             <MenuItem>
                                 <button class="nav-item text-left"><i class="fas fa-info-circle nav-icon"></i> Подробнее</button>
                             </MenuItem>
-                            <MenuItem>
+                            <MenuItem v-if="post.publisherId == userId">
                                 <button @click="deletePostHandler" class="nav-item text-left text-red"><i class="fas fa-trash nav-icon"></i> Удалить</button>
                             </MenuItem>
                         </MenuItems>
-                    </Menu>
-                </div>
+                    </Transition>
+                </Menu>
             </div>
             <img :src="post.imageUrl" class="rounded-md border border-ui-2" />
             <div class="grow">{{ post.description }}</div>
-            <div v-if="post.createdAt" class="text-ui-3">{{ new Date(post.createdAt).toLocaleDateString("ru-RU") }}</div>
+            <div v-if="post.createdAt" class="text-ui-3">
+                {{ new Date(post.createdAt).toLocaleTimeString("ru-RU").slice(0, -3) }}
+                {{ new Date(post.createdAt).toLocaleDateString("ru-RU") }}
+            </div>
             <div class="grid grid-cols-2 md:flex sm:flex-row sm:flex-wrap gap-2 justify-evenly">
                 <button v-if="post.saved" class="btn grow bg-ui hover:bg-red-2 active:bg-red" @click="() => unsavePostHandler(post)">
                     <i class="fas fa-bookmark"></i>

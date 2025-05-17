@@ -27,7 +27,7 @@ if (auth.isAuthenticated) {
     </header>
     <div v-show="showMenu" class="w-full h-screen fixed top-0 left-0 bg-black/60 backdrop-blur-sm z-10 flex flex-col items-center" @click="backdropClick">
         <nav class="absolute z-50 left-3 top-[60px] flex flex-col min-w-[10rem] rounded-md gap-2">
-            <div class="nav rounded-md">
+            <div class="nav rounded-md bg-bg">
                 <RouterLink class="nav-item" to="/">
                     <i class="fas fa-home nav-icon"></i>
                     Главная
@@ -41,7 +41,7 @@ if (auth.isAuthenticated) {
                     Создать публикацию
                 </RouterLink>
             </div>
-            <div class="nav rounded-md">
+            <div class="nav rounded-md bg-bg">
                 <RouterLink class="nav-item" to="/help">
                     <i class="fas fa-question nav-icon"></i>
                     Помощь
@@ -51,7 +51,7 @@ if (auth.isAuthenticated) {
                     О нас
                 </RouterLink>
             </div>
-            <div class="nav rounded-md" v-if="auth.isAuthenticated">
+            <div class="nav rounded-md bg-bg" v-if="auth.isAuthenticated">
                 <RouterLink class="nav-item" :to="profileUrl">
                     <i class="fas fa-user-plus nav-icon"></i>
                     Профиль</RouterLink
@@ -61,7 +61,7 @@ if (auth.isAuthenticated) {
                     Выход
                 </RouterLink>
             </div>
-            <div class="nav rounded-md" v-else>
+            <div class="nav rounded-md bg-bg" v-else>
                 <RouterLink class="nav-item" to="/auth/register">
                     <i class="fas fa-user-plus nav-icon"></i>
                     Регистрация</RouterLink
@@ -81,5 +81,4 @@ if (auth.isAuthenticated) {
     --sidebar-rounded: 0.5rem;
     --sidebar-min-width: 10rem;
 }
-
 </style>

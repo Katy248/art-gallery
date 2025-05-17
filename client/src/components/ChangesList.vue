@@ -26,13 +26,18 @@ const showModal = ref(false);
                                 <li v-for="version in CHANGELOGS" :key="version.title">
                                     <h3 class="font-bold mb-2">
                                         <i class="fa-solid fa-code-commit"></i> {{ version.title }}
-                                        <span v-if="version.preview" class="text-tx-2 font-normal">preview</span>
+                                        <span v-if="version.preview" title="Предварительные нестабильные изменения" class="text-tx-2 font-normal">preview</span>
                                     </h3>
                                     <ul>
                                         <li v-for="change in version.changes" :key="change" class="ps-2">• {{ change }}</li>
                                     </ul>
                                 </li>
                             </ul>
+                            <div class="flex justify-center">
+                                <button class="btn-base hover:text-red active:text-red-2 w-10 h-10 rounded-full" @click="showModal = false">
+                                    <i class="fa fa-xmark"></i>
+                                </button>
+                            </div>
                         </div>
                     </DialogPanel>
                 </div>

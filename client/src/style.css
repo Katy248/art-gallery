@@ -68,7 +68,7 @@ body {
 }
 
 .btn-base {
-    @apply hover:bg-ui-2 bg-ui active:bg-ui-3;
+    @apply hover:bg-ui-2 bg-ui active:bg-ui-3 cursor-pointer;
 }
 
 .btn-base-overlay {

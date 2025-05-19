@@ -11,28 +11,25 @@ import (
 )
 
 func GetUsersPostHandlers() []gin.HandlerFunc {
-	var u auth.User
 	var r request
 	return []gin.HandlerFunc{
-		auth.Authorization(&u),
+		auth.Middleware(),
 		utils.BindRequest(&r),
-		handler(&r, &u),
+		handler(&r),
 	}
 }
-
-const PageLimit = 20
 
 type request struct {
 	UserID int `json:"userId" binding:"required,gt=0"`
 	Page   int `json:"page" binding:"gte=0"`
 }
 
-func handler(r *request, user *auth.User) gin.HandlerFunc {
+func handler(r *request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var posts []shared.ResponsePost
-		database.Conn.Raw(rawSql, user.ID, r.UserID).
-			Offset(PageLimit * r.Page).
-			Limit(PageLimit).
+		database.Conn.Raw(rawSql, auth.UserId(ctx), r.UserID).
+			Offset(shared.PageSize * r.Page).
+			Limit(shared.PageSize).
 			Find(&posts)
 
 		ctx.JSON(http.StatusOK, posts)

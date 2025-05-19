@@ -10,3 +10,5 @@ type ResponsePost struct {
 	PublisherName  string `json:"publisherName"`
 	WarningMessage string `json:"warningMessage"`
 }
+
+const PageSize = 20

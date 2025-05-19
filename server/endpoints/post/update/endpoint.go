@@ -4,7 +4,6 @@ import (
 	"art-gallery-server/database"
 	"art-gallery-server/middleware/auth"
 	"art-gallery-server/models/posts"
-	"art-gallery-server/models/users"
 	"art-gallery-server/utils"
 	"net/http"
 
@@ -13,12 +12,11 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.User
 	var r Request
 	return []gin.HandlerFunc{
-		auth.Authorization(&u),
+		auth.Middleware(),
 		utils.BindRequest(&r),
-		handler(&r, &u),
+		handler(&r),
 	}
 }
 
@@ -28,7 +26,7 @@ type Request struct {
 	WarningMessage string `json:"warningMessage"`
 }
 
-func handler(r *Request, user *auth.User) gin.HandlerFunc {
+func handler(r *Request) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var post posts.Post
 		result := database.Conn.Raw(rawSql, r.PostId).First(&post)
@@ -37,9 +35,9 @@ func handler(r *Request, user *auth.User) gin.HandlerFunc {
 			return
 		}
 
-		if post.PublisherID == user.ID || users.IsAdmin(user.ID) {
+		if post.PublisherID == auth.UserId(c) || auth.UserIsAdmin(c) {
 		} else {
-			log.Errorf("User %d is not the owner of post %d, or is not an admin", user.ID, r.PostId)
+			log.Errorf("User %d is not the owner of post %d, or is not an admin", auth.UserId(c), r.PostId)
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "User is not the owner of the post", "success": false})
 			return
 
@@ -51,7 +49,7 @@ func handler(r *Request, user *auth.User) gin.HandlerFunc {
 			return
 		}
 
-		if users.IsAdmin(user.ID) && r.WarningMessage != "" {
+		if auth.UserIsAdmin(c) && r.WarningMessage != "" {
 			result = database.Conn.Model(&post).Update("warning_message", r.WarningMessage)
 			if !utils.WrapDbResult(c, result) {
 				return

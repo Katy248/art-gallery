@@ -12,12 +12,11 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.User
 	var r request
 	return []gin.HandlerFunc{
-		auth.Authorization(&u),
+		auth.Middleware(),
 		utils.BindRequest(&r),
-		handler(&r, &u),
+		handler(&r),
 	}
 }
 
@@ -26,23 +25,21 @@ type request struct {
 	Page   int `json:"page"`
 }
 
-func handler(r *request, user *auth.User) gin.HandlerFunc {
+func handler(r *request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var posts []shared.ResponsePost
 		var count int64
-		database.Conn.Raw(pagesQuery, user.ID, r.UserID).Count(&count)
-		database.Conn.Raw(rawQuery, user.ID, r.UserID).Offset(r.Page * PageSize).Limit(PageSize).Find(&posts)
+		database.Conn.Raw(pagesQuery, auth.UserId(ctx), r.UserID).Count(&count)
+		database.Conn.Raw(rawQuery, auth.UserId(ctx), r.UserID).Offset(r.Page * shared.PageSize).Limit(shared.PageSize).Find(&posts)
 
-		pages := count / PageSize
-		if count%PageSize != 0 {
+		pages := count / shared.PageSize
+		if count%shared.PageSize != 0 {
 			pages++
 		}
 		log.Debugf("Count: %d, pages: %d", count, pages)
 		ctx.JSON(http.StatusOK, gin.H{"posts": posts, "pages": pages})
 	}
 }
-
-const PageSize = 20
 
 const rawQuery = `
 	SELECT 

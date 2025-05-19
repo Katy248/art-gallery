@@ -12,14 +12,13 @@ import (
 )
 
 func CreatePostHandlers() []gin.HandlerFunc {
-	var user auth.User
 	return []gin.HandlerFunc{
-		auth.Authorization(&user),
-		createPost(&user),
+		auth.Middleware(),
+		createPost(),
 	}
 }
 
-func createPost(user *auth.User) gin.HandlerFunc {
+func createPost() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		desc := ctx.Request.Form.Get("description")
 		if desc != "" {
@@ -36,7 +35,7 @@ func createPost(user *auth.User) gin.HandlerFunc {
 		}
 
 		post := posts.Post{
-			PublisherID: user.ID,
+			PublisherID: auth.UserId(ctx),
 			Description: desc,
 		}
 

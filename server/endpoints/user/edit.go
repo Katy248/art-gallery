@@ -17,22 +17,21 @@ type EditRequest struct {
 }
 
 func EditUserHandlers() []gin.HandlerFunc {
-	var user auth.User
 	var request EditRequest
 	handlers := []gin.HandlerFunc{
-		auth.Authorization(&user),
+		auth.Middleware(),
 		u.BindRequest(&request),
-		editUser(&request, &user),
+		editUser(&request),
 	}
 	return handlers
 }
-func editUser(r *EditRequest, u *auth.User) gin.HandlerFunc {
+func editUser(r *EditRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		dbUser, err := users.GetUser(u.ID)
+		dbUser, err := users.GetUser(auth.UserId(ctx))
 
 		if err != nil {
-			log.Errorf("Failed get user (id = %d) from database: %s", u.ID, err)
+			log.Errorf("Failed get user (id = %d) from database: %s", auth.UserId(ctx), err)
 			ctx.AbortWithStatus(http.StatusBadRequest)
 			return
 		}

@@ -1,10 +1,6 @@
 package auth
 
 import (
-	"art-gallery-server/database"
-	"art-gallery-server/models/users"
-	"art-gallery-server/utils"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -23,114 +19,48 @@ var (
 	signinMethod = jwt.SigningMethodHS256
 )
 
-type AuthRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
+const (
+	Bearer = "Bearer"
+
+	UserIdKey      = "USER_ID_______KEY"
+	UserEmailKey   = "USER_EMAIL____KEY"
+	UserIsAdminKey = "USER_IS_ADMIN_KEY"
+)
+
+func UserId(ctx *gin.Context) int {
+	id := ctx.MustGet(UserIdKey).(float64)
+	return int(id)
+}
+func UserIsAdmin(ctx *gin.Context) bool {
+	return ctx.MustGet(UserIsAdminKey).(bool)
 }
 
-type AuthResponse struct {
-	Token   string `json:"token"`
-	Success bool   `json:"success"`
-	Error   string `json:"error"`
-}
-type User struct {
-	ID    int
-	Email string
-}
-
-func AuthHandlers() []gin.HandlerFunc {
-	var request AuthRequest
-	handlers := []gin.HandlerFunc{
-		utils.BindRequest(&request),
-		auth(&request),
-	}
-	return handlers
-}
-
-func auth(r *AuthRequest) gin.HandlerFunc {
+func Middleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		query := fmt.Sprintf("email = '%s'", r.Email)
-		var u users.User
-		result := database.Conn.Model(&users.User{}).First(&u, query)
-		if result.Error != nil {
-			log.Warnf("Error while getting user '%s': %s", r.Email, result.Error)
-			ctx.JSON(http.StatusNotFound, AuthResponse{
-				Success: false,
-				Error:   "Wrong email or password",
-			})
-			// TODO: return response with error message for frontend
-			return
-		}
-		if !u.CheckPassword(r.Password) {
-			log.Warnf("Wrong password for user '%s'", r.Email)
-			ctx.JSON(http.StatusNotFound, AuthResponse{
-				Success: false,
-				Error:   "Wrong email or password",
-			})
-			// TODO: return response with error message for frontend
-			return
-		}
-
-		token := jwt.NewWithClaims(signinMethod, jwt.MapClaims{
-			"id":      u.ID,
-			"email":   u.Email,
-			"name":    u.Name,
-			"isAdmin": u.IsAdmin,
-		})
-		stringToken, err := token.SignedString(jwtKey)
-		if err != nil {
-			log.Errorf("Failed to sign jwt token: %s", err)
-			ctx.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
-
-		ctx.JSON(http.StatusOK, AuthResponse{Success: true, Token: stringToken})
-	}
-}
-
-func Authorization(u *User) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
 		authHeader := strings.Split(ctx.Request.Header.Get("Authorization"), " ")
-		if len(authHeader) < 2 || authHeader[0] != bearer {
-			ctx.AbortWithStatus(http.StatusMethodNotAllowed)
+		if len(authHeader) < 2 || authHeader[0] != Bearer {
 			log.Warn("Authorization failed: bad auth header")
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"statusCode": http.StatusUnauthorized,
+				"success":    false,
+			})
 			return
 		}
 		tokenString := authHeader[1]
 		token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) { return jwtKey, nil })
 		if err != nil {
-			ctx.AbortWithStatus(http.StatusMethodNotAllowed)
 			log.Warnf("Authorization failed: %s", err)
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"success":    false,
+				"statusCode": http.StatusUnauthorized,
+			})
 			return
 		}
 		claims := token.Claims.(jwt.MapClaims)
-		u.Email = claims["email"].(string)
-		u.ID = int(claims["id"].(float64))
 
+		ctx.Set(UserIdKey, claims["id"].(float64))
+		ctx.Set(UserEmailKey, claims["email"])
+		ctx.Set(UserIsAdminKey, claims["isAdmin"].(bool))
 	}
 }
-
-func GetUser(ctx *gin.Context) (*User, error) {
-	authHeader := strings.Split(ctx.Request.Header.Get("Authorization"), " ")
-	if len(authHeader) < 2 || authHeader[0] != bearer {
-		log.Warn("Authorization failed: bad auth header")
-		return nil, fmt.Errorf("bad auth header")
-	}
-	tokenString := authHeader[1]
-	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) { return jwtKey, nil })
-	if err != nil {
-		log.Warnf("Authorization failed: %s", err)
-		return nil, fmt.Errorf("auth failed: %s", err)
-	}
-	claims := token.Claims.(jwt.MapClaims)
-	user := User{
-		Email: claims["email"].(string),
-		ID:    int(claims["id"].(float64)),
-	}
-	return &user, nil
-}
-
-const (
-	bearer = "Bearer"
-)

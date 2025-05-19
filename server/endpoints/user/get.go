@@ -1,13 +1,12 @@
 package user
 
 import (
-	"art-gallery-server/database"
 	"art-gallery-server/middleware/auth"
 	"art-gallery-server/models/users"
 	"art-gallery-server/utils"
-	"fmt"
 	"net/http"
 
+	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 	gravatar "github.com/katy248/gravatar/pkg/url"
 )
@@ -40,6 +39,7 @@ func newGetUserResponse(u users.User, authorized bool) *getUserResponse {
 func GetUserHandlers() []gin.HandlerFunc {
 	request := &getUserRequest{}
 	handlers := []gin.HandlerFunc{
+		auth.Middleware(),
 		utils.BindRequest(request),
 		getUser(request),
 	}
@@ -49,20 +49,19 @@ func getUser(r *getUserRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorized := false
 		userId := r.Id
-		if user, err := auth.GetUser(ctx); err == nil {
-			if userId == 0 {
-				userId = user.ID
-			}
-			authorized = userId == user.ID
+
+		requestedUserId := auth.UserId(ctx)
+		if userId == 0 {
+			userId = requestedUserId
 		}
-		var user users.User
-		query := fmt.Sprintf("id = %d", userId)
-		result := database.Conn.First(&user, query)
-		if result.Error != nil {
+		authorized = userId == requestedUserId
+
+		user, err := users.GetUser(userId)
+		if err != nil {
+			log.Errorf("Failed get user with id '%d': %s", userId, err)
 			ctx.JSON(http.StatusNotFound, gin.H{
-				"error":   true,
-				"message": "user not found",
-				"code":    404,
+				"statusCode": http.StatusNotFound,
+				"success":    false,
 			})
 			return
 		}

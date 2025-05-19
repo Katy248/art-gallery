@@ -12,12 +12,11 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.User
 	var r Request
 	return []gin.HandlerFunc{
-		auth.Authorization(&u),
+		auth.Middleware(),
 		utils.BindRequest(&r),
-		handler(&r, &u),
+		handler(&r),
 	}
 }
 
@@ -27,11 +26,11 @@ type Request struct {
 
 const PageLimit = 20
 
-func handler(r *Request, u *auth.User) gin.HandlerFunc {
+func handler(r *Request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var posts []shared.ResponsePost
 		var postsCount int64
-		database.Conn.Raw(rawSql, u.ID, PageLimit, r.Page*PageLimit).Find(&posts)
+		database.Conn.Raw(rawSql, auth.UserId(ctx), PageLimit, r.Page*PageLimit).Find(&posts)
 		database.Conn.Raw(rawPagesQuery).Count(&postsCount)
 
 		pages := postsCount / PageLimit

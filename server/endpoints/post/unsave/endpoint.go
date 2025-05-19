@@ -11,12 +11,11 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.User
 	var r request
 	return []gin.HandlerFunc{
-		auth.Authorization(&u),
+		auth.Middleware(),
 		utils.BindRequest(&r),
-		handler(&r, &u),
+		handler(&r),
 	}
 }
 
@@ -24,10 +23,10 @@ type request struct {
 	PostID int `json:"postId" binding:"required,gte=0"`
 }
 
-func handler(r *request, u *auth.User) gin.HandlerFunc {
+func handler(r *request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var existingSave posts.PostSave
-		database.Conn.Unscoped().First(&existingSave, "post_id = ? and user_id = ?", r.PostID, u.ID)
+		database.Conn.Unscoped().First(&existingSave, "post_id = ? and user_id = ?", r.PostID, auth.UserId(ctx))
 		if existingSave.ID != 0 {
 			database.Conn.Unscoped().Delete(&existingSave)
 		}

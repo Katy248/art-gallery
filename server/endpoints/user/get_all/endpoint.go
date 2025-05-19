@@ -13,12 +13,11 @@ import (
 )
 
 func Handlers() []gin.HandlerFunc {
-	var u auth.User
 	var r Request
 	return []gin.HandlerFunc{
-		auth.Authorization(&u),
+		auth.Middleware(),
 		utils.BindRequest(&r),
-		handler(&r, &u),
+		handler(&r),
 	}
 }
 
@@ -35,14 +34,14 @@ type UserResponse struct {
 	IsAdmin     bool   `json:"isAdmin"`
 }
 
-func handler(request *Request, user *auth.User) gin.HandlerFunc {
+func handler(request *Request) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if request.PageSize == 0 {
 			request.PageSize = 10
 		}
-		dbUser, err := users.GetUser(user.ID)
+		dbUser, err := users.GetUser(auth.UserId(c))
 		if err != nil {
-			log.Errorf("Failed get user with id `%d` from database: %s", user.ID, err)
+			log.Errorf("Failed get user with id `%d` from database: %s", auth.UserId(c), err)
 		}
 
 		if !dbUser.IsAdmin {

@@ -2,10 +2,13 @@
 import { onMounted, ref } from "vue";
 import { getPost, updatePost } from "../../api";
 import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/auth";
 const router = useRouter();
 const route = useRoute();
 const postId = route.params.id;
 const props = defineProps({});
+
+const auth = useAuthStore();
 
 const post = ref({});
 onMounted(() => {
@@ -14,7 +17,7 @@ onMounted(() => {
     });
 });
 const onSubmit = () => {
-    updatePost(post.value.id, post.value.description).then((res) => {
+    updatePost(post.value).then((res) => {
         if (res.success) {
             console.log("Post updated successfully");
             router.push("/");
@@ -31,7 +34,12 @@ const onSubmit = () => {
         </div>
 
         <div class="input-group">
+            <label>Описание</label>
             <input class="text-entry" v-model="post.description" />
+        </div>
+        <div class="input-group" v-if="auth.authData.isAdmin">
+            <label>Предупредительное сообщение</label>
+            <input class="text-entry" v-model="post.warningMessage" />
         </div>
         <div class="input-group">
             <input class="btn btn-primary" type="submit" value="Сохранить изменения" />

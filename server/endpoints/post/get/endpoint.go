@@ -1,6 +1,7 @@
 package get
 
 import (
+	"art-gallery-server/endpoints/post/shared"
 	"art-gallery-server/middleware/auth"
 	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
@@ -26,19 +27,10 @@ func (r *Request) Validate() error {
 	return validation.GreaterOrEqual(r.PostId, 0, "page")
 }
 
-type responsePost struct {
-	ID          int    `json:"id"`
-	Description string `json:"description"`
-	ImageUrl    string `json:"imageUrl"`
-	PublisherID int    `json:"publisherId"`
-	Saved       bool   `json:"saved"`
-	CreatedAt   string `json:"createdAt"`
-}
-
 func handler(r *Request, user *auth.User) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := utils.ConnectToDbOrAbort(c)
-		var post responsePost
+		var post shared.ResponsePost
 		db.Raw(rawSql, user.ID, r.PostId).First(&post)
 		// db.Where("publisher_id = ?", user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
 		c.JSON(200, gin.H{
@@ -55,6 +47,7 @@ const rawSql = `
 		, p.image_url
 		, p.publisher_id
 		, p.created_at
+		, p.warning_message
 		, u.name
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved
 	FROM 

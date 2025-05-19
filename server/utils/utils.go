@@ -89,3 +89,18 @@ func ValidateMoreThan(value int, secondValue int, valueName string) error {
 	}
 	return nil
 }
+
+// Returns true if no errors occurred, otherwise false
+func WrapDbResult(ctx *gin.Context, result *gorm.DB) bool {
+
+	if result.Error != nil {
+		log.Errorf("Failed perform database action: %s", result.Error)
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"success": false,
+		})
+		return false
+	}
+
+	return true
+}

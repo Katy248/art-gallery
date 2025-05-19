@@ -1,6 +1,7 @@
 package get_users
 
 import (
+	"art-gallery-server/endpoints/post/shared"
 	"art-gallery-server/middleware/auth"
 	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
@@ -34,20 +35,10 @@ func (r *request) Validate() error {
 	)
 }
 
-type responsePost struct {
-	ID          int    `json:"id"`
-	Description string `json:"description"`
-	ImageUrl    string `json:"imageUrl"`
-	PublisherID int    `json:"publisherId"`
-	Name        string `json:"name"`
-	Saved       bool   `json:"saved"`
-	CreatedAt   string `json:"createdAt"`
-}
-
 func handler(r *request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
-		var posts []responsePost
+		var posts []shared.ResponsePost
 		db.Raw(rawSql, user.ID, r.UserID).
 			Offset(PageLimit * r.Page).
 			Limit(PageLimit).
@@ -64,6 +55,7 @@ const rawSql = `
 		, p.image_url
 		, p.publisher_id
 		, p.created_at
+		, p.warning_message
 		, u.name
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved
 	FROM 

@@ -22,8 +22,9 @@ func Handlers() []gin.HandlerFunc {
 }
 
 type Request struct {
-	PostId      int    `json:"postId"`
-	Description string `json:"description"`
+	PostId         int    `json:"postId" binding:"required,gte=0"`
+	Description    string `json:"description" binding:"required"`
+	WarningMessage string `json:"warningMessage"`
 }
 
 func handler(r *Request, user *auth.User) gin.HandlerFunc {
@@ -31,9 +32,8 @@ func handler(r *Request, user *auth.User) gin.HandlerFunc {
 		db := utils.ConnectToDbOrAbort(c)
 		var post models.Post
 		result := db.Raw(rawSql, r.PostId).First(&post)
-		if result.Error != nil {
+		if !utils.WrapDbResult(c, result) {
 			log.Errorf("Failed get post with id %d: %v", r.PostId, result.Error)
-			c.JSON(http.StatusNotFound, gin.H{"error": "Post not found", "success": false})
 			return
 		}
 
@@ -46,10 +46,16 @@ func handler(r *Request, user *auth.User) gin.HandlerFunc {
 		}
 
 		result = db.Model(&post).Update("description", r.Description)
-		if result.Error != nil {
+		if !utils.WrapDbResult(c, result) {
 			log.Errorf("Failed update post with id %d: %v", r.PostId, result.Error)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed update post", "success": false})
 			return
+		}
+
+		if users.IsAdmin(db, user.ID) && r.WarningMessage != "" {
+			result = db.Model(&post).Update("warning_message", r.WarningMessage)
+			if !utils.WrapDbResult(c, result) {
+				return
+			}
 		}
 
 		c.JSON(http.StatusOK, gin.H{"success": true})

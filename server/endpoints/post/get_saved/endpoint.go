@@ -1,6 +1,7 @@
 package get_saved
 
 import (
+	"art-gallery-server/endpoints/post/shared"
 	"art-gallery-server/middleware/auth"
 	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
@@ -37,7 +38,7 @@ func handler(r *request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := utils.ConnectToDbOrAbort(ctx)
 
-		var posts []responsePost
+		var posts []shared.ResponsePost
 		var count int64
 		db.Raw(pagesQuery, user.ID, r.UserID).Count(&count)
 		db.Raw(rawQuery, user.ID, r.UserID).Offset(r.Page * PageSize).Limit(PageSize).Find(&posts)
@@ -53,22 +54,13 @@ func handler(r *request, user *auth.User) gin.HandlerFunc {
 
 const PageSize = 20
 
-type responsePost struct {
-	ID            int    `json:"id"`
-	CreatedAt     string `json:"createdAt"`
-	Description   string `json:"description"`
-	ImageUrl      string `json:"imageUrl"`
-	PublisherID   int    `json:"publisherId"`
-	Saved         bool   `json:"saved"`
-	PublisherName string `json:"publisherName"`
-}
-
 const rawQuery = `
 	SELECT 
 		p.id
 		, p.description
 		, p.image_url
 		, p.publisher_id
+		, p.warning_message
 		, p.created_at
 		, u.name as publisher_name
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved

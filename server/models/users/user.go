@@ -1,12 +1,13 @@
-package models
+package users
 
 import (
+	"art-gallery-server/database"
+	"art-gallery-server/models"
 	"errors"
 
 	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 const (
@@ -14,12 +15,11 @@ const (
 )
 
 type User struct {
-	*BaseModel
+	*models.BaseModel
 	Name         string
 	Email        string `gorm:"unique"`
 	Description  string
 	PasswordHash string
-	PostSaves    []PostSave
 	IsAdmin      bool
 }
 
@@ -54,10 +54,11 @@ func NewUser(name, email, password string) (*User, error) {
 	}
 	return u, nil
 }
-func (u *User) Save(db *gorm.DB) error {
-	result := db.Create(u)
-	return result.Error
-}
+
+// func (u *User) Save() error {
+// 	result := db.Create(u)
+// 	return result.Error
+// }
 
 func (u *User) SetPassword(password string) *User {
 	hash := hashPassword(password)
@@ -65,8 +66,24 @@ func (u *User) SetPassword(password string) *User {
 	return u
 }
 func (u *User) CheckPassword(password string) bool {
-	// hashed := hashPassword(password)
-	// log.Debugf("Compare passwords '%s' and '%s'", u.PasswordHash, hashed)
-	// return u.PasswordHash == hashed
 	return checkPassword(password, u.PasswordHash)
 }
+
+func GetUser(userId int) (User, error) {
+	var user User
+	result := database.Conn.Raw(`SELECT * FROM users WHERE id = ?`, userId).First(&user)
+	return user, result.Error
+}
+
+func IsAdmin(userId int) (isAdmin bool) {
+	result := database.Conn.Raw(rawIsAdminQuery, userId).First(&isAdmin)
+	if result.Error != nil {
+		log.Errorf("Failed to check if user is admin, returning default false value. Error: %s", result.Error)
+		return false
+	}
+	return isAdmin
+}
+
+var rawIsAdminQuery = `
+	SELECT is_admin FROM users WHERE id = ?
+`

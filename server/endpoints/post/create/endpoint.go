@@ -3,9 +3,7 @@ package create
 import (
 	"art-gallery-server/database"
 	auth "art-gallery-server/middleware/auth"
-	"art-gallery-server/models"
-	"art-gallery-server/utils"
-	"errors"
+	"art-gallery-server/models/posts"
 	"fmt"
 	"net/http"
 
@@ -13,20 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type createPostRequest struct {
-	Description string `form:"description"`
-}
-
-func (r *createPostRequest) Validate() error {
-	return errors.Join()
-}
-
 func CreatePostHandlers() []gin.HandlerFunc {
 	var user auth.User
-	// var request createPostRequest
 	return []gin.HandlerFunc{
 		auth.Authorization(&user),
-		// ValidateRequest(&request),
 		createPost(&user),
 	}
 }
@@ -47,18 +35,17 @@ func createPost(user *auth.User) gin.HandlerFunc {
 			return
 		}
 
-		db := utils.ConnectToDbOrAbort(ctx)
-		post := models.Post{
+		post := posts.Post{
 			PublisherID: user.ID,
 			Description: desc,
 		}
 
-		db.Model(&post).Create(&post)
+		database.Conn.Model(&post).Create(&post)
 
 		imageName := fmt.Sprintf("picture-%d", post.ID)
 		post.ImageUrl = fmt.Sprintf("/api/images/%s", imageName)
 
-		db.Save(&post)
+		database.Conn.Save(&post)
 		err = ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", database.ImagesDir(), imageName))
 		if err != nil {
 			log.Errorf("Failed save file: %s", err)

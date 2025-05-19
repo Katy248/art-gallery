@@ -1,11 +1,10 @@
 package user
 
 import (
+	"art-gallery-server/database"
 	"art-gallery-server/middleware/auth"
-	m "art-gallery-server/models"
+	"art-gallery-server/models/users"
 	"art-gallery-server/utils"
-	u "art-gallery-server/utils"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -14,13 +13,7 @@ import (
 )
 
 type getUserRequest struct {
-	Id int `json:"id"`
-}
-
-func (r *getUserRequest) Validate() error {
-	return errors.Join(
-	// u.ValidateMoreThan(r.Id, 0, "id"),
-	)
+	Id int `json:"id" binding:"gte=0"`
 }
 
 type getUserResponse struct {
@@ -31,7 +24,7 @@ type getUserResponse struct {
 	Description string `json:"description"`
 }
 
-func newGetUserResponse(u m.User, authorized bool) *getUserResponse {
+func newGetUserResponse(u users.User, authorized bool) *getUserResponse {
 	resp := &getUserResponse{
 		Id:          u.ID,
 		Name:        u.Name,
@@ -47,14 +40,13 @@ func newGetUserResponse(u m.User, authorized bool) *getUserResponse {
 func GetUserHandlers() []gin.HandlerFunc {
 	request := &getUserRequest{}
 	handlers := []gin.HandlerFunc{
-		utils.ValidateRequest(request),
+		utils.BindRequest(request),
 		getUser(request),
 	}
 	return handlers
 }
 func getUser(r *getUserRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := u.ConnectToDbOrAbort(ctx)
 		authorized := false
 		userId := r.Id
 		if user, err := auth.GetUser(ctx); err == nil {
@@ -63,9 +55,9 @@ func getUser(r *getUserRequest) gin.HandlerFunc {
 			}
 			authorized = userId == user.ID
 		}
-		var user m.User
+		var user users.User
 		query := fmt.Sprintf("id = %d", userId)
-		result := db.Model(&m.User{}).First(&user, query)
+		result := database.Conn.First(&user, query)
 		if result.Error != nil {
 			ctx.JSON(http.StatusNotFound, gin.H{
 				"error":   true,

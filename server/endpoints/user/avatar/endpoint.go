@@ -1,8 +1,8 @@
 package avatar
 
 import (
-	"art-gallery-server/models"
-	"art-gallery-server/utils"
+	"art-gallery-server/models/users"
+	"net/http"
 	"strconv"
 
 	"github.com/charmbracelet/log"
@@ -26,12 +26,15 @@ func handler() gin.HandlerFunc {
 			})
 			return
 		}
-		var user models.User
-		db := utils.ConnectToDbOrAbort(c)
-		db.Where("id = ?", id).Select("email").First(&user)
+
+		user, err := users.GetUser(id)
+		if err != nil {
+			log.Errorf("Failed get user for avatar image")
+			user.Email = "empty email" //default email string
+		}
 
 		url := gravatar.NewAvatarUrl(user.Email, gravatar.DefaultImage(gravatar.DefaultRetro), gravatar.Size(512))
-		c.JSON(200, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"url": url,
 		})
 	}

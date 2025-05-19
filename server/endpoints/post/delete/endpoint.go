@@ -1,9 +1,10 @@
 package delete
 
 import (
-	"art-gallery-server/database/users"
+	"art-gallery-server/database"
 	"art-gallery-server/middleware/auth"
-	"art-gallery-server/models"
+	"art-gallery-server/models/posts"
+	"art-gallery-server/models/users"
 	"art-gallery-server/utils"
 	"net/http"
 
@@ -27,16 +28,15 @@ func Handlers() []gin.HandlerFunc {
 
 func handler(request *Request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := utils.ConnectToDbOrAbort(ctx)
-		var post models.Post
-		result := db.Raw(rawGetPostQuery, request.PostId).First(&post)
+		var post posts.Post
+		result := database.Conn.Raw(rawGetPostQuery, request.PostId).First(&post)
 		if result.Error != nil {
 			log.Errorf("Failed to get post: %s", result.Error)
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "Failed to get post", "success": false})
 			return
 		}
 
-		if post.PublisherID == user.ID || users.IsAdmin(db, user.ID) {
+		if post.PublisherID == user.ID || users.IsAdmin(user.ID) {
 		} else {
 			log.Warnf("Unauthorized try to delete post %d by user %d", post.ID, request.PostId)
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "You are not authorized to delete this post", "success": false})
@@ -44,7 +44,7 @@ func handler(request *Request, user *auth.User) gin.HandlerFunc {
 
 		}
 
-		result = db.Unscoped().Delete(&post)
+		result = database.Conn.Unscoped().Delete(&post)
 		if result.Error != nil {
 			log.Errorf("Failed to delete post: %s", result.Error)
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete post", "success": false})

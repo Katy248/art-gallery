@@ -18,7 +18,7 @@ func init() {
 
 func ImagesDir() string { return imagesDir }
 
-func setupImages() {
+func SetupImages() {
 	imagesDir = viper.GetString("database.images_dir")
 	log.Debugf("Images dir - '%s'", imagesDir)
 	err := os.MkdirAll(imagesDir, os.ModePerm)

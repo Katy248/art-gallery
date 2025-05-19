@@ -1,12 +1,14 @@
 package get_all
 
 import (
-	"art-gallery-server/database/users"
+	"art-gallery-server/database"
 	"art-gallery-server/middleware/auth"
 	"art-gallery-server/models"
+	"art-gallery-server/models/users"
 	"art-gallery-server/utils"
 	"net/http"
 
+	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,14 +40,17 @@ func handler(request *Request, user *auth.User) gin.HandlerFunc {
 		if request.PageSize == 0 {
 			request.PageSize = 10
 		}
-		db := utils.ConnectToDbOrAbort(c)
+		dbUser, err := users.GetUser(user.ID)
+		if err != nil {
+			log.Errorf("Failed get user with id `%d` from database: %s", user.ID, err)
+		}
 
-		if !users.IsAdmin(db, user.ID) {
+		if !dbUser.IsAdmin {
 			c.JSON(http.StatusMethodNotAllowed, gin.H{"error": "Method not allowed", "success": false})
 		}
 
 		var users []UserResponse
-		db.Raw(rawQuery, request.PageSize, request.Page*request.PageSize).Find(&users)
+		database.Conn.Raw(rawQuery, request.PageSize, request.Page*request.PageSize).Find(&users)
 		c.JSON(http.StatusOK, gin.H{"users": users, "success": true})
 	}
 }

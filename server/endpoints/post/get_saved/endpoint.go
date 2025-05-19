@@ -1,11 +1,10 @@
 package get_saved
 
 import (
+	"art-gallery-server/database"
 	"art-gallery-server/endpoints/post/shared"
 	"art-gallery-server/middleware/auth"
-	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
-	"errors"
 	"net/http"
 
 	"github.com/charmbracelet/log"
@@ -17,31 +16,22 @@ func Handlers() []gin.HandlerFunc {
 	var r request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
-		utils.ValidateRequest(&r),
+		utils.BindRequest(&r),
 		handler(&r, &u),
 	}
 }
 
 type request struct {
-	UserID int `json:"userId"`
+	UserID int `json:"userId" binding:"required,gt=0"`
 	Page   int `json:"page"`
-}
-
-func (r *request) Validate() error {
-	return errors.Join(
-		validation.GreaterThan(r.UserID, 0, "userID"),
-		validation.GreaterOrEqual(r.Page, 0, "page"),
-	)
 }
 
 func handler(r *request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := utils.ConnectToDbOrAbort(ctx)
-
 		var posts []shared.ResponsePost
 		var count int64
-		db.Raw(pagesQuery, user.ID, r.UserID).Count(&count)
-		db.Raw(rawQuery, user.ID, r.UserID).Offset(r.Page * PageSize).Limit(PageSize).Find(&posts)
+		database.Conn.Raw(pagesQuery, user.ID, r.UserID).Count(&count)
+		database.Conn.Raw(rawQuery, user.ID, r.UserID).Offset(r.Page * PageSize).Limit(PageSize).Find(&posts)
 
 		pages := count / PageSize
 		if count%PageSize != 0 {

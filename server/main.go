@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	db "art-gallery-server/database"
+	"art-gallery-server/database/migration"
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
@@ -22,9 +23,11 @@ func init() {
 }
 
 func main() {
-	db.SetupConnectionStringFromConf()
-	db.MustMigrateDb()
-	log.Info("Here")
+	db.SetConnectionStringFromConf()
+	db.MustConnect()
+
+	migration.MustMigrateDb()
+
 	addr := fmt.Sprintf(":%d", port)
 	server := CreateServer(addr)
 	server.Run(addr)

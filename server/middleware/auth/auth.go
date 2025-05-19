@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"art-gallery-server/models"
-	u "art-gallery-server/utils"
-	"errors"
+	"art-gallery-server/database"
+	"art-gallery-server/models/users"
+	"art-gallery-server/utils"
 	"fmt"
 	"net/http"
 	"strings"
@@ -23,52 +23,48 @@ var (
 	signinMethod = jwt.SigningMethodHS256
 )
 
-type authRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+type AuthRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
 }
 
-func (r *authRequest) Validate() error {
-	return errors.Join(
-		u.ValidateNotEmpty(r.Email),
-		u.ValidateNotEmpty(r.Password),
-	)
-}
-
-type authResponse struct {
+type AuthResponse struct {
 	Token   string `json:"token"`
 	Success bool   `json:"success"`
 	Error   string `json:"error"`
 }
+type User struct {
+	ID    int
+	Email string
+}
 
 func AuthHandlers() []gin.HandlerFunc {
-	var request authRequest
+	var request AuthRequest
 	handlers := []gin.HandlerFunc{
-		u.ValidateRequest(&request),
+		utils.BindRequest(&request),
 		auth(&request),
 	}
 	return handlers
 }
 
-func auth(r *authRequest) gin.HandlerFunc {
+func auth(r *AuthRequest) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := u.ConnectToDbOrAbort(ctx)
 
 		query := fmt.Sprintf("email = '%s'", r.Email)
-		var user models.User
-		result := db.Model(&models.User{}).First(&user, query)
+		var u users.User
+		result := database.Conn.Model(&users.User{}).First(&u, query)
 		if result.Error != nil {
 			log.Warnf("Error while getting user '%s': %s", r.Email, result.Error)
-			ctx.JSON(http.StatusNotFound, authResponse{
+			ctx.JSON(http.StatusNotFound, AuthResponse{
 				Success: false,
 				Error:   "Wrong email or password",
 			})
 			// TODO: return response with error message for frontend
 			return
 		}
-		if !user.CheckPassword(r.Password) {
+		if !u.CheckPassword(r.Password) {
 			log.Warnf("Wrong password for user '%s'", r.Email)
-			ctx.JSON(http.StatusNotFound, authResponse{
+			ctx.JSON(http.StatusNotFound, AuthResponse{
 				Success: false,
 				Error:   "Wrong email or password",
 			})
@@ -76,7 +72,12 @@ func auth(r *authRequest) gin.HandlerFunc {
 			return
 		}
 
-		token := jwt.NewWithClaims(signinMethod, jwt.MapClaims{"id": user.ID, "email": user.Email, "name": user.Name, "isAdmin": user.IsAdmin})
+		token := jwt.NewWithClaims(signinMethod, jwt.MapClaims{
+			"id":      u.ID,
+			"email":   u.Email,
+			"name":    u.Name,
+			"isAdmin": u.IsAdmin,
+		})
 		stringToken, err := token.SignedString(jwtKey)
 		if err != nil {
 			log.Errorf("Failed to sign jwt token: %s", err)
@@ -84,13 +85,8 @@ func auth(r *authRequest) gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, authResponse{Success: true, Token: stringToken})
+		ctx.JSON(http.StatusOK, AuthResponse{Success: true, Token: stringToken})
 	}
-}
-
-type User struct {
-	ID    int
-	Email string
 }
 
 func Authorization(u *User) gin.HandlerFunc {

@@ -1,50 +1,46 @@
 package user
 
 import (
+	"art-gallery-server/database"
 	"art-gallery-server/middleware/auth"
-	m "art-gallery-server/models"
+	"art-gallery-server/models/users"
 	u "art-gallery-server/utils"
-	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
 )
 
-type editRequest struct {
-	Name string `json:"name"`
-}
-
-func (r *editRequest) Validate() error {
-	return errors.Join(u.ValidateNotEmptyNamed(r.Name, "name"))
+type EditRequest struct {
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description"`
 }
 
 func EditUserHandlers() []gin.HandlerFunc {
 	var user auth.User
-	var request editRequest
+	var request EditRequest
 	handlers := []gin.HandlerFunc{
 		auth.Authorization(&user),
-		u.ValidateRequest(&request),
+		u.BindRequest(&request),
 		editUser(&request, &user),
 	}
 	return handlers
 }
-func editUser(r *editRequest, user *auth.User) gin.HandlerFunc {
+func editUser(r *EditRequest, u *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := u.ConnectToDbOrAbort(ctx)
 
-		var dbUser m.User
-		query := fmt.Sprintf("id = %d", user.ID)
-		result := db.Model(&m.User{}).First(&dbUser, query)
+		dbUser, err := users.GetUser(u.ID)
 
-		if result.Error != nil {
-			log.Errorf("Failed get user (id = %d) from database: %s", user.ID, result.Error)
+		if err != nil {
+			log.Errorf("Failed get user (id = %d) from database: %s", u.ID, err)
 			ctx.AbortWithStatus(http.StatusBadRequest)
 			return
 		}
 
-		db.Model(&dbUser).Update("Name", r.Name)
-		ctx.AbortWithStatus(http.StatusOK)
+		database.Conn.Model(&dbUser).Update("Name", r.Name)
+		ctx.JSON(http.StatusOK, gin.H{
+			"statusCode": http.StatusOK,
+			"success":    true,
+		})
 	}
 }

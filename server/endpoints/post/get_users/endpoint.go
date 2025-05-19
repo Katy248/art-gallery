@@ -1,11 +1,10 @@
 package get_users
 
 import (
+	"art-gallery-server/database"
 	"art-gallery-server/endpoints/post/shared"
 	"art-gallery-server/middleware/auth"
-	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +15,7 @@ func GetUsersPostHandlers() []gin.HandlerFunc {
 	var r request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
-		utils.ValidateRequest(&r),
+		utils.BindRequest(&r),
 		handler(&r, &u),
 	}
 }
@@ -24,22 +23,14 @@ func GetUsersPostHandlers() []gin.HandlerFunc {
 const PageLimit = 20
 
 type request struct {
-	UserID int `json:"userId"`
-	Page   int `json:"page"`
-}
-
-func (r *request) Validate() error {
-	return errors.Join(
-		validation.GreaterThan(r.UserID, 0, "userID"),
-		validation.GreaterOrEqual(r.Page, 0, "page"),
-	)
+	UserID int `json:"userId" binding:"required,gt=0"`
+	Page   int `json:"page" binding:"gte=0"`
 }
 
 func handler(r *request, user *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := utils.ConnectToDbOrAbort(ctx)
 		var posts []shared.ResponsePost
-		db.Raw(rawSql, user.ID, r.UserID).
+		database.Conn.Raw(rawSql, user.ID, r.UserID).
 			Offset(PageLimit * r.Page).
 			Limit(PageLimit).
 			Find(&posts)

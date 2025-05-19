@@ -1,9 +1,9 @@
 package get
 
 import (
+	"art-gallery-server/database"
 	"art-gallery-server/endpoints/post/shared"
 	"art-gallery-server/middleware/auth"
-	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ func Handlers() []gin.HandlerFunc {
 	var r Request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
-		utils.ValidateRequest(&r),
+		utils.BindRequest(&r),
 		handler(&r, &u),
 	}
 }
@@ -23,15 +23,10 @@ type Request struct {
 	PostId int `json:"postId"`
 }
 
-func (r *Request) Validate() error {
-	return validation.GreaterOrEqual(r.PostId, 0, "page")
-}
-
 func handler(r *Request, user *auth.User) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db := utils.ConnectToDbOrAbort(c)
 		var post shared.ResponsePost
-		db.Raw(rawSql, user.ID, r.PostId).First(&post)
+		database.Conn.Raw(rawSql, user.ID, r.PostId).First(&post)
 		// db.Where("publisher_id = ?", user.ID).Offset(r.Page * 20).Limit(20).Find(&posts)
 		c.JSON(200, gin.H{
 			"success": true,

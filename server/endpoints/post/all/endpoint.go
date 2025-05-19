@@ -1,10 +1,11 @@
 package all
 
 import (
+	"art-gallery-server/database"
 	"art-gallery-server/endpoints/post/shared"
 	"art-gallery-server/middleware/auth"
-	"art-gallery-server/middleware/validation"
 	"art-gallery-server/utils"
+	"net/http"
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
@@ -15,28 +16,23 @@ func Handlers() []gin.HandlerFunc {
 	var r Request
 	return []gin.HandlerFunc{
 		auth.Authorization(&u),
-		utils.ValidateRequest(&r),
+		utils.BindRequest(&r),
 		handler(&r, &u),
 	}
 }
 
 type Request struct {
-	Page int `json:"page"`
-}
-
-func (r *Request) Validate() error {
-	return validation.GreaterOrEqual(r.Page, 0, "page")
+	Page int `json:"page" binding:"gte=0"`
 }
 
 const PageLimit = 20
 
 func handler(r *Request, u *auth.User) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		db := utils.ConnectToDbOrAbort(ctx)
 		var posts []shared.ResponsePost
 		var postsCount int64
-		db.Raw(rawSql, u.ID, PageLimit, r.Page*PageLimit).Find(&posts)
-		db.Raw(rawPagesQuery).Count(&postsCount)
+		database.Conn.Raw(rawSql, u.ID, PageLimit, r.Page*PageLimit).Find(&posts)
+		database.Conn.Raw(rawPagesQuery).Count(&postsCount)
 
 		pages := postsCount / PageLimit
 		if pages%PageLimit != 0 {
@@ -44,7 +40,7 @@ func handler(r *Request, u *auth.User) gin.HandlerFunc {
 		}
 		log.Debugf("Posts: %d, pages: %d", postsCount, pages)
 
-		ctx.JSON(200, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"posts": posts,
 			"pages": pages,
 		})

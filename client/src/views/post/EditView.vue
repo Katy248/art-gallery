@@ -6,7 +6,6 @@ import { useAuthStore } from "../../stores/auth";
 const router = useRouter();
 const route = useRoute();
 const postId = route.params.id;
-const props = defineProps({});
 
 const auth = useAuthStore();
 

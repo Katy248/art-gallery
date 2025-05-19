@@ -7,4 +7,6 @@ const authStore = useAuthStore();
 authStore.logout();
 router.push("/auth/login");
 </script>
-<template></template>
+<template>
+  <h1>Logging out...</h1>
+</template>

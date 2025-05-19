@@ -5,12 +5,10 @@ import { onBeforeRouteUpdate, useRoute } from "vue-router";
 import UserPostsList from "../../components/UserPostsList.vue";
 import UserSavedPostsList from "../../components/UserSavedPostsList.vue";
 import { TabGroup, TabList, Tab, TabPanel, TabPanels } from "@headlessui/vue";
-import { useAuthStore } from "../../stores/auth";
 import ErrorPresenter from "../../components/ErrorPresenter.vue";
 
 const user = ref(null);
 const selectedTabIndex = ref(0);
-const authStore = useAuthStore();
 const route = useRoute();
 
 const changeTab = (tab) => {
@@ -31,11 +29,14 @@ const getInfo = (id) => {
       console.log(user.value);
     })
     .catch((err) => {
-      log.error(err);
+      console.error(err);
     });
 };
 
 onBeforeRouteUpdate(async (to, from) => {
+  if (from === to) {
+    return;
+  }
   getInfo(to.params.id);
   selectedTabIndex.value = 0;
   window.scrollTo(0, 0);

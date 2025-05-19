@@ -32,7 +32,12 @@ const switchPage = (page) => {
 <template>
   <div class="flex flex-col gap-4">
     <div class="grid md:grid-cols-2 gap-4">
-      <PostCard v-for="post in posts" :post="post" :showPublisher="true" />
+      <PostCard
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        :showPublisher="true"
+      />
     </div>
     <div class="flex gap-1 justify-center">
       <ListPager

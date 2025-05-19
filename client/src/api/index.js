@@ -17,7 +17,7 @@ const register = (email, name, password) => {
     email: email,
     password: password,
     name: name,
-  }).then((r) => {
+  }).then(() => {
     authenticate(email, password);
   });
 };

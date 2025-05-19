@@ -5,10 +5,10 @@ import { useAuthStore } from "../stores/auth";
 
 let showMenu = ref(false);
 
-const menuClick = (event) => {
+const menuClick = () => {
   showMenu.value = !showMenu.value;
 };
-const backdropClick = (event) => {
+const backdropClick = () => {
   showMenu.value = false;
 };
 

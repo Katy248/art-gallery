@@ -28,7 +28,7 @@ import { LINKS } from "../data";
         <p>Свяжитесь с нами по электронной почте: <a href="mailto:support@artgallery.com">support@artgallery.com</a></p>
         <p>Мы также активно ведем наши социальные сети, где вы можете следить за новостями и событиями:</p> -->
     <ul>
-      <li v-for="link in LINKS">
+      <li v-for="link in LINKS" v-bind:key="link.name">
         <a :href="link.url" target="_blank">
           <i v-if="link.icon" :class="link.icon" class="me-1"></i>
           {{ link.name }}</a

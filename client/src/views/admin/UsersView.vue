@@ -17,7 +17,7 @@ const getData = (page) => {
 onMounted(() => {
   getData(route.params.page);
 });
-onBeforeRouteUpdate(async (to, from) => {
+onBeforeRouteUpdate(async (to) => {
   getData(to.params.page);
 });
 

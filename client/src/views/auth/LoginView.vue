@@ -8,7 +8,7 @@ const email = ref("");
 const password = ref("");
 const router = useRouter();
 
-const onSubmit = (e) => {
+const onSubmit = () => {
   authenticate(email.value, password.value);
 };
 
@@ -18,7 +18,7 @@ const checkAuthAndRedirect = () => {
   }
 };
 
-authStore.$subscribe((mutation, state) => {
+authStore.$subscribe(() => {
   checkAuthAndRedirect();
 });
 checkAuthAndRedirect();

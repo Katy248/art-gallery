@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
   pages: {
     type: Number,
     required: true,
@@ -18,6 +18,7 @@ const props = defineProps({
   <button
     class="btn px-4 py-1 rounded bg-ui hover:bg-ui-2 active:bg-ui-3"
     v-for="p in [...Array(pages).keys()]"
+    :key="p"
     @click="pageButtonActivatedHandler(p)"
     :class="currentPage === p ? 'text-magenta px-20' : ''"
   >

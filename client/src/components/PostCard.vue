@@ -18,6 +18,7 @@ const props = defineProps({
     default: false,
   },
 });
+
 const savePostHandler = (post) => {
   savePost(post.id).then((r) => {
     post.saved = r.saved;
@@ -162,14 +163,6 @@ const deletePostHandler = () => {
           <i class="far fa-bookmark"></i>
           Сохранить
         </button>
-        <!-- <button class="btn btn-base">
-                    <i class="fas fa-plus"></i>
-                    В коллекцию
-                </button>
-                <button class="btn btn-base">
-                    <i class="fas fa-share"></i>
-                    Поделиться
-                </button> -->
         <a type="_blank" class="grow btn btn-base" :href="post.imageUrl">
           <i class="fas fa-image"></i>
           Оригинал

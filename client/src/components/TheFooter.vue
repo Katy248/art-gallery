@@ -9,7 +9,7 @@ const currentYear = ref(new Date());
       <section>
         <h5>Контакты</h5>
         <ul>
-          <li v-for="contact in CONTACTS">
+          <li v-for="contact in CONTACTS" :key="contact.name">
             <a
               class="item"
               :href="contact.url"
@@ -25,7 +25,7 @@ const currentYear = ref(new Date());
       <section>
         <h5>Ссылки</h5>
         <ul>
-          <li v-for="link in LINKS" class="item">
+          <li v-for="link in LINKS" class="item" :key="link.name">
             <a :href="link.url" target="_blank">
               <i v-if="link.icon" :class="link.icon" class="me-1"></i>
               {{ link.name }}</a

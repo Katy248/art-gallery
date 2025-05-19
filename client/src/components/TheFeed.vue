@@ -1,11 +1,11 @@
 <script setup>
 import PostCard from "./PostCard.vue";
 const props = defineProps({
-    posts: {},
+  posts: {},
 });
 </script>
 <template>
-    <div class="flex flex-col gap-6 items-center">
-        <PostCard v-for="post in props.posts" :post="post" :showPublisher="true" />
-    </div>
+  <div class="flex flex-col gap-6 items-center">
+    <PostCard v-for="post in props.posts" :post="post" :showPublisher="true" />
+  </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import TheNav from "./components/TheNav.vue";
 import TheFooter from "./components/TheFooter.vue";
 </script>
@@ -15,9 +15,3 @@ import TheFooter from "./components/TheFooter.vue";
     <TheFooter />
   </div>
 </template>
-<style>
-@import "./style.css";
-body {
-  @apply dark:bg-[#100F0F];
-}
-</style>

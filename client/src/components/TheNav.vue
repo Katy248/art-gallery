@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/auth";
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 let showMenu = ref(false);
 

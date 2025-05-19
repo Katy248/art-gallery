@@ -63,17 +63,6 @@ getInfo(route.params.id);
       v-if="user.id"
       class="flex justify-center items-center flex-col gap-4 w-full grow"
     >
-      <!-- <div v-if="user.id == authStore.authData.id" class="flex gap-2 bg-bg-2 p-2 rounded-lg justify-center w-fit">
-                <button class="btn btn-base">
-                    <i class="fas fa-plus"></i>
-                    Создать публикацию
-                </button>
-                <button class="btn btn-base">
-                    <i class="fa-solid fa-image"></i>
-                    Создать коллекцию
-                </button>
-            </div> -->
-
       <TabGroup :selectedIndex="selectedTabIndex" @change="changeTab">
         <TabList>
           <div class="flex gap-2 bg-bg-2 p-2 rounded-lg w-full grow">

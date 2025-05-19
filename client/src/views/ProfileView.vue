@@ -4,12 +4,12 @@ import { getProfileInfo } from "../api";
 const name = ref("");
 const img = ref("");
 getProfileInfo().then((response) => {
-    name.value = response.name;
-    img.value = response.avatarUrl;
-    console.log(response);
+  name.value = response.name;
+  img.value = response.avatarUrl;
+  console.log(response);
 });
 </script>
 <template>
-    <img :src="img" class="rounded-full" />
-    <div>{{ name }}</div>
+  <img :src="img" class="rounded-full" />
+  <div>{{ name }}</div>
 </template>

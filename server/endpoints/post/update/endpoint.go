@@ -23,7 +23,7 @@ func Handlers() []gin.HandlerFunc {
 
 type Request struct {
 	PostId         int    `json:"postId" binding:"required,gte=0"`
-	Description    string `json:"description" binding:"required"`
+	Description    string `json:"description"`
 	WarningMessage string `json:"warningMessage"`
 }
 

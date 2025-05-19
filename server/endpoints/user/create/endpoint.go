@@ -1,4 +1,4 @@
-package user
+package create
 
 import (
 	"net/http"
@@ -13,21 +13,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type createUserRequest struct {
+type Request struct {
 	Name     string `json:"name" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
 }
 
-func CreateUserHandlers() []gin.HandlerFunc {
-	request := &createUserRequest{}
+func Handlers() []gin.HandlerFunc {
+	request := &Request{}
 	handlers := []gin.HandlerFunc{
-		utils.BindRequest(request), createUser(request),
+		utils.BindRequest(request), handler(request),
 	}
 	return handlers
 }
 
-func createUser(r *createUserRequest) gin.HandlerFunc {
+func handler(r *Request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user, err := users.NewUser(r.Name, r.Email, r.Password)
 		if err != nil {

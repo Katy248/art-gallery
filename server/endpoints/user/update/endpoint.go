@@ -1,4 +1,4 @@
-package user
+package update
 
 import (
 	"art-gallery-server/database"
@@ -11,21 +11,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type EditRequest struct {
+type Request struct {
 	Name        string `json:"name" binding:"required"`
 	Description string `json:"description"`
 }
 
-func EditUserHandlers() []gin.HandlerFunc {
-	var request EditRequest
+func Handlers() []gin.HandlerFunc {
+	var request Request
 	handlers := []gin.HandlerFunc{
 		auth.Middleware(),
 		u.BindRequest(&request),
-		editUser(&request),
+		handler(&request),
 	}
 	return handlers
 }
-func editUser(r *EditRequest) gin.HandlerFunc {
+func handler(r *Request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		dbUser, err := users.GetUser(auth.UserId(ctx))

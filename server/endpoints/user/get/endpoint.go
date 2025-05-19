@@ -1,4 +1,4 @@
-package user
+package get
 
 import (
 	"art-gallery-server/middleware/auth"
@@ -11,11 +11,11 @@ import (
 	gravatar "github.com/katy248/gravatar/pkg/url"
 )
 
-type getUserRequest struct {
+type Request struct {
 	Id int `json:"id" binding:"gte=0"`
 }
 
-type getUserResponse struct {
+type Response struct {
 	Id          uint   `json:"id"`
 	Name        string `json:"name"`
 	AvatarUrl   string `json:"avatarUrl"`
@@ -23,8 +23,8 @@ type getUserResponse struct {
 	Description string `json:"description"`
 }
 
-func newGetUserResponse(u users.User, authorized bool) *getUserResponse {
-	resp := &getUserResponse{
+func newGetUserResponse(u users.User, authorized bool) *Response {
+	resp := &Response{
 		Id:          u.ID,
 		Name:        u.Name,
 		AvatarUrl:   gravatar.NewAvatarUrl(u.Email, gravatar.DefaultImage(gravatar.DefaultRetro), gravatar.Size(512)),
@@ -36,8 +36,8 @@ func newGetUserResponse(u users.User, authorized bool) *getUserResponse {
 	return resp
 }
 
-func GetUserHandlers() []gin.HandlerFunc {
-	request := &getUserRequest{}
+func Handlers() []gin.HandlerFunc {
+	request := &Request{}
 	handlers := []gin.HandlerFunc{
 		auth.Middleware(),
 		utils.BindRequest(request),
@@ -45,7 +45,7 @@ func GetUserHandlers() []gin.HandlerFunc {
 	}
 	return handlers
 }
-func getUser(r *getUserRequest) gin.HandlerFunc {
+func getUser(r *Request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorized := false
 		userId := r.Id

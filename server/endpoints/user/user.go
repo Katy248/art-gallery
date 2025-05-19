@@ -2,18 +2,21 @@ package user
 
 import (
 	"art-gallery-server/endpoints/user/avatar"
+	"art-gallery-server/endpoints/user/create"
+	"art-gallery-server/endpoints/user/get"
 	"art-gallery-server/endpoints/user/get_all"
+	"art-gallery-server/endpoints/user/update"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Setup(router *gin.RouterGroup) {
 	// get user by id
-	router.POST("/get", GetUserHandlers()...)
+	router.POST("/get", get.Handlers()...)
 	// create new user, aka register
-	router.POST("/create", CreateUserHandlers()...)
+	router.POST("/create", create.Handlers()...)
 	// update user info
-	router.POST("/edit", EditUserHandlers()...)
+	router.POST("/update", update.Handlers()...)
 	// get user avatar
 	router.GET("/avatar/:id", avatar.Handlers()...)
 	// get all users

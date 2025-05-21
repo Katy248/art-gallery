@@ -9,165 +9,123 @@ const user = authStore.authData;
 const deleted = ref(false);
 
 const props = defineProps({
-  post: {
-    type: Object,
-    required: true,
-  },
-  showPublisher: {
-    type: Boolean,
-    default: false,
-  },
+    post: {
+        type: Object,
+        required: true,
+    },
+    showPublisher: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const savePostHandler = (post) => {
-  savePost(post.id).then((r) => {
-    post.saved = r.saved;
-  });
+    savePost(post.id).then((r) => {
+        post.saved = r.saved;
+    });
 };
 const unsavePostHandler = (post) => {
-  unsavePost(post.id).then((r) => {
-    post.saved = r.saved;
-  });
+    unsavePost(post.id).then((r) => {
+        post.saved = r.saved;
+    });
 };
 onMounted(() => {
-  if (props.showPublisher) {
-    getAvatar(props.post.publisherId).then((r) => {
-      props.post.publisherAvatar = r.url;
-    });
-  }
+    if (props.showPublisher) {
+        getAvatar(props.post.publisherId).then((r) => {
+            props.post.publisherAvatar = r.url;
+        });
+    }
 });
 const deletePostHandler = () => {
-  deletePost(props.post.id).then((r) => {
-    if (r.success) {
-      props.post.deleted = true;
-      deleted.value = true;
-    }
-  });
+    deletePost(props.post.id).then((r) => {
+        if (r.success) {
+            props.post.deleted = true;
+            deleted.value = true;
+        }
+    });
 };
 </script>
 <template>
-  <div v-if="!deleted" class="w-full">
-    <div class="bg-bg-2 p-2 gap-2 flex flex-col rounded-lg w-full">
-      <div class="flex flex-row justify-between">
-        <div>
-          <RouterLink
-            v-if="showPublisher"
-            class="flex items-center gap-2 hover:bg-ui-2 transition-all duration-200 py-1 px-1 rounded-sm justify-start w-fit"
-            title="Публикация пользователя {{ post.publisherName }}"
-            :to="`/user/${post.publisherId}`"
-          >
-            <img
-              v-if="post.publisherAvatar"
-              :src="post.publisherAvatar"
-              class="h-6 rounded-full"
-            />
-            <span>
-              {{ post.publisherName }}
-              <span
-                class="text-tx-2"
-                v-if="post.publisherId == authStore.authData.id"
-                >(Вы)</span
-              >
-            </span>
-          </RouterLink>
-        </div>
-        <Menu as="div" class="relative" v-slot="{ open }">
-          <MenuButton class="btn-base cursor-pointer rounded-sm py-1 px-3">
-            <i v-if="open" class="fas fa-angle-down"></i>
-            <i v-else class="fas fa-ellipsis"></i>
-          </MenuButton>
-          <Transition
-            enter-active-class="transform scale-90"
-            leave-active-class="transform scale-90"
-          >
-            <MenuItems
-              class="absolute rounded top-10 right-0 nav shadow-xl/30 shadow-text origin-top-right w-max bg-bg"
-            >
-              <MenuItem>
-                <button class="nav-item text-left">
-                  <i class="fas fa-info-circle nav-icon"></i> Подробнее
+    <div v-if="!deleted" class="w-full">
+        <div class="bg-bg-2 p-2 gap-2 flex flex-col rounded-lg w-full">
+            <div class="flex flex-row justify-between">
+                <div>
+                    <RouterLink v-if="showPublisher"
+                        class="flex items-center gap-2 hover:bg-ui-2 transition-all duration-200 py-1 px-1 rounded-sm justify-start w-fit"
+                        title="Публикация пользователя {{ post.publisherName }}" :to="`/user/${post.publisherId}`">
+                        <img v-if="post.publisherAvatar" :src="post.publisherAvatar" class="h-6 rounded-full" />
+                        <span>
+                            {{ post.publisherName }}
+                            <span class="text-tx-2" v-if="post.publisherId == authStore.authData.id">(Вы)</span>
+                        </span>
+                    </RouterLink>
+                </div>
+                <Menu as="div" class="relative" v-slot="{ open }">
+                    <MenuButton class="btn-base cursor-pointer rounded-sm py-1 px-3">
+                        <i v-if="open" class="fas fa-angle-down"></i>
+                        <i v-else class="fas fa-ellipsis"></i>
+                    </MenuButton>
+                    <Transition enter-active-class="transform scale-90" leave-active-class="transform scale-90">
+                        <MenuItems
+                            class="absolute rounded top-10 right-0 nav shadow-xl/30 shadow-text origin-top-right w-max bg-bg">
+                            <MenuItem>
+                            <button class="nav-item text-left">
+                                <i class="fas fa-info-circle nav-icon"></i> Подробнее
+                            </button>
+                            </MenuItem>
+                            <MenuItem v-if="post.publisherId == user.id || user.isAdmin">
+                            <RouterLink @click="deletePostHandler" class="nav-item" :to="`/post/${post.id}/edit`">
+                                <i class="fas fa-edit nav-icon"></i>
+                                <span>
+                                    Редактировать
+                                    <span v-if="post.publisherId != user.id && user.isAdmin">(админ)</span>
+                                </span>
+                            </RouterLink>
+                            </MenuItem>
+                            <MenuItem v-if="post.publisherId == user.id || user.isAdmin">
+                            <button @click="deletePostHandler" class="nav-item text-left text-red">
+                                <i class="fas fa-trash nav-icon"></i>
+                                <span>
+                                    Удалить
+                                    <span v-if="post.publisherId != user.id && user.isAdmin">(админ)</span>
+                                </span>
+                            </button>
+                            </MenuItem>
+                        </MenuItems>
+                    </Transition>
+                </Menu>
+            </div>
+            <div v-if="post.warningMessage" class="rounded-md bg-orange-2 px-3 py-2 flex gap-4 border-orange border-2">
+                <div>
+                    <i class="fas fa-triangle-exclamation"></i>
+                </div>
+                <div class="font-bold">
+                    {{ post.warningMessage }}
+                </div>
+            </div>
+            <img :src="post.imageUrl" class="rounded-md border" :class="post.warningMessage ? ' border-2  border-orange ' : 'border-ui-2'
+                " />
+            <div class="grow">{{ post.description }}</div>
+            <div v-if="post.createdAt" class="text-ui-3">
+                {{ new Date(post.createdAt).toLocaleTimeString("ru-RU").slice(0, -3) }}
+                {{ new Date(post.createdAt).toLocaleDateString("ru-RU") }}
+            </div>
+            <div class="grid grid-cols-2 md:flex sm:flex-row sm:flex-wrap gap-2 justify-evenly">
+                <button v-if="post.saved" class="btn grow bg-ui hover:bg-red-2 active:bg-red"
+                    @click="() => unsavePostHandler(post)">
+                    <i class="fas fa-bookmark"></i>
+                    Сохранено
                 </button>
-              </MenuItem>
-              <MenuItem v-if="post.publisherId == user.id || user.isAdmin">
-                <RouterLink
-                  @click="deletePostHandler"
-                  class="nav-item"
-                  :to="`/post/${post.id}/edit`"
-                >
-                  <i class="fas fa-edit nav-icon"></i>
-                  <span>
-                    Редактировать
-                    <span v-if="post.publisherId != user.id && user.isAdmin"
-                      >(админ)</span
-                    >
-                  </span>
-                </RouterLink>
-              </MenuItem>
-              <MenuItem v-if="post.publisherId == user.id || user.isAdmin">
-                <button
-                  @click="deletePostHandler"
-                  class="nav-item text-left text-red"
-                >
-                  <i class="fas fa-trash nav-icon"></i>
-                  <span>
-                    Удалить
-                    <span v-if="post.publisherId != user.id && user.isAdmin"
-                      >(админ)</span
-                    >
-                  </span>
+                <button v-else class="btn grow btn-primary" @click="() => savePostHandler(post)">
+                    <i class="far fa-bookmark"></i>
+                    Сохранить
                 </button>
-              </MenuItem>
-            </MenuItems>
-          </Transition>
-        </Menu>
-      </div>
-      <div
-        v-if="post.warningMessage"
-        class="rounded-md bg-orange-2 px-3 py-2 flex gap-4 border-orange border-2"
-      >
-        <div>
-          <i class="fas fa-triangle-exclamation"></i>
+                <a target="_blank" class="grow btn btn-base" :href="post.imageUrl">
+                    <!-- <i class="fas fa-image"></i> -->
+                    Оригинал 
+                    <i class="fas fa-up-right-from-square text-sm text-tx-3"></i>
+                </a>
+            </div>
         </div>
-        <div class="font-bold">
-          {{ post.warningMessage }}
-        </div>
-      </div>
-      <img
-        :src="post.imageUrl"
-        class="rounded-md border"
-        :class="
-          post.warningMessage ? ' border-2  border-orange ' : 'border-ui-2'
-        "
-      />
-      <div class="grow">{{ post.description }}</div>
-      <div v-if="post.createdAt" class="text-ui-3">
-        {{ new Date(post.createdAt).toLocaleTimeString("ru-RU").slice(0, -3) }}
-        {{ new Date(post.createdAt).toLocaleDateString("ru-RU") }}
-      </div>
-      <div
-        class="grid grid-cols-2 md:flex sm:flex-row sm:flex-wrap gap-2 justify-evenly"
-      >
-        <button
-          v-if="post.saved"
-          class="btn grow bg-ui hover:bg-red-2 active:bg-red"
-          @click="() => unsavePostHandler(post)"
-        >
-          <i class="fas fa-bookmark"></i>
-          Сохранено
-        </button>
-        <button
-          v-else
-          class="btn grow btn-primary"
-          @click="() => savePostHandler(post)"
-        >
-          <i class="far fa-bookmark"></i>
-          Сохранить
-        </button>
-        <a type="_blank" class="grow btn btn-base" :href="post.imageUrl">
-          <i class="fas fa-image"></i>
-          Оригинал
-        </a>
-      </div>
     </div>
-  </div>
 </template>

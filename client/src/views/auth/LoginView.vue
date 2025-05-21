@@ -7,9 +7,14 @@ const authStore = useAuthStore();
 const email = ref("");
 const password = ref("");
 const router = useRouter();
+const error = ref("");
 
 const onSubmit = () => {
-  authenticate(email.value, password.value);
+  authenticate(email.value, password.value).then((r) => {
+    if (!r.success) {
+      error.value = "Неверный логин или пароль";
+    }
+  });
 };
 
 const checkAuthAndRedirect = () => {
@@ -24,7 +29,16 @@ authStore.$subscribe(() => {
 checkAuthAndRedirect();
 </script>
 <template>
-  <div class="flex w-full justify-center items-center">
+  <div class="flex flex-col gap-8 w-full justify-center items-center">
+    <div
+      v-if="error"
+      class="bg-red-2 p-4 w-full rounded-lg flex flex-row items-center gap-2"
+    >
+      <i class="fas fa-circle-exclamation"></i>
+      <div>
+        {{ error }}
+      </div>
+    </div>
     <form
       class="bg-bg-2 p-4 rounded-lg flex flex-col gap-4"
       @submit.prevent="onSubmit"

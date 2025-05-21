@@ -4,6 +4,7 @@ import { register } from "../../api";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const error = ref("");
 
 const name = ref("");
 const email = ref("");
@@ -11,19 +12,45 @@ const password = ref("");
 const passwordRepeated = ref("");
 
 const onSubmit = () => {
+  if (!name.value) {
+    error.value = "Имя пользователя не может быть пустым";
+    return;
+  }
+  if (!email.value) {
+    error.value = "Email не может быть пустым";
+    return;
+  }
+  if (!password.value) {
+    error.value = "Пароль не может быть пустым";
+    return;
+  }
   if (password.value !== passwordRepeated.value) {
     console.error("Пароли не совпадают");
+    error.value = "Пароли не совпадают";
     return;
   }
 
-  register(email.value, name.value, password.value).then(() => {
-    console.log("Регистрация прошла успешно");
-    router.push("/");
+  register(email.value, name.value, password.value).then((r) => {
+    if (r.success) {
+      console.log("Регистрация прошла успешно");
+      router.push("/");
+    } else {
+      error.value = "Регистрация не удалась" + r.error;
+    }
   });
 };
 </script>
 <template>
-  <div class="w-full flex justify-center items-center">
+  <div class="w-full flex flex-col gap-8 justify-center items-center">
+    <div
+      v-if="error"
+      class="bg-red-2 p-4 w-full rounded-lg flex flex-row items-center gap-2"
+    >
+      <i class="fas fa-circle-exclamation"></i>
+      <div>
+        {{ error }}
+      </div>
+    </div>
     <form
       class="bg-bg-2 p-4 rounded-lg flex flex-col gap-4 w-full sm:w-fit"
       @submit.prevent="onSubmit"

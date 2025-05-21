@@ -2,14 +2,18 @@ import { useAuthStore } from "../stores/auth";
 import { runFetch } from "./shared";
 
 const authenticate = (email, password) => {
-  runFetch("/api/auth", "POST", { email: email, password: password }).then(
-    (r) => {
-      const token = r.token;
-
-      const store = useAuthStore();
-      store.authenticate(token);
+  return runFetch("/api/auth", "POST", {
+    email: email,
+    password: password,
+  }).then((r) => {
+    if (!r.success) {
+      return { success: false };
     }
-  );
+    const token = r.token;
+    const store = useAuthStore();
+    store.authenticate(token);
+    return { success: true };
+  });
 };
 
 const register = (email, name, password) => {

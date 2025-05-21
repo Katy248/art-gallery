@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { createPost } from "../api";
+import { createPost } from "../../api";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -58,7 +58,7 @@ const onSubmit = () => {
         <input
           v-if="!image"
           @change="onFileChange"
-          accept="image/png, image/jpeg"
+          accept="image/png, image/jpeg, image/gif"
           type="file"
           class="text-entry"
           placeholder="example@mail.ru"

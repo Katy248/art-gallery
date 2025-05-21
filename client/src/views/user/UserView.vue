@@ -6,10 +6,12 @@ import UserPostsList from "../../components/UserPostsList.vue";
 import UserSavedPostsList from "../../components/UserSavedPostsList.vue";
 import { TabGroup, TabList, Tab, TabPanel, TabPanels } from "@headlessui/vue";
 import ErrorPresenter from "../../components/ErrorPresenter.vue";
+import { useAuthStore } from "../../stores/auth";
 
 const user = ref(null);
 const selectedTabIndex = ref(0);
 const route = useRoute();
+const authStore = useAuthStore();
 
 const changeTab = (tab) => {
   selectedTabIndex.value = tab;
@@ -59,7 +61,21 @@ getInfo(route.params.id);
         </div>
       </div>
     </div>
-
+    <div class="flex flex-row gap-2">
+      <!-- <button class="btn btn-base">
+        <i class="fas fa-edit"></i>
+        Изменить профиль
+      </button> -->
+      <a
+        href="https://gravatar.com/profile"
+        class="btn btn-base"
+        target="_blank"
+        v-if="authStore.authData.id == user.id"
+      >
+        Изменить аватар
+        <i class="fas fa-up-right-from-square text-tx-2"></i>
+      </a>
+    </div>
     <div
       v-if="user.id"
       class="flex justify-center items-center flex-col gap-4 w-full grow"

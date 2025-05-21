@@ -34,12 +34,15 @@ import { LINKS } from "../data";
           {{ link.name }}</a
         >
       </li>
-      <!-- <li>
-                <a href="https://vk.com/artgallery" target="_blank"><i class="fab fa-vk pr-2"></i>VK</a>
-            </li>
-            <li>
-                <a href="https://rutube.ru/artgallery" target="_blank"><i class="fab fa-youtube pr-2"></i>Rutube</a>
-            </li> -->
+    </ul>
+    <p></p>
+  </section>
+  <section>
+    <p class="mb-4">Сделано с помощью:</p>
+    <ul class="pl-2">
+      <li><i class="fab fa-golang"></i> Golang</li>
+      <li><i class="fab fa-vuejs"></i> Vue.js</li>
+      <li><i class="fab fa-font-awesome"></i> Font awesome</li>
     </ul>
   </section>
 </template>

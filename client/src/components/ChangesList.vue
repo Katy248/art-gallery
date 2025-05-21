@@ -21,6 +21,7 @@ const showModal = ref(false);
 
     <button class="btn btn-base" @click="showModal = true">
       Все изменения
+      <i class="fa-solid fa-angles-right"></i>
     </button>
     <TransitionRoot
       as="template"

@@ -32,13 +32,13 @@ func handler(r *Request) gin.HandlerFunc {
 		user, err := users.NewUser(r.Name, r.Email, r.Password)
 		if err != nil {
 			log.Errorf("Error while creating new user: %s", err)
-			ctx.AbortWithStatus(http.StatusInternalServerError)
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"success": false, "error": "invalid user data"})
 			return
 		}
 		result := database.Conn.Create(&user)
 		if result.Error != nil {
 			log.Errorf("Failed to save user: %s", result.Error)
-			ctx.AbortWithStatus(http.StatusInternalServerError)
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"success": false, "error": "invalid user data, probably user with this email already exists"})
 			return
 		}
 		ctx.JSON(http.StatusOK, gin.H{"success": true})

@@ -21,10 +21,9 @@ func CreatePostHandlers() []gin.HandlerFunc {
 func createPost() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		desc := ctx.Request.Form.Get("description")
-		if desc != "" {
-			log.Errorf("Failed bind form data: description field is empty")
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "description field is empty", "success": false})
-			return
+		log.Info("Form data", "data", ctx.Request.Form)
+		if desc == "" {
+			log.Warnf("No description provided")
 		}
 
 		file, err := ctx.FormFile("picture")

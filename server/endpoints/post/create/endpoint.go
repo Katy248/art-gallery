@@ -20,10 +20,11 @@ func CreatePostHandlers() []gin.HandlerFunc {
 
 func createPost() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		desc := ctx.Request.Form.Get("description")
-		log.Info("Form data", "data", ctx.Request.Form)
-		if desc == "" {
-			log.Warnf("No description provided")
+		var request struct {
+			Description string `form:"description" json:"description"`
+		}
+		if err := ctx.ShouldBind(&request); err != nil {
+			log.Errorf("Failed bind request data: %s", err)
 		}
 
 		file, err := ctx.FormFile("picture")
@@ -35,7 +36,7 @@ func createPost() gin.HandlerFunc {
 
 		post := posts.Post{
 			PublisherID: auth.UserId(ctx),
-			Description: desc,
+			Description: request.Description,
 		}
 
 		database.Conn.Model(&post).Create(&post)

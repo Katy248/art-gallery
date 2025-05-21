@@ -24,17 +24,15 @@ type Request struct {
 	Page int `json:"page" binding:"gte=0"`
 }
 
-const PageLimit = 20
-
 func handler(r *Request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var posts []shared.ResponsePost
 		var postsCount int64
-		database.Conn.Raw(rawSql, auth.UserId(ctx), PageLimit, r.Page*PageLimit).Find(&posts)
+		database.Conn.Raw(rawSql, auth.UserId(ctx), shared.PageSize, r.Page*shared.PageSize).Find(&posts)
 		database.Conn.Raw(rawPagesQuery).Count(&postsCount)
 
-		pages := postsCount / PageLimit
-		if pages%PageLimit != 0 {
+		pages := postsCount / shared.PageSize
+		if pages%shared.PageSize != 0 {
 			pages++
 		}
 		log.Debugf("Posts: %d, pages: %d", postsCount, pages)

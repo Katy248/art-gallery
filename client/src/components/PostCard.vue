@@ -138,6 +138,7 @@ const deletePostHandler = () => {
       <img
         :src="post.imageUrl"
         class="rounded-md border"
+        loading="lazy"
         :class="
           post.warningMessage ? ' border-2  border-orange ' : 'border-ui-2'
         "

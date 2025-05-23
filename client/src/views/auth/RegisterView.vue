@@ -86,6 +86,14 @@ const onSubmit = () => {
           placeholder="******"
           autocomplete="new-password"
         />
+        <label class="wrap text-sm text-tx-2"
+          >Пароль должен состоять минимум из 8 символов и содержать цифру.
+          <RouterLink
+            class="hover:underline italic active:underline active:text-tx"
+            to="/help#password-requirements"
+            >Подробнее <i class="fas fa-arrow-up-right-from-square text-xs"></i>
+          </RouterLink>
+        </label>
       </div>
       <div class="input-group">
         <label>Пароль (повторно):</label>

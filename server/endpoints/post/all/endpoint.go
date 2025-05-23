@@ -26,9 +26,13 @@ type Request struct {
 
 func handler(r *Request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var posts []shared.ResponsePost
+		var posts []*shared.ResponsePost
 		var postsCount int64
-		database.Conn.Raw(rawSql, auth.UserId(ctx), shared.PageSize, r.Page*shared.PageSize).Find(&posts)
+		result := database.Conn.Raw(rawSql, auth.UserId(ctx), shared.PageSize, r.Page*shared.PageSize).Find(&posts)
+		if result.Error != nil {
+			log.Errorf("Error getting posts: %v", result.Error)
+			return
+		}
 		database.Conn.Raw(rawPagesQuery).Count(&postsCount)
 
 		pages := postsCount / shared.PageSize
@@ -36,6 +40,10 @@ func handler(r *Request) gin.HandlerFunc {
 			pages++
 		}
 		log.Debugf("Posts: %d, pages: %d", postsCount, pages)
+
+		for _, post := range posts {
+			post.UpdateSavesCount()
+		}
 
 		ctx.JSON(http.StatusOK, gin.H{
 			"posts": posts,

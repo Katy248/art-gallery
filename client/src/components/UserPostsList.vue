@@ -17,6 +17,7 @@ const pages = ref(0);
 
 const loadPosts = () => {
   getPosts(props.userId, page.value).then((r) => {
+    console.log(r);
     posts.value = r.sort((a, b) => b.createdAt - a.createdAt);
     pages.value = r.pages;
     console.log(r);

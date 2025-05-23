@@ -18,15 +18,18 @@ const props = defineProps({
     default: false,
   },
 });
+console.log(props.post);
 
 const savePostHandler = (post) => {
   savePost(post.id).then((r) => {
     post.saved = r.saved;
+    post.savesCount++;
   });
 };
 const unsavePostHandler = (post) => {
   unsavePost(post.id).then((r) => {
     post.saved = r.saved;
+    post.savesCount--;
   });
 };
 onMounted(() => {
@@ -157,7 +160,7 @@ const deletePostHandler = () => {
           @click="() => unsavePostHandler(post)"
         >
           <i class="fas fa-bookmark text-red"></i>
-          Сохранено
+          Сохранено ({{ post.savesCount }})
         </button>
         <button
           v-else
@@ -165,7 +168,7 @@ const deletePostHandler = () => {
           @click="() => savePostHandler(post)"
         >
           <i class="far fa-bookmark"></i>
-          Сохранить
+          Сохранить ({{ post.savesCount }})
         </button>
         <a target="_blank" class="grow btn btn-base" :href="post.imageUrl">
           <!-- <i class="fas fa-image"></i> -->

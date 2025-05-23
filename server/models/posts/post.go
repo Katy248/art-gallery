@@ -1,8 +1,11 @@
 package posts
 
 import (
+	"art-gallery-server/database"
 	"art-gallery-server/models"
 	"art-gallery-server/models/users"
+
+	"github.com/charmbracelet/log"
 )
 
 type Post struct {
@@ -34,4 +37,14 @@ type Comment struct {
 	CreatorID int
 
 	Text string
+}
+
+func GetPostSavesCount(postId int) int {
+	var count int64
+	result := database.Conn.Raw("SELECT COUNT(*) FROM post_saves WHERE post_id = ?", postId).Count(&count)
+	if result.Error != nil {
+		log.Errorf("Error getting post saves count: %v", result.Error)
+	}
+	log.Infof("Post saves count: %d", count)
+	return int(count)
 }

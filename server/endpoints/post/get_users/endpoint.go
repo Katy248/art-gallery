@@ -26,11 +26,15 @@ type request struct {
 
 func handler(r *request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var posts []shared.ResponsePost
+		var posts []*shared.ResponsePost
 		database.Conn.Raw(rawSql, auth.UserId(ctx), r.UserID).
 			Offset(shared.PageSize * r.Page).
 			Limit(shared.PageSize).
 			Find(&posts)
+
+		for _, post := range posts {
+			post.UpdateSavesCount()
+		}
 
 		ctx.JSON(http.StatusOK, posts)
 	}

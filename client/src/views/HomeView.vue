@@ -36,10 +36,10 @@ const switchPage = (p) => {
 };
 </script>
 <template>
-  <div class="mb-8">
-    <ChangesList />
-  </div>
   <div v-if="authStore.isAuthenticated" class="flex flex-col gap-8 w-full">
+    <div class="mb-8">
+      <ChangesList />
+    </div>
     <div>
       <RouterLink class="btn btn-primary" to="/post/create">
         <i class="fas fa-upload"></i>
@@ -55,14 +55,21 @@ const switchPage = (p) => {
       />
     </div>
   </div>
-  <div v-else>
+  <div v-else class="flex flex-col items-center">
     <h1 class="text-center text-5xl font-bold text-magenta-2 pb-10">
       ArtGallery
     </h1>
-    <div class="pb-10 plain-text">
-      <p>Для всякого</p>
-      <div>
-        <RouterLink to="/about">Подробнее...</RouterLink>
+    <div class="pb-10 flex flex-col gap-10 items-center">
+      <div class="text-xl font-semibold">
+        Для всякого, для всего, для ничего, для души...
+      </div>
+      <div class="w-full flex justify-center">
+        <RouterLink
+          class="text-center cursor-pointer font-semibold text-magenta p-4 hover:text-tx active:text-tx hover:bg-magenta/70 active:bg-magenta/80 border-magenta border-2 rounded-md transition-colors duration-300 w-full"
+          to="/about"
+          >Подробнее
+          <i class="fas fa-angle-right"></i>
+        </RouterLink>
       </div>
     </div>
 
@@ -71,9 +78,16 @@ const switchPage = (p) => {
         <i class="fas fa-arrow-right-to-bracket"></i>
         Вход</RouterLink
       >
+      <RouterLink class="btn btn-base" to="/auth/register">
+        <i class="fas fa-user-plus"></i>
+        Регистрация</RouterLink
+      >
       <RouterLink class="btn btn-base" to="/help">
         <i class="fas fa-question"></i> Помощь</RouterLink
       >
+    </div>
+    <div class="mt-8">
+      <ChangesList />
     </div>
   </div>
 </template>

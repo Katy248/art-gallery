@@ -24,6 +24,10 @@ const onSubmit = () => {
     error.value = "Пароль не может быть пустым";
     return;
   }
+  if (password.value.length < 8) {
+    error.value = "Пароль должен быть не менее 8 символов";
+    return;
+  }
   if (password.value !== passwordRepeated.value) {
     console.error("Пароли не совпадают");
     error.value = "Пароли не совпадают";

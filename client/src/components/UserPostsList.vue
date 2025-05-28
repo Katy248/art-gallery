@@ -16,6 +16,7 @@ const posts = ref([]);
 const pages = ref(0);
 
 const loadPosts = () => {
+  posts.value = [];
   getPosts(props.userId, page.value).then((r) => {
     console.log(r);
     posts.value = r.posts.sort((a, b) => b.createdAt - a.createdAt);
@@ -26,9 +27,9 @@ const loadPosts = () => {
 onMounted(() => {
   loadPosts();
 });
-const switchPage = (page) => {
-  page.value = page;
+const switchPage = (p) => {
   loadPosts();
+  page.value = p;
 };
 </script>
 <template>

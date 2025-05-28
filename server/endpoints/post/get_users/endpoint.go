@@ -36,7 +36,14 @@ func handler(r *request) gin.HandlerFunc {
 			post.UpdateSavesCount()
 		}
 
-		ctx.JSON(http.StatusOK, posts)
+		var count int64
+		database.Conn.Raw(rawPagesSql, auth.UserId(ctx), r.UserID).Count(&count)
+		pages := count / shared.PageSize
+		if count%shared.PageSize != 0 {
+			pages++
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{"posts": posts, "pages": pages})
 	}
 }
 
@@ -50,6 +57,22 @@ const rawSql = `
 		, p.warning_message
 		, u.name
 		, CAST(CASE WHEN ps.user_id IS NULL THEN 0 ELSE 1 END AS BOOLEAN) as saved
+	FROM 
+		posts p 
+			LEFT JOIN users u ON p.publisher_id = u.id
+			LEFT JOIN post_saves ps ON 
+				p.id = ps.post_id 
+				and ps.user_id = ?
+
+	WHERE publisher_id = ?
+	
+	ORDER BY 
+		p.created_at DESC
+`
+
+const rawPagesSql = `
+	SELECT 
+		COUNT(*)
 	FROM 
 		posts p 
 			LEFT JOIN users u ON p.publisher_id = u.id

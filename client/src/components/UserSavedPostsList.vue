@@ -41,7 +41,7 @@ const switchPage = (page) => {
     </div>
     <div class="flex gap-1 justify-center">
       <ListPager
-        :pages="[...Array(pages).keys()]"
+        :pages="pages"
         :pageButtonActivatedHandler="switchPage"
         :currentPage="page"
       />

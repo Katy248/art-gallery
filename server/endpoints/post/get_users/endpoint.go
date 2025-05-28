@@ -27,9 +27,7 @@ type request struct {
 func handler(r *request) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var posts []*shared.ResponsePost
-		database.Conn.Raw(rawSql, auth.UserId(ctx), r.UserID).
-			Offset(shared.PageSize * r.Page).
-			Limit(shared.PageSize).
+		database.Conn.Raw(rawSql, auth.UserId(ctx), r.UserID, shared.PageSize*r.Page, shared.PageSize).
 			Find(&posts)
 
 		for _, post := range posts {
@@ -68,6 +66,9 @@ const rawSql = `
 	
 	ORDER BY 
 		p.created_at DESC
+		
+	OFFSET ?
+	LIMIT ?
 `
 
 const rawPagesSql = `

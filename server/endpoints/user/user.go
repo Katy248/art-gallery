@@ -3,6 +3,7 @@ package user
 import (
 	"art-gallery-server/endpoints/user/avatar"
 	"art-gallery-server/endpoints/user/create"
+	"art-gallery-server/endpoints/user/delete"
 	"art-gallery-server/endpoints/user/get"
 	"art-gallery-server/endpoints/user/get_all"
 	"art-gallery-server/endpoints/user/update"
@@ -21,4 +22,6 @@ func Setup(router *gin.RouterGroup) {
 	router.GET("/avatar/:id", avatar.Handlers()...)
 	// get all users
 	router.POST("/get-all", get_all.Handlers()...)
+	// delete user
+	router.DELETE("/delete", delete.Handlers()...)
 }

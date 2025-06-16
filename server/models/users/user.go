@@ -75,13 +75,21 @@ func GetUser(userId int) (User, error) {
 	return user, result.Error
 }
 
-func IsAdmin(userId int) (isAdmin bool) {
-	result := database.Conn.Raw(rawIsAdminQuery, userId).First(&isAdmin)
+func IsAdmin(userId int) bool {
+	var returnVal struct {
+		IsAdmin bool
+	}
+	result := database.Conn.Raw(rawIsAdminQuery, userId).First(&returnVal)
 	if result.Error != nil {
 		log.Errorf("Failed to check if user is admin, returning default false value. Error: %s", result.Error)
 		return false
 	}
-	return isAdmin
+	return returnVal.IsAdmin
+}
+
+func Delete(userId int) error {
+	result := database.Conn.Unscoped().Delete(&User{}, userId)
+	return result.Error
 }
 
 var rawIsAdminQuery = `

@@ -8,9 +8,10 @@ const CONTACTS = [
 const LINKS = [
   {
     name: "Исходные коды",
-    url: "https://gitlab.com/side-projects133505/art-gallery",
+    url: "https://github.com/katy248/art-gallery",
     icon: "fab fa-github",
   },
+  { name: "Поддержать разработчика", url: "https://boosty.to/katy248/donate" },
   { name: "Профиль администратора", url: "http://80.74.25.113:5173/user/1" },
 ];
 const CHANGELOGS = [

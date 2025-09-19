@@ -6,6 +6,7 @@ import { onMounted, ref } from "vue";
 import ListPager from "../components/ListPager.vue";
 import { useAuthStore } from "../stores/auth";
 import ChangesList from "../components/ChangesList.vue";
+import { donateLinkUrl } from "../data";
 const posts = ref([]);
 
 const authStore = useAuthStore();
@@ -63,13 +64,19 @@ const switchPage = (p) => {
       <div class="text-xl font-semibold">
         Для всякого, для всего, для ничего, для души...
       </div>
-      <div class="w-full flex justify-center">
+      <div class="w-full flex flex-col gap-2 justify-center">
         <RouterLink
           class="text-center cursor-pointer font-semibold text-magenta p-4 hover:text-tx active:text-tx hover:bg-magenta/70 active:bg-magenta/80 border-magenta border-2 rounded-md transition-colors duration-300 w-full"
           to="/about"
           >Подробнее
           <i class="fas fa-angle-right"></i>
         </RouterLink>
+        <a
+          class="text-center cursor-pointer font-semibold text-yellow p-4 hover:text-tx active:text-tx hover:bg-yellow/70 active:bg-yellow/80 border-yellow border-2 rounded-md transition-colors duration-300 w-full"
+          :href="donateLinkUrl"
+          >Задонатить
+          <i class="fas fa-dollar"></i>
+        </a>
       </div>
     </div>
 

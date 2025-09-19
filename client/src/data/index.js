@@ -5,13 +5,14 @@ const CONTACTS = [
     url: "mailto:petrovanton247@gmail.com",
   },
 ];
+const donateLinkUrl = "https://boosty.to/katy248/donate";
 const LINKS = [
   {
     name: "Исходные коды",
     url: "https://github.com/katy248/art-gallery",
     icon: "fab fa-github",
   },
-  { name: "Поддержать разработчика", url: "https://boosty.to/katy248/donate" },
+  { name: "Поддержать разработчика", url: donateLinkUrl },
   { name: "Профиль администратора", url: "http://80.74.25.113:5173/user/1" },
 ];
 const CHANGELOGS = [
@@ -67,4 +68,4 @@ const CHANGELOGS = [
   },
 ];
 
-export { CONTACTS, LINKS, CHANGELOGS };
+export { CONTACTS, LINKS, CHANGELOGS, donateLinkUrl };

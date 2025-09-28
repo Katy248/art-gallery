@@ -13,8 +13,12 @@ const showModal = ref(false);
         <i class="fa-solid fa-code-commit"></i> {{ lastChange.title }}
       </h3>
       <ul>
-        <li v-for="change in lastChange.changes" :key="change" class="ps-2">
-          • {{ change }}
+        <li
+          v-for="change in lastChange.changes"
+          :key="change"
+          class="ps-2 plain-text"
+        >
+          • <span v-html="change"></span>
         </li>
       </ul>
     </div>
@@ -45,6 +49,9 @@ const showModal = ref(false);
                     <h3 class="font-bold mb-2">
                       <i class="fa-solid fa-code-commit"></i>
                       {{ version.title }}
+                      <div class="font-normal italic ps-6 text-tx-2">
+                        {{ version.subtitle }}
+                      </div>
                       <span
                         v-if="version.preview"
                         title="Предварительные нестабильные изменения"
@@ -56,9 +63,9 @@ const showModal = ref(false);
                       <li
                         v-for="change in version.changes"
                         :key="change"
-                        class="ps-2"
+                        class="ps-2 plain-text"
                       >
-                        • {{ change }}
+                        • <span v-html="change"></span>
                       </li>
                     </ul>
                   </li>

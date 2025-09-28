@@ -66,6 +66,10 @@ if (auth.isAuthenticated) {
           <i class="fas fa-info nav-icon"></i>
           О нас
         </RouterLink>
+        <RouterLink to="/plans" class="nav-item">
+          <i class="fas fa-list-check nav-icon"></i>
+          Планы/Задачи
+        </RouterLink>
       </div>
       <div class="nav rounded-md bg-bg" v-if="auth.isAuthenticated">
         <RouterLink class="nav-item" :to="profileUrl">

@@ -45,6 +45,7 @@ const routes = [
     component: () => import("./views/post/PostView.vue"),
     sensitive: true,
   },
+  { path: "/plans", component: () => import("./views/PlansView.vue") },
 ];
 
 const router = createRouter({

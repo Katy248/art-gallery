@@ -18,23 +18,27 @@ const LINKS = [
 const CHANGELOGS = [
   {
     title: "Версия 0.7 (Death Rattle)",
+    subtitle: "I can hear your death rattle sounds so cool",
     changes: [
       "Проект перенесён на github",
       "Добавлен PWA манифест",
       "Исправлен копирайт",
       "Добавлены отдельные страницы для постов",
+      "Добавлен раздел <a href='/plans'>планов</a>",
     ],
   },
   {
     title: "Версия 0.6",
+    subtitle: "DYS - Delete yourself",
     changes: [
       "Добавлена возможность удалять пользователей через панель администратора",
     ],
   },
   {
     title: "Версия 0.5",
+    subtitle: "Cirrilla gif",
     changes: [
-      "Добавлена возможность публиковать `gif`",
+      "Добавлена возможность публиковать <code>gif</code>",
       "Добавлено отображение ошибок при авторизации/регистрации",
       "Добавлены требования к паролю на странице регистрации и в разделе Помощь",
       "Обновлена главная страница для неавторизованного пользователя",
@@ -71,6 +75,8 @@ const CHANGELOGS = [
       "Добавлено отображение времени публикации (не только даты)",
     ],
   },
+  { title: "Версия 0.1", subtitle: "Инициализация проекта" },
 ];
+import PLANS from "./plans";
 
-export { CONTACTS, LINKS, CHANGELOGS, donateLinkUrl };
+export { CONTACTS, PLANS, LINKS, CHANGELOGS, donateLinkUrl };

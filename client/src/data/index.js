@@ -17,8 +17,12 @@ const LINKS = [
 ];
 const CHANGELOGS = [
   {
-    title: "Версия 0.0.7",
-    changes: ["Проект перенесён на github"],
+    title: "Версия 0.0.7 (Death Rattle)",
+    changes: [
+      "Проект перенесён на github",
+      "Добавлен PWA манифест",
+      "Исправлен копирайт",
+    ],
   },
   {
     title: "Версия 0.0.6",

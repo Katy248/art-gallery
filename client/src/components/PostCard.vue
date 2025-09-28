@@ -18,7 +18,6 @@ const props = defineProps({
     default: false,
   },
 });
-console.log(props.post);
 
 const savePostHandler = (post) => {
   savePost(post.id).then((r) => {
@@ -170,6 +169,9 @@ const deletePostHandler = () => {
           <i class="far fa-bookmark"></i>
           Сохранить ({{ post.savesCount }})
         </button>
+        <RouterLink :to="'/post/' + post.id" class="btn btn-base grow">
+          Подробнее
+        </RouterLink>
         <a target="_blank" class="grow btn btn-base" :href="post.imageUrl">
           <!-- <i class="fas fa-image"></i> -->
           Оригинал

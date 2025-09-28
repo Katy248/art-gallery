@@ -1,3 +1,4 @@
+import { useFetch } from "@vueuse/core";
 import { useAuthStore } from "../stores/auth";
 import { runFetch } from "./shared";
 
@@ -82,19 +83,38 @@ const updatePost = (post) => {
   });
 };
 
+const fetchPost = (id) => {
+  const postId = parseInt(id);
+  const authStore = useAuthStore();
+  if (!authStore.isAuthenticated) {
+    console.error("User is not authenticated to get this post info");
+    return;
+  }
+  const token = authStore.token;
+
+  return useFetch("/api/post/get", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .post({ postId: postId })
+    .json();
+};
+
 export {
   authenticate,
-  getProfileInfo,
-  register,
   createPost,
-  getUserInfo,
+  deletePost,
+  fetchPost,
+  getAllPosts,
+  getAvatar,
+  getPost,
   getPosts,
+  getProfileInfo,
+  getSavedPosts,
+  getUserInfo,
+  register,
   savePost,
   unsavePost,
-  getSavedPosts,
-  getAvatar,
-  getAllPosts,
-  deletePost,
-  getPost,
   updatePost,
 };

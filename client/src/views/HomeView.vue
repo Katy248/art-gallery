@@ -7,6 +7,7 @@ import ListPager from "../components/ListPager.vue";
 import { useAuthStore } from "../stores/auth";
 import ChangesList from "../components/ChangesList.vue";
 import { donateLinkUrl } from "../data";
+import InstallPWAPrompt from "../components/InstallPWAPrompt.vue";
 const posts = ref([]);
 
 const authStore = useAuthStore();
@@ -37,6 +38,7 @@ const switchPage = (p) => {
 };
 </script>
 <template>
+  <InstallPWAPrompt />
   <div v-if="authStore.isAuthenticated" class="flex flex-col gap-8 w-full">
     <div class="mb-8">
       <ChangesList />

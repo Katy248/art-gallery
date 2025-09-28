@@ -35,7 +35,7 @@ const currentYear = ref(new Date());
       </section>
     </div>
     <p class="text-center py-2 text-tx-2">
-      © 2023-{{ currentYear.getFullYear() }} ArtGallery. Все права защищены.
+      смерть © с 2023 по {{ currentYear.getFullYear() }}
     </p>
   </footer>
 </template>

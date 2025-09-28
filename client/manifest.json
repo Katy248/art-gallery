@@ -1,0 +1,42 @@
+{
+  "id": "ru.katy248.art-gallery",
+  "short_name": "ArtGallery",
+  "name": "ArtGallery",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "background_color": "#fffcf0",
+  "theme_color": "#a02f6f",
+  "orientation": "portrait",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "any"
+    },
+    {
+      "src": "/icon-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/icon-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-384.png",
+      "sizes": "384x384"
+    },
+    {
+      "src": "/icon-1024.png",
+      "sizes": "1024x1024"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512"
+    }
+  ],
+  "description": "Веб-сервис для обмена картинками"
+}

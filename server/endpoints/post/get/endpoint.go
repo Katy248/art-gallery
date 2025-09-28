@@ -25,8 +25,8 @@ type Request struct {
 
 func handler(r *Request) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var post *shared.ResponsePost
-		database.Conn.Raw(rawSql, auth.UserId(c), r.PostId).First(post)
+		var post shared.ResponsePost
+		database.Conn.Raw(rawSql, auth.UserId(c), r.PostId).First(&post)
 
 		post.UpdateSavesCount()
 

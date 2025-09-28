@@ -5,5 +5,8 @@ import vue from "@vitejs/plugin-vue";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
-  server: { proxy: { "/api": { target: "http://80.74.25.113:8080" } } },
+  server: {
+    proxy: { "/api": { target: "http://80.74.25.113:8080" } },
+    allowedHosts: ["art-gallery.katy248.ru"],
+  },
 });

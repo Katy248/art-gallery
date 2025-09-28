@@ -41,7 +41,7 @@ const routes = [
     sensitive: true,
   },
   {
-    path: "/post/:id",
+    path: "/post/:id(\\d+)",
     component: () => import("./views/post/PostView.vue"),
     sensitive: true,
   },

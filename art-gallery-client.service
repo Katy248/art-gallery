@@ -1,6 +1,7 @@
 
 [Unit]
 Description=ArtGallery client
+Requires=art-gallery-server.service
 
 [Service]
 Type=simple

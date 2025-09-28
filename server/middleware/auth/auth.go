@@ -45,7 +45,7 @@ func Middleware() gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"statusCode": http.StatusUnauthorized,
 				"success":    false,
-				"message":    "Authorization failed: bad auth header",
+				"message":    "Authorization failed: " + err.Error(),
 			})
 			return
 		}

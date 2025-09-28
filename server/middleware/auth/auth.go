@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -38,9 +39,9 @@ func UserIsAdmin(ctx *gin.Context) bool {
 func Middleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		authHeader := strings.Split(ctx.Request.Header.Get("Authorization"), " ")
-		if len(authHeader) < 2 || authHeader[0] != Bearer {
-			log.Warn("Authorization failed: bad auth header")
+		id, email, isAdmin, err := GetAuthInfo(ctx.Request)
+		if err != nil {
+			log.Error("Authorization failed", "error", err)
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"statusCode": http.StatusUnauthorized,
 				"success":    false,
@@ -48,21 +49,43 @@ func Middleware() gin.HandlerFunc {
 			})
 			return
 		}
-		tokenString := authHeader[1]
-		token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) { return jwtKey, nil })
-		if err != nil {
-			log.Warnf("Authorization failed: %s", err)
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"success":    false,
-				"statusCode": http.StatusUnauthorized,
-				"message":    "Authorization failed",
-			})
-			return
-		}
-		claims := token.Claims.(jwt.MapClaims)
 
-		ctx.Set(UserIdKey, claims["id"].(float64))
-		ctx.Set(UserEmailKey, claims["email"])
-		ctx.Set(UserIsAdminKey, claims["isAdmin"].(bool))
+		ctx.Set(UserIdKey, id)
+		ctx.Set(UserEmailKey, email)
+		ctx.Set(UserIsAdminKey, isAdmin)
 	}
+}
+
+func GetAuthInfo(req *http.Request) (id float64, email string, isAdmin bool, err error) {
+	header := req.Header.Get("Authorization")
+	if header == "" {
+		return id, email, isAdmin, fmt.Errorf("header Authorization is empty")
+	}
+	words := strings.Split(header, " ")
+	if len(words) < 2 {
+		return id, email, isAdmin, fmt.Errorf("bad auth header: words length less than 2")
+	}
+	if words[0] != Bearer {
+		return id, email, isAdmin, fmt.Errorf("bad auth header: there is no %q specified", Bearer)
+	}
+	tokenString := words[1]
+	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) { return jwtKey, nil })
+	if err != nil {
+		return id, email, isAdmin, fmt.Errorf("failed parse JWT: %s", err)
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	id, ok := claims["id"].(float64)
+	if !ok {
+		return id, email, isAdmin, fmt.Errorf("id key not specified in payload")
+	}
+	email, ok = claims["email"].(string)
+	if !ok {
+		return id, email, isAdmin, fmt.Errorf("email key not specified in payload")
+	}
+
+	isAdmin, ok = claims["isAdmin"].(bool)
+	if !ok {
+		return id, email, isAdmin, fmt.Errorf("isAdmin key not specified in payload")
+	}
+	return id, email, isAdmin, nil
 }

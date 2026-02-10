@@ -1,141 +1,146 @@
 @import "tailwindcss";
 
 :root {
-    color-scheme: light dark;
-    --bg: light-dark(#fffcf0, #100f0f);
-    --bg-2: light-dark(#f2f0e5, #1c1b1a);
-    --ui: light-dark(#e6e4d9, #282726);
-    --ui-2: light-dark(#dad8ce, #343331);
-    --ui-3: light-dark(#cecdc3, #403e3c);
-    --tx: light-dark(#100f0f, #cecdc3);
-    --tx-2: light-dark(#6f6e69, #878580);
-    --tx-3: light-dark(#b7b5ac, #575653);
-    /* Colors */
-    --red: light-dark(#af3029, #d14d41);
-    --orange: light-dark(#bc5215, #da702c);
-    --yellow: light-dark(#ad8301, #d0a215);
-    --green: light-dark(#66800b, #879a39);
-    --cyan: light-dark(#24837b, #3aa99f);
-    --blue: light-dark(#205ea6, #4385be);
-    --purple: light-dark(#5e409d, #8b7ec8);
-    --magenta: light-dark(#a02f6f, #ce5d97);
+  color-scheme: light dark;
+  --bg: light-dark(#fffcf0, #100f0f);
+  --bg-2: light-dark(#f2f0e5, #1c1b1a);
+  --ui: light-dark(#e6e4d9, #282726);
+  --ui-2: light-dark(#dad8ce, #343331);
+  --ui-3: light-dark(#cecdc3, #403e3c);
+  --tx: light-dark(#100f0f, #cecdc3);
+  --tx-2: light-dark(#6f6e69, #878580);
+  --tx-3: light-dark(#b7b5ac, #575653);
+  /* Colors */
+  --red: light-dark(#af3029, #d14d41);
+  --orange: light-dark(#bc5215, #da702c);
+  --yellow: light-dark(#ad8301, #d0a215);
+  --green: light-dark(#66800b, #879a39);
+  --cyan: light-dark(#24837b, #3aa99f);
+  --blue: light-dark(#205ea6, #4385be);
+  --purple: light-dark(#5e409d, #8b7ec8);
+  --magenta: light-dark(#a02f6f, #ce5d97);
 
-    --red-2: light-dark(#d14d41, #af3029);
-    --orange-2: light-dark(#da702c, #bc5215);
-    --yellow-2: light-dark(#d0a215, #ad8301);
-    --green-2: light-dark(#879a39, #66800b);
-    --cyan-2: light-dark(#3aa99f, #24837b);
-    --blue-2: light-dark(#4385be, #205ea6);
-    --purple-2: light-dark(#8b7ec8, #5e409d);
-    --magenta-2: light-dark(#ce5d97, #a02f6f);
+  --red-2: light-dark(#d14d41, #af3029);
+  --orange-2: light-dark(#da702c, #bc5215);
+  --yellow-2: light-dark(#d0a215, #ad8301);
+  --green-2: light-dark(#879a39, #66800b);
+  --cyan-2: light-dark(#3aa99f, #24837b);
+  --blue-2: light-dark(#4385be, #205ea6);
+  --purple-2: light-dark(#8b7ec8, #5e409d);
+  --magenta-2: light-dark(#ce5d97, #a02f6f);
 }
 
 @theme {
-    --color-bg: light-dark(#fffcf0, #100f0f);
-    --color-bg-2: light-dark(#f2f0e5, #1c1b1a);
-    --color-ui: light-dark(#e6e4d9, #282726);
-    --color-ui-2: light-dark(#dad8ce, #343331);
-    --color-ui-3: light-dark(#cecdc3, #403e3c);
-    --color-tx: light-dark(#100f0f, #cecdc3);
-    --color-tx-2: light-dark(#6f6e69, #878580);
-    --color-tx-3: light-dark(#b7b5ac, #575653);
-    /* Colors */
-    --color-red: light-dark(#af3029, #d14d41);
-    --color-orange: light-dark(#bc5215, #da702c);
-    --color-yellow: light-dark(#ad8301, #d0a215);
-    --color-green: light-dark(#66800b, #879a39);
-    --color-cyan: light-dark(#24837b, #3aa99f);
-    --color-blue: light-dark(#205ea6, #4385be);
-    --color-purple: light-dark(#5e409d, #8b7ec8);
-    --color-magenta: light-dark(#a02f6f, #ce5d97);
+  --color-bg: light-dark(#fffcf0, #100f0f);
+  --color-bg-2: light-dark(#f2f0e5, #1c1b1a);
+  --color-ui: light-dark(#e6e4d9, #282726);
+  --color-ui-2: light-dark(#dad8ce, #343331);
+  --color-ui-3: light-dark(#cecdc3, #403e3c);
+  --color-tx: light-dark(#100f0f, #cecdc3);
+  --color-tx-2: light-dark(#6f6e69, #878580);
+  --color-tx-3: light-dark(#b7b5ac, #575653);
+  /* Colors */
+  --color-red: light-dark(#af3029, #d14d41);
+  --color-orange: light-dark(#bc5215, #da702c);
+  --color-yellow: light-dark(#ad8301, #d0a215);
+  --color-green: light-dark(#66800b, #879a39);
+  --color-cyan: light-dark(#24837b, #3aa99f);
+  --color-blue: light-dark(#205ea6, #4385be);
+  --color-purple: light-dark(#5e409d, #8b7ec8);
+  --color-magenta: light-dark(#a02f6f, #ce5d97);
 
-    --color-red-2: light-dark(#d14d41, #af3029);
-    --color-orange-2: light-dark(#da702c, #bc5215);
-    --color-yellow-2: light-dark(#d0a215, #ad8301);
-    --color-green-2: light-dark(#879a39, #66800b);
-    --color-cyan-2: light-dark(#3aa99f, #24837b);
-    --color-blue-2: light-dark(#4385be, #205ea6);
-    --color-purple-2: light-dark(#8b7ec8, #5e409d);
-    --color-magenta-2: light-dark(#ce5d97, #a02f6f);
+  --color-red-2: light-dark(#d14d41, #af3029);
+  --color-orange-2: light-dark(#da702c, #bc5215);
+  --color-yellow-2: light-dark(#d0a215, #ad8301);
+  --color-green-2: light-dark(#879a39, #66800b);
+  --color-cyan-2: light-dark(#3aa99f, #24837b);
+  --color-blue-2: light-dark(#4385be, #205ea6);
+  --color-purple-2: light-dark(#8b7ec8, #5e409d);
+  --color-magenta-2: light-dark(#ce5d97, #a02f6f);
 }
 
 body {
-    @apply bg-bg text-tx;
+  @apply bg-bg text-tx;
 }
 
 .btn {
-    @apply cursor-pointer px-4 py-1 rounded-md h-fit flex flex-row items-center gap-2 justify-center transition-all duration-300;
+  @apply cursor-pointer px-4 py-1 rounded-md h-fit flex flex-row items-center gap-2 justify-center transition-all duration-300;
 }
 
 .btn-base {
-    @apply hover:bg-ui-2 bg-ui active:bg-ui-3 cursor-pointer transition-all duration-300;
+  @apply hover:bg-ui-2 bg-ui active:bg-ui-3 cursor-pointer transition-all duration-300;
 }
 
 .btn-base-overlay {
-    @apply text-tx hover:bg-ui-2/70 bg-ui/70 active:bg-ui-3/70;
+  @apply text-tx hover:bg-ui-2/70 bg-ui/70 active:bg-ui-3/70;
 }
 
 .btn-primary {
-    @apply active:bg-green/80 hover:bg-green bg-green-2;
+  @apply active:bg-green/80 hover:bg-green bg-green-2;
 }
 
 .btn-danger {
-    @apply hover:bg-red bg-red-2 active:bg-red/80;
+  @apply hover:bg-red bg-red-2 active:bg-red/80;
 }
 
 .plain-text {
-    & .site-name {
-        @apply text-magenta;
-    }
+  & .site-name {
+    @apply text-magenta;
+  }
 
-    & p {
-        @apply mb-4 px-2 text-tx-2 hover:text-tx border-l-2 border-transparent hover:border-l-2 hover:border-red transition-all duration-300;
-    }
+  & p {
+    @apply mb-4 px-2 text-tx-2 hover:text-tx border-l-2 border-transparent hover:border-l-2 hover:border-red transition-all duration-300;
+  }
 
-    & h2,
-    & h3,
-    & h4 {}
+  & h2,
+  & h3,
+  & h4 {
+  }
 
-    & h2 {
-        @apply text-2xl font-bold;
-    }
+  & h2 {
+    @apply text-2xl font-bold;
+  }
 
-    & h3 {
-        @apply text-xl mb-5 font-bold;
-    }
+  & h3 {
+    @apply text-xl mb-5 font-bold;
+  }
 
-    & h4 {
-        @apply mb-3 font-semibold;
-    }
+  & h4 {
+    @apply mb-3 font-semibold;
+  }
 
-    & a {
-        @apply hover:underline text-purple-2 hover:text-purple;
-    }
+  & a {
+    @apply hover:underline text-purple-2 hover:text-purple;
+  }
+}
+
+.link {
+  @apply hover:underline text-purple-2 hover:text-purple;
 }
 
 .text-entry {
-    @apply bg-ui outline-0 px-2 py-1 rounded-md border-ui-2 border;
+  @apply bg-ui outline-0 px-2 py-1 rounded-md border-ui-2 border;
 }
 
 .input-group {
-    @apply flex flex-col grow gap-1;
+  @apply flex flex-col grow gap-1;
 
-    &>label {
-        @apply text-sm;
-    }
+  & > label {
+    @apply text-sm;
+  }
 }
 
 .nav {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    gap: 0.5rem;
-    padding: 0.5rem;
-    @apply flex flex-col;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  gap: 0.5rem;
+  padding: 0.5rem;
+  @apply flex flex-col;
 }
 
 .nav-icon {
-    @apply w-[1rem] text-center me-2;
+  @apply w-[1rem] text-center me-2;
 }
 
 .nav-item {
-    @apply flex gap-1 items-baseline py-2 px-3 rounded-sm cursor-pointer hover:bg-ui active:bg-ui-2 transition-all duration-200;
+  @apply flex gap-1 items-baseline py-2 px-3 rounded-sm cursor-pointer hover:bg-ui active:bg-ui-2 transition-all duration-200;
 }

@@ -10,6 +10,7 @@ const name = ref("");
 const email = ref("");
 const password = ref("");
 const passwordRepeated = ref("");
+const agreed = ref(false);
 
 const onSubmit = () => {
   if (!name.value) {
@@ -31,6 +32,11 @@ const onSubmit = () => {
   if (password.value !== passwordRepeated.value) {
     console.error("Пароли не совпадают");
     error.value = "Пароли не совпадают";
+    return;
+  }
+  if (!agreed.value) {
+    error.value =
+      "Вы должны согласиться с условиями пользования и политикой конфиденциальности";
     return;
   }
 
@@ -104,6 +110,19 @@ const onSubmit = () => {
           placeholder="******"
           autocomplete="new-password"
         />
+      </div>
+      <div>
+        <input class="accent-purple me-2" type="checkbox" v-model="agreed" />
+        <label
+          >Я прочитал и согласен с
+          <RouterLink class="link" href="/help"
+            >условиями пользования</RouterLink
+          >
+          и
+          <RouterLink to="/help" class="link"
+            >политикой конфиденциальности</RouterLink
+          ></label
+        >
       </div>
       <div class="input-group">
         <input

@@ -4,6 +4,9 @@ import (
 	"art-gallery-server/database"
 	"art-gallery-server/models"
 	"errors"
+	"fmt"
+	"regexp"
+	"unicode"
 
 	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
@@ -38,14 +41,15 @@ func checkPassword(password, hash string) bool {
 }
 
 func NewUser(name, email, password string) (*User, error) {
+
 	if name == "" {
 		return nil, errors.New("name is empty")
 	}
 	if email == "" {
 		return nil, errors.New("email is empty")
 	}
-	if len(password) <= MinPasswordLen {
-		return nil, errors.New("password is empty or less than minimum required length")
+	if err := validatePassword(password); err != nil {
+		return nil, fmt.Errorf("Invalid password")
 	}
 	u := &User{
 		Name:         name,
@@ -53,6 +57,26 @@ func NewUser(name, email, password string) (*User, error) {
 		PasswordHash: hashPassword(password),
 	}
 	return u, nil
+}
+
+func validatePassword(pass string) error {
+	if len(pass) < MinPasswordLen {
+		return fmt.Errorf("password is empty or less than minimum required length (%d)", MinPasswordLen)
+	}
+	for _, r := range pass {
+		if int(r) > unicode.MaxASCII {
+			return fmt.Errorf("password must contains ASCII characters")
+		}
+		if !unicode.IsLetter(r) && !unicode.IsNumber(r) && !unicode.IsPunct(r) && !unicode.IsSymbol(r) {
+			return fmt.Errorf("password must contains only letters, numbers, punctuation marks, and symbols")
+		}
+	}
+	if matched, _ := regexp.Match("0-9", []byte(pass)); !matched {
+		return fmt.Errorf("password must contains number")
+	}
+
+	return nil
+
 }
 
 // func (u *User) Save() error {

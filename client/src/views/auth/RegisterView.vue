@@ -45,7 +45,7 @@ const onSubmit = () => {
       console.log("Регистрация прошла успешно");
       router.push("/");
     } else {
-      error.value = "Регистрация не удалась" + r.error;
+      error.value = "Регистрация не удалась: " + r.error;
     }
   });
 };

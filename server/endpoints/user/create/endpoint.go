@@ -1,6 +1,7 @@
 package create
 
 import (
+	"fmt"
 	"net/http"
 
 	"art-gallery-server/database"
@@ -32,7 +33,7 @@ func handler(r *Request) gin.HandlerFunc {
 		user, err := users.NewUser(r.Name, r.Email, r.Password)
 		if err != nil {
 			log.Errorf("Error while creating new user: %s", err)
-			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"success": false, "error": "invalid user data"})
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"success": false, "error": fmt.Sprintf("invalid user data: %s", err)})
 			return
 		}
 		result := database.Conn.Create(&user)

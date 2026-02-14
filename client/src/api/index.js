@@ -22,8 +22,9 @@ const register = (email, name, password) => {
     email: email,
     password: password,
     name: name,
-  }).then(() => {
-    authenticate(email, password);
+  }).catch((err) => {
+    console.error("Error while registering user:", err);
+    return { success: false, error: "Что-то пошло не так: " + err };
   });
 };
 
